@@ -1,0 +1,163 @@
+#include <windows.h>
+#include "Defines.h"
+#include <App/Scene/SceneMgr.h>
+#include <stdio.h>
+#include <crtdbg.h>
+#include <System/Clocker.h>
+#include <fcntl.h>
+
+// timeGetTime周りの使用
+#pragma comment(lib, "winmm.lib")
+
+//--- プロトタイプ宣言
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+
+// エントリポイント
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	//--- 変数宣言
+	WNDCLASSEX wcex;
+	HWND hWnd;
+	MSG message;
+
+	// ウィンドクラス情報の設定
+	ZeroMemory(&wcex, sizeof(wcex));
+	wcex.hInstance = hInstance;
+	wcex.lpszClassName = "Class Name";
+	wcex.lpfnWndProc = WndProc;
+	wcex.style = CS_CLASSDC | CS_DBLCLKS;
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wcex.hIconSm = wcex.hIcon;
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+
+	// ウィンドウクラス情報の登録
+	if (!RegisterClassEx(&wcex))
+	{
+		MessageBox(NULL, "Failed to RegisterClassEx", "Error", MB_OK);
+		return 0;
+	}
+
+	// ウィンドウの作成
+	hWnd = CreateWindowEx(
+		WS_EX_OVERLAPPEDWINDOW, wcex.lpszClassName,
+		APP_TITLE, WS_CAPTION | WS_SYSMENU,
+		CW_USEDEFAULT,CW_USEDEFAULT,
+		SCREEN_WIDTH, SCREEN_HEIGHT,
+		HWND_DESKTOP,
+		NULL, hInstance, NULL
+	);
+
+#ifdef _DEBUG
+	// コンソール作成
+	AttachConsole(ATTACH_PARENT_PROCESS);
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+	SetConsoleTitle("Debug Console");
+
+#endif // _DEBUG
+
+	
+	// ウィンドウの表示
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
+
+	// 初期化処理
+	if (FAILED(SceneMgr::GetInstance().Init(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT)))
+	{
+		return 0;
+	}
+
+	Clocker::GetInstance().Init();
+
+	//--- FPS制御
+	int fpsCount = 0;	// 1秒間の処理回数
+	timeBeginPeriod(1);
+	DWORD countStartTime = timeGetTime();
+	DWORD preExecTime = countStartTime;
+	Clocker::GetInstance().StartFrame(countStartTime);
+	//--- ウィンドウの管理
+	while (1)
+	{
+		if (PeekMessage(&message, NULL, 0, 0, PM_NOREMOVE))
+		{
+			if (!GetMessage(&message, NULL, 0, 0))
+			{
+				break;
+			}
+			else
+			{
+				TranslateMessage(&message);
+				DispatchMessage(&message);
+			}
+		}
+		else
+		{
+			// FPSの制御
+			DWORD nowTime = timeGetTime();	//現在時刻
+
+			if (nowTime - countStartTime >= 1000)
+			{
+				char fpsText[20];
+				//fpsCount = static_cast<int>(Clocker::GetInstance().GetGameTime());
+				sprintf(fpsText, "FPS:%d", fpsCount);
+				SetWindowText(hWnd, fpsText);
+				// 次の１秒間の計測準備
+				countStartTime = nowTime;
+				fpsCount = 0;
+			}
+
+			if (nowTime - preExecTime >= 1000 / 60)
+			{
+				Clocker::GetInstance().EndFrame(timeGetTime());
+				Clocker::GetInstance().CalcFrameTime();
+				Clocker::GetInstance().StartFrame(timeGetTime());
+				SceneMgr::GetInstance().Update();
+				SceneMgr::GetInstance().Draw();
+				preExecTime = nowTime;
+				++fpsCount;
+			}
+
+		}
+	}
+
+
+	// 終了時
+	timeEndPeriod(1);
+	SceneMgr::GetInstance().Uninit();
+
+#ifdef _DEBUG
+	FreeConsole();
+
+#endif // _DEBUG
+
+	UnregisterClass(wcex.lpszClassName, hInstance);
+
+
+	return 0;
+}
+
+// ウィンドウプロシージャ
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			// [x]が押されたように振舞う
+			PostMessage(hWnd, WM_CLOSE, 0, 0);
+			return 0;
+		}
+		break;
+	}
+	return DefWindowProc(hWnd, message, wParam, lParam);
+}

@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル\PixelShader">
+      <UniqueIdentifier>{a9755fd2-e8f8-4e2e-854e-68fcfb6a9b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\VertexShader">
+      <UniqueIdentifier>{e4c96e83-672c-4720-aa96-8ee0c9525558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="C++ファイル\System">
+      <UniqueIdentifier>{76d7d9cf-96c4-4ff5-a5f6-7dfd24ef09cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\System\Sound">
+      <UniqueIdentifier>{a23bba52-60ec-413c-809e-6093713d21d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\System\ClassDesign">
+      <UniqueIdentifier>{118c2a07-1548-4bb4-aa33-bf617f6dbb05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App">
+      <UniqueIdentifier>{375453a1-ead7-471e-9fe9-85ec8b5e9c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Component">
+      <UniqueIdentifier>{ec0979f1-4d6d-4417-90e9-c3c004455350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Component\Renderer">
+      <UniqueIdentifier>{36f73187-79c2-4273-891a-d04ec9c82d8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Scene">
+      <UniqueIdentifier>{e91f7ff3-2c71-4199-8e04-a76fac98f9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Event">
+      <UniqueIdentifier>{e1cf8052-e28f-4571-aaeb-d4feb3fe0716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Component\Character">
+      <UniqueIdentifier>{55ddb99c-485b-402e-b9bf-d52705cfe075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C++ファイル\App\Component\Event">
+      <UniqueIdentifier>{1c84f0c2-bf2b-45f9-baef-5739c75cb467}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Shader\ShaderBuffer.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Object.cpp">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Event\Talk.cpp">
+      <Filter>C++ファイル\App\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Scene\Game.cpp">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Scene\SceneMgr.cpp">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Camera.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\EventMgr.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Light.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="System\MessageWindow.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\MMDModel.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\OBJModel.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\RenderPipeline.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Sound\Sound.cpp">
+      <Filter>C++ファイル\System\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Collision.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\DirectX.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\DrawBuffer.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Geometory.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Input.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\MMDParser.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Mouse.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\OBJParser.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RenderTarget.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Shader.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Texture.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Image.cpp">
+      <Filter>C++ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Level.cpp">
+      <Filter>C++ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMath.cpp">
+      <Filter>C++ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Startup.cpp">
+      <Filter>C++ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Character\Character.cpp">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Character\Player.cpp">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Event\Event.cpp">
+      <Filter>C++ファイル\App\Component\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Event\EventTrigger.cpp">
+      <Filter>C++ファイル\App\Component\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Renderer\Renderer2D.cpp">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Renderer\Renderer3D.cpp">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Renderer\BillBoardRenderer.cpp">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Character\MasterWitch.cpp">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="System\LoadFiles.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Clocker.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Defines.h">
+      <Filter>C++ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="System\DrawBuffer.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Geometory.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Input.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Texture.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Shader.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Camera.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ShaderBuffer.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>C++ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>C++ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMath.h">
+      <Filter>C++ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="App\OBJModel.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\MMDModel.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Light.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Scene\Game.h">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RenderTarget.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\OBJParser.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\MMDParser.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Sound\Sound.h">
+      <Filter>C++ファイル\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Component.h">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Object.h">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collision.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\RenderPipeline.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="System\DirectX.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Clocker.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\EventMgr.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="System\MessageWindow.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\FactoryMethod.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Scene\SceneMgr.h">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Event\EventBase.h">
+      <Filter>C++ファイル\App\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Event\Talk.h">
+      <Filter>C++ファイル\App\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="System\LoadFiles.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Image.h">
+      <Filter>C++ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Level.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Scene\SceneBase.h">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Mouse.h">
+      <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\Manager.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Character\Character.h">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Character\Player.h">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Event\Event.h">
+      <Filter>C++ファイル\App\Component\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Event\EventTrigger.h">
+      <Filter>C++ファイル\App\Component\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Renderer\BillBoardRenderer.h">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Renderer\Renderer.h">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Renderer\Renderer2D.h">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Renderer\Renderer3D.h">
+      <Filter>C++ファイル\App\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\Delegate.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\Singleton.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Character\MasterWitch.h">
+      <Filter>C++ファイル\App\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\State.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\PSBlur.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSGrass.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSLambert.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSPixelColor.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSScope.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSToon.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSToonShadow.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSWorld.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSDummy.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSOutLine.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSNormal.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSNormal.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSBackBuffer.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="System\PSFade.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSWater.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSLightDepth.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSLightDepth.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSCameraDepth.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSCameraDepth.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSWater.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSAnimation.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
