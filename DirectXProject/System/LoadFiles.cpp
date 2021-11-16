@@ -8,8 +8,11 @@ const STRINGMAP& LoadFiles::CSV(const char * pPath)
 	std::ifstream readfile;
 	readfile.open(pPath, std::ios::in);
 
-	if (!readfile.is_open())return m_StringMap;
-
+	if (!readfile.is_open())
+	{
+		std::cout << "CSVƒtƒ@ƒCƒ‹" << pPath << "‚ª“Ç‚Ýž‚ß‚Ü‚¹‚ñ‚Å‚µ‚½" << std::endl;
+		return m_StringMap;
+	}
 	std::string line;
 	while (std::getline(readfile, line))
 	{
@@ -22,7 +25,7 @@ const STRINGMAP& LoadFiles::CSV(const char * pPath)
 		{
 			if (word.empty())continue;
 
-			if (word[0] == '(')continue;
+			if (word[0] == '(')break;
 
 			if (word[0] == '[')
 			{
@@ -34,7 +37,8 @@ const STRINGMAP& LoadFiles::CSV(const char * pPath)
 				texts.push_back(word);
 			}
 		}
-		if (word.empty())continue;
+		if (title.empty())continue;
+		if (texts.empty())continue;
 		m_StringMap[title] = texts;
 	}
 

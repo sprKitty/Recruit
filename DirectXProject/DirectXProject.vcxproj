@@ -183,11 +183,13 @@
     <ClCompile Include="App\RenderPipeline.cpp" />
     <ClCompile Include="App\Scene\Game.cpp" />
     <ClCompile Include="App\Scene\SceneMgr.cpp" />
+    <ClCompile Include="App\TexAnimation.cpp" />
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="Shader\ShaderBuffer.cpp" />
     <ClCompile Include="Startup.cpp" />
     <ClCompile Include="System\Clocker.cpp" />
     <ClCompile Include="System\Collision.cpp" />
+    <ClCompile Include="System\DebugLog.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="System\DrawBuffer.cpp" />
     <ClCompile Include="System\Geometory.cpp" />
@@ -228,6 +230,7 @@
     <ClInclude Include="App\Scene\Game.h" />
     <ClInclude Include="App\Scene\SceneBase.h" />
     <ClInclude Include="App\Scene\SceneMgr.h" />
+    <ClInclude Include="App\TexAnimation.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Shader\ShaderBuffer.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="System\ClassDesign\State.h" />
     <ClInclude Include="System\Clocker.h" />
     <ClInclude Include="System\Collision.h" />
+    <ClInclude Include="System\DebugLog.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="System\DrawBuffer.h" />
     <ClInclude Include="System\Geometory.h" />

@@ -20,6 +20,9 @@ public:
 	friend class Singleton<FactoryMethod>;
 
 public:
+	void Initialize()override {}
+	void Finalize()override {}
+
 	Object::OWNER_OBJ CreateObject()
 	{
 		Object::OWNER_OBJ pObj(new Object());

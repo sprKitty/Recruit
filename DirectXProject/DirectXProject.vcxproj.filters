@@ -161,6 +161,8 @@
     <ClCompile Include="System\Clocker.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
+    <ClCompile Include="App\TexAnimation.cpp" />
+    <ClCompile Include="System\DebugLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -309,6 +311,12 @@
     </ClInclude>
     <ClInclude Include="System\ClassDesign\State.h">
       <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="App\TexAnimation.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="System\DebugLog.h">
+      <Filter>C++ファイル\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

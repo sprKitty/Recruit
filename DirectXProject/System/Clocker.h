@@ -1,5 +1,6 @@
 #pragma once
 #include <System/ClassDesign/Singleton.h>
+#include <string>
 
 class Clocker : public Singleton<Clocker>
 {
@@ -7,12 +8,13 @@ private:
 	friend class Singleton<Clocker>;
 
 public:
-	void Init();
-	void Uninit();
+	void Initialize()override;
+	void Finalize()override;
 
 	void StartFrame(long start);
 	void EndFrame(long end);
 	void CalcFrameTime();
+	const std::string GetDateTimeStr();
 
 	const double& GetGameTime();
 	const double& GetFrameTime();

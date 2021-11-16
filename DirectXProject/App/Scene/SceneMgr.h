@@ -9,8 +9,9 @@ public:
 	friend class Singleton<SceneMgr>;
 
 public:
+	void Initialize()override {}
+	void Finalize()override;
 	HRESULT Init(HWND hWnd, UINT width, UINT height);
-	void Uninit();
 	void Update();
 	void Draw();
 

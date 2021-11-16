@@ -3,7 +3,7 @@
 
 
 class Camera;
-class Image;
+class TexAnimation;
 
 class BillBoardRenderer : public Renderer
 {
@@ -53,14 +53,14 @@ public:
 		m_pCamera = pCamera;
 	}
 
-	inline void SetMainImage(const std::weak_ptr<Image> pImage)
+	inline void SetMainImage(const std::weak_ptr<TexAnimation> pImage)
 	{
-		m_pMainImage = std::move(pImage);
+		m_pMainTexAnim = std::move(pImage);
 	}
 
-	void SetBumpImage(const std::weak_ptr<Image> pImage)
+	void SetBumpImage(const std::weak_ptr<TexAnimation> pImage)
 	{
-		m_pBumpImage = std::move(pImage);
+		m_pBumpTexAnim = std::move(pImage);
 	}
 
 	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
@@ -81,6 +81,6 @@ private:
 	bool m_isZaxisLock;
 
 	std::weak_ptr<Camera> m_pCamera;
-	std::weak_ptr<Image> m_pMainImage;
-	std::weak_ptr<Image> m_pBumpImage;
+	std::weak_ptr<TexAnimation> m_pMainTexAnim;
+	std::weak_ptr<TexAnimation> m_pBumpTexAnim;
 };

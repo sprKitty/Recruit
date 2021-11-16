@@ -12,13 +12,11 @@ public:
 	friend class Singleton<EventMgr>;
 
 public:
-
+	void Initialize()override {}
+	void Finalize()override;
 	void SetEventInfo(const std::weak_ptr<Event> pEvent, const Object::WORKER_OBJECTLIST& pObjects, const EventTrigger::Type& type);
 
 	void CallFunc();
-
-	void Finalize();
-
 private:
 	struct EventInfo
 	{

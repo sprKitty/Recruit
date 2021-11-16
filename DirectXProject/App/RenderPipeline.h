@@ -18,8 +18,8 @@ private:
 
 public:
 	
-	void Initialize();
-	void Finalize();
+	void Initialize()override;
+	void Finalize()override;
 	
 	/*************************************************
 	* @brief リストに登録されているオブジェクトを消す

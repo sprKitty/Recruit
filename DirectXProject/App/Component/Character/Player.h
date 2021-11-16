@@ -2,13 +2,12 @@
 #include "Character.h"
 #include <System/ClassDesign/State.h>
 
-class Image;
+class TexAnimation;
 class BillBoardRenderer;
 
-class Player : public Character
+namespace Player_State
 {
-public:
-	enum class State
+	enum Kind
 	{
 		WAIT,
 		WALK,
@@ -18,7 +17,10 @@ public:
 
 		MAX,
 	};
+}
 
+class Player : public Character
+{
 public:
 	Player() {}
 	~Player()override {}
@@ -39,12 +41,14 @@ protected:
 	void Move()override;
 
 private:
-	State m_State;
+	Player_State::Kind m_State;
+	Chara_Direction::Kind m_Direction;
 	Vector2 m_vDestination;
 	Vector2 m_vMove;
+	int m_nAnimFrame;
 	Transform m_Transform;
 	const float OneSecMoveSpeed = 3.0f;
 
-	std::vector<std::shared_ptr<Image> > m_pImageList;
+	std::vector<std::shared_ptr<TexAnimation> > m_pTexAnimList;
 	std::weak_ptr<BillBoardRenderer> m_pBBR;  // BillBoardRendererコンポーネント
 };

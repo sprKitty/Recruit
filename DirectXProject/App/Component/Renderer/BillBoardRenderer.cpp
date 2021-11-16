@@ -1,6 +1,6 @@
 #include "BillBoardRenderer.h"
 #include <App/Component/Object.h>
-#include <App/Component/Image.h>
+#include <App/TexAnimation.h>
 #include <App/Camera.h>
 #include <App/RenderPipeline.h>
 #include <System/Geometory.h>
@@ -43,16 +43,16 @@ void BillBoardRenderer::Draw(const DrawType::kind type)
 {
 	if (!m_isDrawType[type])
 	{
-		std::cout << "ビルボード使用するカメラが設定されていません" << std::endl;
+		std::cout << "ビルボードに使用するカメラが設定されていません" << std::endl;
 		return;
 	}
-	if (!m_pMainImage.expired())
+	if (!m_pMainTexAnim.expired())
 	{
-		m_pMainImage.lock()->Bind();
+		m_pMainTexAnim.lock()->Bind();
 	}
-	if (!m_pBumpImage.expired())
+	if (!m_pBumpTexAnim.expired())
 	{
-		m_pBumpImage.lock()->Bind();
+		m_pBumpTexAnim.lock()->Bind();
 	}
 
 	DirectX::XMMATRIX mtx = DirectX::XMMatrixIdentity();

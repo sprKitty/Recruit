@@ -11,6 +11,9 @@ public:
 		return Instace;
 	}
 
+public:
+	virtual void Initialize() = 0;
+	virtual void Finalize() = 0;
 protected:
 	Singleton() {}
 	virtual ~Singleton() {}

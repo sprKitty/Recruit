@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	Clocker::GetInstance().Init();
+	Clocker::GetInstance().Initialize();
 
 	//--- FPS§Œä
 	int fpsCount = 0;	// 1•bŠÔ‚Ìˆ—‰ñ”
@@ -128,7 +128,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// I—¹
 	timeEndPeriod(1);
-	SceneMgr::GetInstance().Uninit();
+	SceneMgr::GetInstance().Finalize();
 
 #ifdef _DEBUG
 	FreeConsole();

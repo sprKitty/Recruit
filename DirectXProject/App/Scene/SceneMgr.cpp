@@ -15,7 +15,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	InitSound();
 	Geometory::GetInstance().Create();
 	InitInput();
-	ShaderBuffer::GetInstance().Initalize();
+	ShaderBuffer::GetInstance().Initialize();
 	RenderPipeline::GetInstance().Initialize();
 	MessageWindow::CreateOffsetMap();
 	srand(timeGetTime());
@@ -28,7 +28,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	return S_OK;
 }
 
-void SceneMgr::Uninit()
+void SceneMgr::Finalize()
 {
 	m_pSceneList[m_NowScene]->Uninit();
 	RenderPipeline::GetInstance().Finalize();

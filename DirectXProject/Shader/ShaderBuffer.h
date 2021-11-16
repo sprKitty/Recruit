@@ -146,8 +146,8 @@ public:
 
 public:
 
-	void Initalize();
-	void Finalize();
+	void Initialize()override;
+	void Finalize()override;
 	void InitParam();
 	void Write(CB_TYPE cb);
 	void BindVS(VS_TYPE vs);

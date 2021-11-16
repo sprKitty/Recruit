@@ -49,7 +49,7 @@ ShaderBuffer::~ShaderBuffer()
 	if (m_pMap) { m_pMap->Release(); }
 }
 
-void ShaderBuffer::Initalize()
+void ShaderBuffer::Initialize()
 {
 	HRESULT hr;
 	// 頂点シェーダー作成

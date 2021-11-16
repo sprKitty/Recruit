@@ -14,6 +14,8 @@ public:
 	friend class Singleton<Geometory>;
 
 public:
+	void Initialize()override {}
+	void Finalize()override {}
 	HRESULT Create();
 	void DrawPolygon();
 	void DrawCharacterPolygon();
