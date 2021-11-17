@@ -126,6 +126,90 @@ public:
 
 
 
+class VectorInt2
+{
+public:
+	VectorInt2() = default;
+	VectorInt2(int x, int y) :x(x), y(y) {}
+	VectorInt2(int v) :x(v), y(v) {}
+	~VectorInt2() {}
+
+	const VectorInt2& operator =(const VectorInt2 &v)
+	{
+		x = v.x;
+		y = v.y;
+		return *this;
+	}
+
+	const VectorInt2 operator +(const VectorInt2 &v) const
+	{
+		VectorInt2 a;
+		a.x = x + v.x;
+		a.y = y + v.y;
+		return a;
+	}
+
+	const VectorInt2 operator -(const VectorInt2 &v) const
+	{
+		VectorInt2 a;
+		a.x = x - v.x;
+		a.y = y - v.y;
+		return a;
+	}
+
+	const VectorInt2 operator *(const VectorInt2 &v) const
+	{
+		VectorInt2 a;
+		a.x = x * v.x;
+		a.y = y * v.y;
+		return a;
+	}
+
+	const VectorInt2 operator /(const VectorInt2 &v) const
+	{
+		VectorInt2 a;
+		a.x = x / v.x;
+		a.y = y / v.y;
+		return a;
+	}
+
+
+	VectorInt2& operator+=(const VectorInt2 &v)
+	{
+		x += v.x;
+		y += v.y;
+		return *this;
+	}
+
+	VectorInt2& operator-=(const VectorInt2 &v)
+	{
+		x -= v.x;
+		y -= v.y;
+		return *this;
+	}
+
+	VectorInt2& operator*=(const VectorInt2 &v)
+	{
+		x *= v.x;
+		y *= v.y;
+		return *this;
+	}
+
+	VectorInt2& operator/=(const VectorInt2 &v)
+	{
+		x /= v.x;
+		y /= v.y;
+		return *this;
+	}
+
+	int x, y;
+};
+
+
+
+
+
+
 
 //===================================
 // classÅFVector3

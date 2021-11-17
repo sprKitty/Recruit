@@ -1,8 +1,9 @@
 #pragma once
 #include <App/Component/Component.h>
+#include <App/TexAnimation.h>
 
 
-class Renderer3D;
+class BillBoardRenderer;
 
 namespace Chara_Direction
 {
@@ -31,10 +32,21 @@ public:
 	virtual void Uninit()override {}
 	virtual void Update()override {}
 
+	inline void SetBillBoardRenderer(const std::weak_ptr<BillBoardRenderer>& pBBR)
+	{
+		m_pBBR = std::move(pBBR);
+	}
+
 protected:
-	virtual void Move() = 0;
+	virtual void Move();
 	virtual void PointAtoB_AStar();
 	const Chara_Direction::Kind CalcDirection(const float fDeg);
+
+protected:
+	std::vector<std::shared_ptr<TexAnimation> > m_pTexAnimList;
+	std::weak_ptr<BillBoardRenderer> m_pBBR;  // BillBoardRendererコンポーネント
+	Transform m_Transform;
+	Chara_Direction::Kind m_Direction;
 
 private:
 

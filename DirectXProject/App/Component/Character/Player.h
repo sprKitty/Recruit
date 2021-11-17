@@ -2,8 +2,6 @@
 #include "Character.h"
 #include <System/ClassDesign/State.h>
 
-class TexAnimation;
-class BillBoardRenderer;
 
 namespace Player_State
 {
@@ -31,24 +29,15 @@ public:
 
 	void CalcDestination(const Vector3& vPos);
 
-	inline void SetBillBoardRenderer(const std::weak_ptr<BillBoardRenderer>& pBBR)
-	{
-		m_pBBR = std::move(pBBR);
-	}
-
 protected:
 	void DestinationCollision();
 	void Move()override;
 
 private:
-	Player_State::Kind m_State;
-	Chara_Direction::Kind m_Direction;
-	Vector2 m_vDestination;
-	Vector2 m_vMove;
-	int m_nAnimFrame;
-	Transform m_Transform;
 	const float OneSecMoveSpeed = 3.0f;
 
-	std::vector<std::shared_ptr<TexAnimation> > m_pTexAnimList;
-	std::weak_ptr<BillBoardRenderer> m_pBBR;  // BillBoardRendererコンポーネント
+	Player_State::Kind m_State;
+	Vector2 m_vDestination;
+	Vector2 m_vMove;
+	bool m_isMove;
 };

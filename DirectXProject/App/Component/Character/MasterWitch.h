@@ -1,8 +1,19 @@
 #pragma once
-#include <App/Component/Component.h>
+#include <App/Component/Character/Character.h>
 
+class Object;
 
-class MasterWitch : public Component
+namespace Witch_State
+{
+	enum Kind
+	{
+		WAIT,
+
+		MAX,
+	};
+}
+
+class MasterWitch : public Character
 {
 public:
 	MasterWitch() {}
@@ -12,6 +23,14 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-private:
+	inline void SetTarget(const std::weak_ptr<Object>& pTarget)
+	{
+		m_pTarget = pTarget;
+	}
 
+private:
+	void CalcTarget();
+
+private:
+	std::weak_ptr<Object> m_pTarget;
 };

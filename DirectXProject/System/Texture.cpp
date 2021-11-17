@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include "DirectXTex/DirectXTex.h"
 #include <iostream>
+#include <System/DebugLog.h>
 
 #ifdef _X86_
 #ifdef _DEBUG
@@ -39,10 +40,8 @@ HRESULT LoadTextureFromFile(const char *pszFileName, ID3D11ShaderResourceView **
 	}
 	if (FAILED(hr))
 	{
-#ifdef _DEBUG
-		std::cout << pszFileName << "‚ª“Ç‚Ýž‚ß‚Ü‚¹‚ñ‚Å‚µ‚½" << std::endl;
-
-#endif // _DEBUG
+		DebugLog::GetInstance().LoadFileError(pszFileName);
+		//std::cout << pszFileName << "‚ª“Ç‚Ýž‚ß‚Ü‚¹‚ñ‚Å‚µ‚½" << std::endl;
 
 		MessageBox(NULL, pszFileName, "Failed to load texture.", MB_OK);
 		return hr;

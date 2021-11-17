@@ -2,9 +2,8 @@
 #include "Defines.h"
 #include <App/Scene/SceneMgr.h>
 #include <stdio.h>
-#include <crtdbg.h>
 #include <System/Clocker.h>
-#include <fcntl.h>
+#include <System/DebugLog.h>
 
 // timeGetTime周りの使用
 #pragma comment(lib, "winmm.lib")
@@ -53,12 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	);
 
 #ifdef _DEBUG
-	// コンソール作成
-	AttachConsole(ATTACH_PARENT_PROCESS);
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-	SetConsoleTitle("Debug Console");
-
+	DebugLog::GetInstance().Initialize();
 #endif // _DEBUG
 
 	
@@ -131,8 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SceneMgr::GetInstance().Finalize();
 
 #ifdef _DEBUG
-	FreeConsole();
-
+	DebugLog::GetInstance().Finalize();
 #endif // _DEBUG
 
 	UnregisterClass(wcex.lpszClassName, hInstance);

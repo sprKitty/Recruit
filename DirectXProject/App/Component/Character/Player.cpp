@@ -1,10 +1,18 @@
 #include "Player.h"
 #include <App/Component/Object.h>
-#include <App/Component/Image.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
-#include <App/TexAnimation.h>
 #include <System/Clocker.h>
 #include <System/Input.h>
+#include <MyMath.h>
+
+const char* g_pPlayerAnimPath[Player_State::MAX] =
+{
+	"Assets/csv/playerwalk.csv",
+	"Assets/csv/playerwalk.csv",
+	"Assets/csv/playerwalk.csv",
+	"Assets/csv/playerwalk.csv",
+	"Assets/csv/playerwalk.csv",
+};
 
 void Player::Init()
 {
@@ -13,17 +21,12 @@ void Player::Init()
 	for (int i = 0; i < Player_State::MAX; ++i)
 	{
 		std::shared_ptr<TexAnimation> pImage(new TexAnimation());
+		pImage->LoadData(g_pPlayerAnimPath[i]);
 		m_pTexAnimList.push_back(pImage);
 	}
 
-	Vector2 vTiling = Vector2(0.167f, 0.25f);
-	//m_pTexAnimList[Player_State::WAIT]->LoadData("Assets/samp.png");
-	m_pTexAnimList[Player_State::WALK]->LoadData("Assets/csv/playerwalk.csv");
-	//m_pTexAnimList[Player_State::ATTACK]->SetPath("Assets/samp.png");
-	//m_pTexAnimList[Player_State::SKILL1]->SetPath("Assets/samp.png");
-	//m_pTexAnimList[Player_State::SKILL2]->SetPath("Assets/samp.png");
-	m_nAnimFrame = 0;
 	m_Direction = Chara_Direction::DOWN;
+	m_isMove = false;
 }
 
 void Player::Uninit()
@@ -35,11 +38,19 @@ void Player::Update()
 	m_Transform = m_pOwner.lock()->GetTransform();
 	DestinationCollision();
 	Move();
-	m_pTexAnimList[Player_State::WALK]->Update(m_Direction);
+	if (!m_isMove)
+	{
+		m_pTexAnimList[Player_State::WALK]->Reset(m_Direction);
+	}
+	else
+	{
+		m_pTexAnimList[Player_State::WALK]->Update(m_Direction);
+	}
 	if (!m_pBBR.expired())
 	{
 		m_pBBR.lock()->SetMainImage(m_pTexAnimList[Player_State::WALK]);
 	}
+	m_pOwner.lock()->SetTransform(m_Transform);
 }
 
 void Player::DestinationCollision()
@@ -49,6 +60,11 @@ void Player::DestinationCollision()
 	if (fLength < OneSecMoveSpeed * 0.05f)
 	{
 		m_vMove = 0;
+		m_isMove = false;
+	}
+	else
+	{
+		m_isMove = true;
 	}
 }
 
@@ -57,13 +73,12 @@ void Player::Move()
 	m_Transform.move.x = m_vMove.x * static_cast<float>(Clocker::GetInstance().GetFrameTime());
 	m_Transform.move.z = m_vMove.y * static_cast<float>(Clocker::GetInstance().GetFrameTime());
 	m_Transform.pos += m_Transform.move;
-	m_pOwner.lock()->SetTransform(m_Transform);
 }
 
 void Player::CalcDestination(const Vector3 & vPos)
 {
 	if (IsKeyPress(VK_LBUTTON))
-	{
+	{ 
 		m_vDestination.x = vPos.x;
 		m_vDestination.y = vPos.z;
 		m_vMove.x = m_vDestination.x - m_Transform.pos.x;

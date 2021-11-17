@@ -161,8 +161,10 @@
     <ClCompile Include="System\Clocker.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="App\TexAnimation.cpp" />
     <ClCompile Include="System\DebugLog.cpp" />
+    <ClCompile Include="App\TexAnimation.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">

@@ -12,7 +12,7 @@ public:
 	virtual ~TexAnimation() {}
 
 	void LoadData(const char* pPath);
-	void Reset();
+	void Reset(const int nType);
 	void Update(const int nType);
 	void Bind();
 
@@ -21,8 +21,8 @@ private:
 	std::vector<Vector2> m_vStartOffsetList;
 	float m_fAnimSpeed;
 	float m_fTime;
-	int m_nSheetsX;
-	int m_nSheetsY;
-	int m_nSheet;
+	VectorInt2 m_vSheetsNum;
+	VectorInt2 m_vSheet;
+	VectorInt2 m_vStartSheet;
 	int m_nAnimType;
 };

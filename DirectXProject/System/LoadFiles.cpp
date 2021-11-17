@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <System/DebugLog.h>
 
 const STRINGMAP& LoadFiles::CSV(const char * pPath)
 {
@@ -10,7 +11,8 @@ const STRINGMAP& LoadFiles::CSV(const char * pPath)
 
 	if (!readfile.is_open())
 	{
-		std::cout << "CSVファイル" << pPath << "が読み込めませんでした" << std::endl;
+		DebugLog::GetInstance().LoadFileError(pPath);
+		//std::cout << "CSVファイル" << pPath << "が読み込めませんでした" << std::endl;
 		return m_StringMap;
 	}
 	std::string line;

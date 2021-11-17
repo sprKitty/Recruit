@@ -9,6 +9,7 @@
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Object.h>
 #include <App/Component/Character/Player.h>
+#include <App/Component/Character/MasterWitch.h>
 #include <App/Event/Talk.h>
 #include <App/EventMgr.h>
 #include <System/ClassDesign/Singleton.h>
@@ -74,6 +75,14 @@ public:
 	{
 		Object::OWNER_OBJ pObj(new Object());
 		pObj->SetType(Object::Type::BOSS_WITCH);
+		std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
+		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
+		if (!pMasterWitch.expired() && !pBBR.expired())
+		{
+			pMasterWitch.lock()->SetBillBoardRenderer(pBBR);
+			pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
+			pBBR.lock()->SetCamera(m_pCamera);
+		}
 		std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 		if (!pET.expired())
 		{

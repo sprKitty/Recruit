@@ -4,6 +4,7 @@
 #include <App/Camera.h>
 #include <App/RenderPipeline.h>
 #include <System/Geometory.h>
+#include <System/DebugLog.h>
 
 void BillBoardRenderer::Init()
 {
@@ -43,7 +44,7 @@ void BillBoardRenderer::Draw(const DrawType::kind type)
 {
 	if (!m_isDrawType[type])
 	{
-		std::cout << "ビルボードに使用するカメラが設定されていません" << std::endl;
+		DebugLog::GetInstance().FreeError("ビルボードに使用使うカメラが設定されていません");
 		return;
 	}
 	if (!m_pMainTexAnim.expired())
