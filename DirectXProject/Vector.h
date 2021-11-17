@@ -99,6 +99,13 @@ public:
 		return *this;
 	}
 
+	const Vector2& Abs()
+	{
+		x = (x < 0) ? x * -1 : x;
+		y = (y < 0) ? y * -1 : y;
+		return *this;
+	}
+
 	DirectX::XMFLOAT2 Convert()
 	{
 		DirectX::XMFLOAT2 v2;
@@ -328,6 +335,14 @@ public:
 	const float Dot(const Vector3& vA, const Vector3& vB)
 	{
 		return vA.x * vB.x + vA.y * vB.y + vA.z * vB.z;
+	}
+
+	const Vector3& Abs()
+	{
+		x = (x < 0) ? x * -1 : x;
+		y = (y < 0) ? y * -1 : y;
+		z = (z < 0) ? z * -1 : z;
+		return *this;
 	}
 
 	DirectX::XMFLOAT3 Convert()

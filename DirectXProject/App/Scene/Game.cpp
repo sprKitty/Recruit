@@ -23,21 +23,30 @@ void Game::Init()
 	FactoryMethod::GetInstance().SetCamera(m_pCamera);
 	FactoryMethod::GetInstance().SetMouse(m_pMouse);
 
-	Object::OWNER_OBJ pObj;
-	m_pObjList.push_back(std::move(FactoryMethod::GetInstance().CreateObject()));
+	Object::OWNER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
 
-	m_pObjList.push_back(std::move(FactoryMethod::GetInstance().CreatePlayerObject()));
+	Object::OWNER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject();
 	
-	m_pObjList.push_back(std::move(FactoryMethod::GetInstance().CreateBoss1Object()));
+	Object::OWNER_OBJ pBoss1 = FactoryMethod::GetInstance().CreateBoss1Object();
 
-	m_pObjList.push_back(std::move(FactoryMethod::GetInstance().CreateBossWitchObject()));
+	Object::OWNER_OBJ pMasterWitch = FactoryMethod::GetInstance().CreateBossWitchObject();
 
 	std::shared_ptr<Talk> pTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
 	pTalk->SetMessageWindow(m_pMessageWindow);
 
-	pObj = std::move(FactoryMethod::GetInstance().CreateEventObject());
+	Object::OWNER_OBJ pEvent = FactoryMethod::GetInstance().CreateEventObject();
+	std::weak_ptr<Event> pTalkEvent = pEvent->GetComponent<Event>();
+	
+	if (!pMasterWitch->GetComponent<MasterWitch>().expired())
+	{
+		pMasterWitch->GetComponent<MasterWitch>().lock()->SetTarget(pPlayer);
+	}
+
 	m_pObjList.push_back(pObj);
-	std::weak_ptr<Event> pTalkEvent = pObj->GetComponent<Event>();
+	m_pObjList.push_back(pPlayer);
+	m_pObjList.push_back(pBoss1);
+	m_pObjList.push_back(pMasterWitch);
+	m_pObjList.push_back(pEvent);
 
 	Object::WORKER_OBJECTLIST pObjects = Object::ConvertWorker(m_pObjList);
 	if (!pTalkEvent.expired())

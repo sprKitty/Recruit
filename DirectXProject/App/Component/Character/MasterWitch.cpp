@@ -40,14 +40,24 @@ void MasterWitch::Update()
 
 void MasterWitch::CalcTarget()
 {
-	if(m_pTarget.expired())
+	if (m_pTarget.expired())
 	{
 		DebugLog::GetInstance().FreeError("MasterWitchクラスでターゲットが設定されていません。");
 		return;
 	}
 	Transform targetT = m_pTarget.lock()->GetTransform();
 
-	float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
+	Vector2 vDistance = Vector2(m_Transform.pos.x - targetT.pos.x, m_Transform.pos.z - targetT.pos.z);
+	float fLength = vDistance.Length();
 
-	m_Direction = CalcDirection(fRad);
+	if (fLength > 5)
+	{
+		m_Direction = Chara_Direction::DOWN;
+	}
+	else
+	{
+		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
+
+		m_Direction = CalcDirection(DEG(fRad));
+	}
 }

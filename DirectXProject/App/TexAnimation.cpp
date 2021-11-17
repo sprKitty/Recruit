@@ -40,7 +40,9 @@ void TexAnimation::LoadData(const char * pPath)
 		}
 		else if (itr.first == "1ファイル名")
 		{
-			m_pImage->SetPath(itr.second[0].c_str());
+			std::string path("Assets/characterchip/");
+			path += itr.second[0];
+			m_pImage->SetPath(path.c_str());
 		}
 		else if (itr.first == "4アニメーション枚数")
 		{
