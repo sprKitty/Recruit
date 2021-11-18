@@ -1,5 +1,7 @@
 #pragma once
 #include <App/Component/Character/Character.h>
+#include<System/ClassDesign/StateBase.h>
+
 
 class Object;
 
@@ -7,10 +9,29 @@ namespace Witch_State
 {
 	enum Kind
 	{
-		WAIT,
-
+		MASTER,
+		BOSS,
 		MAX,
 	};
+
+	namespace Master
+	{
+		enum Kind
+		{
+			WAIT = 0,
+			MAX
+		};
+	};
+
+	namespace Boss
+	{
+		enum Kind
+		{
+			WAIT = 0,
+			ATTACK1 = 1,
+			MAX,
+		};
+	}
 }
 
 class MasterWitch : public Character
@@ -28,9 +49,18 @@ public:
 		m_pTarget = pTarget;
 	}
 
-private:
-	void CalcTarget();
+	const bool CalcTarget();
+	
+	const int MasterFromBoss();
+	const int ChangeBossState();
+	const int ResetBossState();
 
 private:
+	Witch_State::Master::Kind m_masterState;
+	Witch_State::Boss::Kind m_bossState;
+	Witch_State::Kind m_state;
 	std::weak_ptr<Object> m_pTarget;
+	std::vector<std::unique_ptr<StateBase> > m_pMasterStateList;
+	std::vector<std::unique_ptr<StateBase> > m_pBossStateList;
+
 };

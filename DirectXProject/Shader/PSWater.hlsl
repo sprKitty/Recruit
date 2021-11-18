@@ -84,6 +84,7 @@ SamplerState MIRROR : register(s4);
 void gerstnerWave(in float3 localVtx, float t, float waveLen, float Q, float R, float2 browDir, inout float3 localVtxPos, inout float3 localNormal)
 {
 
+    
     browDir = normalize(browDir);
     const float pi = 3.1415926535f;
     const float grav = 9.8f;

@@ -12,7 +12,8 @@ Event::~Event()
 void Event::Init()
 {
 	m_isPlay = false;
-	for (const auto itr : m_pActionEvents)
+	m_isFinishAll = false;
+	for (const auto& itr : m_pActionEvents)
 	{
 		itr->Init();
 	}
@@ -20,7 +21,7 @@ void Event::Init()
 
 void Event::Uninit()
 {
-	for (const auto itr : m_pActionEvents)
+	for (const auto& itr : m_pActionEvents)
 	{
 		itr->Uninit();
 	}
@@ -29,11 +30,31 @@ void Event::Uninit()
 void Event::Update()
 {
 	if (!m_isPlay)return;
-	m_pActiveItr = m_pActionEvents.begin();
+	if (m_isFinishAll)return;
+
 	if ((*m_pActiveItr)->IsFin())
 	{
-		++m_pActiveItr;
-	}
+		if (m_pActiveItr == m_pActionEvents.end())
+		{
+			m_isFinishAll = true;
+			return;
+		}
+		else
+		{
+			++m_pActiveItr;
+		}
 
+	}
 	(*m_pActiveItr)->Update();
+}
+
+void Event::ResetEvent()
+{
+	m_isPlay = false;
+	m_isFinishAll = false;
+	for (const auto itr : m_pActionEvents)
+	{
+		itr->Init();
+	}
+	m_pActiveItr = m_pActionEvents.begin();
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Character.h"
-#include <System/ClassDesign/State.h>
+#include <System/ClassDesign/StateBase.h>
 
 
 namespace Player_State

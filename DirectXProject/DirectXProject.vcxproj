@@ -237,7 +237,7 @@
     <ClInclude Include="System\ClassDesign\Delegate.h" />
     <ClInclude Include="System\ClassDesign\Manager.h" />
     <ClInclude Include="System\ClassDesign\Singleton.h" />
-    <ClInclude Include="System\ClassDesign\State.h" />
+    <ClInclude Include="System\ClassDesign\StateBase.h" />
     <ClInclude Include="System\Clocker.h" />
     <ClInclude Include="System\Collision.h" />
     <ClInclude Include="System\DebugLog.h" />

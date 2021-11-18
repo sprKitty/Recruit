@@ -66,6 +66,7 @@ void Talk::Update()
 				++m_nStep;
 				if (m_nStep == m_Infos.size())
 				{
+					m_isFin = true;
 					m_nStep = 0;
 				}
 			}

@@ -119,12 +119,6 @@
     <ClCompile Include="System\Texture.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="App\Component\Image.cpp">
-      <Filter>C++ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Level.cpp">
-      <Filter>C++ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="MyMath.cpp">
       <Filter>C++ファイル</Filter>
     </ClCompile>
@@ -161,8 +155,16 @@
     <ClCompile Include="System\Clocker.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="System\DebugLog.cpp" />
     <ClCompile Include="App\TexAnimation.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="System\DebugLog.cpp">
+      <Filter>C++ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Level.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Image.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,9 +265,6 @@
     <ClInclude Include="System\LoadFiles.h">
       <Filter>C++ファイル\System</Filter>
     </ClInclude>
-    <ClInclude Include="App\Component\Image.h">
-      <Filter>C++ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="App\Level.h">
       <Filter>C++ファイル\App</Filter>
     </ClInclude>
@@ -311,14 +310,17 @@
     <ClInclude Include="App\Component\Character\MasterWitch.h">
       <Filter>C++ファイル\App\Component\Character</Filter>
     </ClInclude>
-    <ClInclude Include="System\ClassDesign\State.h">
-      <Filter>C++ファイル\System\ClassDesign</Filter>
-    </ClInclude>
     <ClInclude Include="App\TexAnimation.h">
       <Filter>C++ファイル\App</Filter>
     </ClInclude>
     <ClInclude Include="System\DebugLog.h">
       <Filter>C++ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Image.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\StateBase.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
