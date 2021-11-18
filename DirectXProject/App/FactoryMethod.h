@@ -77,6 +77,7 @@ public:
 		pObj->SetType(Object::Type::BOSS_WITCH);
 		std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
+		pObj->AddComponent<Event>();
 		if (!pMasterWitch.expired() && !pBBR.expired())
 		{
 			pMasterWitch.lock()->SetBillBoardRenderer(pBBR);

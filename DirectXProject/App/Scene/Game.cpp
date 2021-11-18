@@ -34,8 +34,8 @@ void Game::Init()
 	std::shared_ptr<Talk> pTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
 	pTalk->SetMessageWindow(m_pMessageWindow);
 
-	Object::OWNER_OBJ pEvent = FactoryMethod::GetInstance().CreateEventObject();
-	std::weak_ptr<Event> pTalkEvent = pEvent->GetComponent<Event>();
+	//Object::OWNER_OBJ pEvent = FactoryMethod::GetInstance().CreateEventObject();
+	std::weak_ptr<Event> pTalkEvent = pMasterWitch->GetComponent<Event>();
 	
 	if (!pMasterWitch->GetComponent<MasterWitch>().expired())
 	{
@@ -46,7 +46,7 @@ void Game::Init()
 	m_pObjList.push_back(pPlayer);
 	m_pObjList.push_back(pBoss1);
 	m_pObjList.push_back(pMasterWitch);
-	m_pObjList.push_back(pEvent);
+	//m_pObjList.push_back(pEvent);
 
 	Object::WORKER_OBJECTLIST pObjects = Object::ConvertWorker(m_pObjList);
 	if (!pTalkEvent.expired())

@@ -60,7 +60,7 @@ private:
 	Witch_State::Boss::Kind m_bossState;
 	Witch_State::Kind m_state;
 	std::weak_ptr<Object> m_pTarget;
-	std::vector<std::unique_ptr<StateBase> > m_pMasterStateList;
-	std::vector<std::unique_ptr<StateBase> > m_pBossStateList;
+	std::vector<std::unique_ptr<State<MasterWitch> > > m_pMasterStateList;
+	std::vector<std::unique_ptr<State<MasterWitch> > > m_pBossStateList;
 
 };

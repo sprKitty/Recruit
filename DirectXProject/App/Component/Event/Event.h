@@ -29,12 +29,12 @@ public:
 	template<class T>
 	inline void Add(const std::shared_ptr<T>& pT)
 	{
-		m_pActionEvents.push_back(std::move(std::dynamic_pointer_cast<EventBase>(pT)));
+		m_pActionEvents.push_back(std::move(pT));
 	}
 
 private:
 	bool m_isPlay;
 	bool m_isFinishAll;
 	std::vector<std::shared_ptr<EventBase> > m_pActionEvents;
-	std::vector<std::shared_ptr<EventBase> >::iterator m_pActiveItr;
+	int m_nArray;
 };

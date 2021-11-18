@@ -13,6 +13,7 @@ void Event::Init()
 {
 	m_isPlay = false;
 	m_isFinishAll = false;
+	m_nArray = 0;
 	for (const auto& itr : m_pActionEvents)
 	{
 		itr->Init();
@@ -32,20 +33,21 @@ void Event::Update()
 	if (!m_isPlay)return;
 	if (m_isFinishAll)return;
 
-	if ((*m_pActiveItr)->IsFin())
+	if (m_pActionEvents[m_nArray]->IsFin())
 	{
-		if (m_pActiveItr == m_pActionEvents.end())
+		int nSize = static_cast<int>(m_pActionEvents.size());
+		if (m_nArray >= nSize - 1)
 		{
 			m_isFinishAll = true;
 			return;
 		}
 		else
 		{
-			++m_pActiveItr;
+			++m_nArray;
 		}
-
 	}
-	(*m_pActiveItr)->Update();
+
+	m_pActionEvents[m_nArray]->Update();
 }
 
 void Event::ResetEvent()
@@ -56,5 +58,5 @@ void Event::ResetEvent()
 	{
 		itr->Init();
 	}
-	m_pActiveItr = m_pActionEvents.begin();
+	//m_pActiveItr = m_pActionEvents.begin();
 }

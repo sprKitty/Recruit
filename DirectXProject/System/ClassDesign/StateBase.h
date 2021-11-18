@@ -4,17 +4,20 @@
 #include<Defines.h>
 
 
-class StateBase
+template<class T>
+class State
 {
-protected:
-	using EVENT_FUNC = std::shared_ptr<DelegateBase_void<const bool> >;
-	using TRANS_FUNC = std::shared_ptr<DelegateBase_void<const int> >;
+private:
+	using ACTION_DELEGATE = std::shared_ptr<DelegateBase_void<const bool> >;
+	using TRANS_DELEGATE = std::shared_ptr<DelegateBase_void<const int> >;
 
+	using ActionFunc = const bool(T::*)();
+	using TransFunc = const int(T::*)();
 public:
-	StateBase() {}
-	virtual ~StateBase() {}
+	State() {}
+	virtual ~State() {}
 
-	virtual const bool Execute()
+	virtual const bool Action()
 	{
 		if (m_pEventFuncList.empty())
 		{
@@ -41,17 +44,17 @@ public:
 		return m_pTransFunc->Execute();
 	}
 
-	void AddEventFunc(const EVENT_FUNC& pEvent)
+	void AddActionFunc(const std::weak_ptr<T>& pT, const ActionFunc func)
 	{
-		m_pEventFuncList.push_back(pEvent);
+		m_pEventFuncList.push_back(Delegate_void<T, const bool>::CreateDelegator(pT, func));
 	}
 
-	void SetTransitionFunc(const TRANS_FUNC& pTrans)
+	void SetTransitionFunc(const std::weak_ptr<T>& pT, const TransFunc func)
 	{
-		m_pTransFunc = pTrans;
+		m_pTransFunc = Delegate_void<T, const int>::CreateDelegator(pT, func);
 	}
 
 private:
-	std::vector<EVENT_FUNC> m_pEventFuncList;
-	TRANS_FUNC m_pTransFunc;
+	std::vector<ACTION_DELEGATE> m_pEventFuncList;
+	TRANS_DELEGATE m_pTransFunc;
 };

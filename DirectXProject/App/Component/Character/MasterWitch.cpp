@@ -28,20 +28,20 @@ void MasterWitch::Init()
 	{
 		for (int i = 0; i < Witch_State::Master::MAX; ++i)
 		{
-			m_pMasterStateList.push_back(std::move(std::make_unique<StateBase>()));
+			m_pMasterStateList.push_back(std::move(std::make_unique<State<MasterWitch> >()));
 		}
 		for (int i = 0; i < Witch_State::Boss::MAX; ++i)
 		{
-			m_pBossStateList.push_back(std::move(std::make_unique<StateBase>()));
+			m_pBossStateList.push_back(std::move(std::make_unique<State<MasterWitch> >()));
 		}
 		
-		m_pMasterStateList[Witch_State::Master::WAIT]->AddEventFunc(Delegate_void<MasterWitch, const bool>::CreateDelegator(pMW, &MasterWitch::CalcTarget));
-		m_pMasterStateList[Witch_State::Master::WAIT]->SetTransitionFunc(Delegate_void<MasterWitch, const int>::CreateDelegator(pMW, &MasterWitch::MasterFromBoss));
+		m_pMasterStateList[Witch_State::Master::WAIT]->AddActionFunc(pMW, &MasterWitch::CalcTarget);
+		m_pMasterStateList[Witch_State::Master::WAIT]->SetTransitionFunc(pMW, &MasterWitch::MasterFromBoss);
 
-		m_pBossStateList[Witch_State::Boss::WAIT]->AddEventFunc(Delegate_void<MasterWitch, const bool>::CreateDelegator(pMW, &MasterWitch::CalcTarget));
-		m_pBossStateList[Witch_State::Boss::WAIT]->SetTransitionFunc(Delegate_void<MasterWitch, const int>::CreateDelegator(pMW, &MasterWitch::ChangeBossState));
+		m_pBossStateList[Witch_State::Boss::WAIT]->AddActionFunc(pMW, &MasterWitch::CalcTarget);
+		m_pBossStateList[Witch_State::Boss::WAIT]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 
-		m_pBossStateList[Witch_State::Boss::ATTACK1]->SetTransitionFunc(Delegate_void<MasterWitch, const int>::CreateDelegator(pMW, &MasterWitch::ChangeBossState));
+		m_pBossStateList[Witch_State::Boss::ATTACK1]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 	}
 	else
 	{
@@ -63,7 +63,7 @@ void MasterWitch::Update()
 	switch (m_state)
 	{
 	case Witch_State::MASTER:
-		if (m_pMasterStateList[m_masterState]->Execute())
+		if (m_pMasterStateList[m_masterState]->Action())
 		{
 			m_masterState = static_cast<Witch_State::Master::Kind>(m_pMasterStateList[m_masterState]->Next());
 			
@@ -81,7 +81,7 @@ void MasterWitch::Update()
 		break;
 	
 	case Witch_State::BOSS:
-		if (m_pBossStateList[m_bossState]->Execute())
+		if (m_pBossStateList[m_bossState]->Action())
 		{
 			m_bossState = static_cast<Witch_State::Boss::Kind>(m_pBossStateList[m_bossState]->Next());
 		
@@ -156,7 +156,7 @@ const int MasterWitch::MasterFromBoss()
 	{
 		if (pEvent.lock()->IsFinishAll())
 		{
-			return Witch_State::Master::MAX;
+			return Witch_State::BOSS;
 		}
 		else
 		{
@@ -173,7 +173,7 @@ const int MasterWitch::MasterFromBoss()
 
 const int MasterWitch::ChangeBossState()
 {
-	return Witch_State::Boss::ATTACK1;
+	return Witch_State::Boss::WAIT;
 }
 
 const int MasterWitch::ResetBossState()

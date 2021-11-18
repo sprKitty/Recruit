@@ -1,6 +1,5 @@
 ﻿  MasterWitch.cpp
-  Event.cpp
-  EventMgr.cpp
+  Player.cpp
   Game.cpp
   コードを生成中...
   DirectXProject.vcxproj -> C:\Users\taker\Desktop\MyGame\Recruit\x64\Debug\DirectXProject.exe
