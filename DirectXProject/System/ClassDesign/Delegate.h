@@ -48,10 +48,9 @@ public:
 		m_func = func;
 	}
 
-protected:
+private:
 	std::weak_ptr<T> m_pObj;
 	EventFunc m_func;
-private:
 
 };
 
@@ -97,9 +96,8 @@ public:
 		m_func = func;
 	}
 
-protected:
+private:
 	std::weak_ptr<T> m_pObj;
 	EventFunc m_func;
-private:
 
 };

@@ -51,11 +51,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		NULL, hInstance, NULL
 	);
 
-#ifdef _DEBUG
-	DebugLog::GetInstance().Initialize();
-#endif // _DEBUG
 
 	
+	DebugLog::GetInstance().Initialize();
 	// ウィンドウの表示
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
@@ -124,9 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	timeEndPeriod(1);
 	SceneMgr::GetInstance().Finalize();
 
-#ifdef _DEBUG
 	DebugLog::GetInstance().Finalize();
-#endif // _DEBUG
 
 	UnregisterClass(wcex.lpszClassName, hInstance);
 

@@ -9,9 +9,9 @@ namespace Player_State
 	{
 		WAIT,
 		WALK,
-		ATTACK,
-		SKILL1,
-		SKILL2,
+		//ATTACK,
+		//SKILL1,
+		//SKILL2,
 
 		MAX,
 	};
@@ -27,17 +27,26 @@ public:
 	void Uninit() override;
 	void Update() override;
 
-	void CalcDestination(const Vector3& vPos);
+	void SetMousePos(const Vector3& vPos);
+	void EnableChangeDestination();
 
 protected:
-	void DestinationCollision();
-	void Move()override;
+	const bool Move()override;
+
+private:
+	const bool CalcDestination();
+	const bool DestinationCollision();
+
+	const int WaitStateChange();
+	const int WalkStateChange();
 
 private:
 	const float OneSecMoveSpeed = 3.0f;
-
-	Player_State::Kind m_State;
+	State<Player>::PTRLIST m_pStateList;
+	Player_State::Kind m_state;
+	Vector3 m_vMousePos;
 	Vector2 m_vDestination;
 	Vector2 m_vMove;
 	bool m_isMove;
+	bool m_isChangeDestination;
 };

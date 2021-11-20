@@ -12,6 +12,7 @@
 #include <App/Component/Character/MasterWitch.h>
 #include <App/Event/Talk.h>
 #include <App/EventMgr.h>
+#include <App/GameKeyBind.h>
 #include <System/ClassDesign/Singleton.h>
 
 
@@ -44,23 +45,27 @@ public:
 		return std::move(pObj);
 	}
 
-	Object::OWNER_OBJ CreatePlayerObject()
+	Object::OWNER_OBJ CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB)
 	{
 		Object::OWNER_OBJ pObj(new Object());
 		pObj->SetType(Object::Type::PLAYER);
 		
 		
 		std::weak_ptr<Player> pPlayer = pObj->AddComponent<Player>();
-		if (!m_pMouse.expired())
-		{
-			m_pMouse.lock()->SetExecuteFunc(Delegate<Player, void, const Vector3&>::CreateDelegator(pObj->GetComponent<Player>(), &Player::CalcDestination));
-		}
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 		if (!pPlayer.expired() && !pBBR.expired())
 		{
 			pPlayer.lock()->SetBillBoardRenderer(pBBR);
 			pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
 			pBBR.lock()->SetCamera(m_pCamera);
+		}
+		if (!m_pMouse.expired())
+		{
+			m_pMouse.lock()->SetExecuteFunc(Delegate<Player, void, const Vector3&>::CreateDelegator(pPlayer, &Player::SetMousePos));
+		}
+		if (!pGKB.expired())
+		{
+			pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate_void<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination));
 		}
 		std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 		if (!pET.expired())

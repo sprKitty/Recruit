@@ -17,6 +17,9 @@ void MasterWitch::Init()
 	m_masterState = Witch_State::Master::WAIT;
 	m_bossState = Witch_State::Boss::WAIT;
 	m_state = Witch_State::MASTER;
+	Transform transform;
+	transform.scale = 2;
+	m_pOwner.lock()->SetTransform(transform);
 	for (int i = 0; i < Witch_State::MAX; ++i)
 	{
 		std::shared_ptr<TexAnimation> pImage(new TexAnimation());

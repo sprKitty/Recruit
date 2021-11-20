@@ -1,11 +1,9 @@
 #include "Character.h"
 
-void Character::Move()
-{
-}
 
-void Character::PointAtoB_AStar()
+const bool  Character::PointAtoB_AStar()
 {
+	return true;
 }
 
 const Chara_Direction::Kind Character::CalcDirection(const float fDeg)

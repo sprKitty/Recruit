@@ -176,6 +176,7 @@
     <ClCompile Include="App\Component\Renderer\Renderer3D.cpp" />
     <ClCompile Include="App\EventMgr.cpp" />
     <ClCompile Include="App\Event\Talk.cpp" />
+    <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Level.cpp" />
     <ClCompile Include="App\Light.cpp" />
     <ClCompile Include="App\MMDModel.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="App\Event\EventBase.h" />
     <ClInclude Include="App\Event\Talk.h" />
     <ClInclude Include="App\FactoryMethod.h" />
+    <ClInclude Include="App\GameKeyBind.h" />
     <ClInclude Include="App\Level.h" />
     <ClInclude Include="App\Light.h" />
     <ClInclude Include="App\MMDModel.h" />

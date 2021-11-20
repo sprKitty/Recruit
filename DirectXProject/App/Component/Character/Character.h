@@ -38,8 +38,8 @@ public:
 	}
 
 protected:
-	virtual void Move();
-	virtual void PointAtoB_AStar();
+	virtual const bool Move() { return true; }
+	virtual const bool  PointAtoB_AStar();
 	const Chara_Direction::Kind CalcDirection(const float fDeg);
 
 protected:

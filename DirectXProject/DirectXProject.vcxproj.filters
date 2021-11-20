@@ -167,6 +167,7 @@
     <ClCompile Include="App\Component\Image.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
+    <ClCompile Include="App\GameKeyBind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -321,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="System\ClassDesign\StateBase.h">
       <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="App\GameKeyBind.h">
+      <Filter>C++ファイル\App</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
