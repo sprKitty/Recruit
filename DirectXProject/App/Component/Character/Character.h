@@ -40,7 +40,8 @@ public:
 protected:
 	virtual const bool Move() { return true; }
 	virtual const bool  PointAtoB_AStar();
-	const Chara_Direction::Kind CalcDirection(const float fDeg);
+	const Chara_Direction::Kind CalcDirection8(const float fDeg);
+	const Chara_Direction::Kind CalcDirection4(const float fDeg);
 
 protected:
 	std::vector<std::shared_ptr<TexAnimation> > m_pTexAnimList;

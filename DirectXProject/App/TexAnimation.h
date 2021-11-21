@@ -16,6 +16,11 @@ public:
 	void Update(const int nType);
 	void Bind();
 
+	inline const bool IsFinish()
+	{
+		return m_isFinish;
+	}
+
 private:
 	std::shared_ptr<Image> m_pImage;
 	std::vector<Vector2> m_vStartOffsetList;
@@ -25,4 +30,6 @@ private:
 	VectorInt2 m_vSheet;
 	VectorInt2 m_vStartSheet;
 	int m_nAnimType;
+	bool m_isLoop;
+	bool m_isFinish;
 };

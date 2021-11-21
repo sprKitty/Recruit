@@ -1,10 +1,11 @@
 #include "BillBoardRenderer.h"
 #include <App/Component/Object.h>
+#include <App/Component/Mesh.h>
 #include <App/TexAnimation.h>
 #include <App/Camera.h>
 #include <App/RenderPipeline.h>
-#include <System/Geometory.h>
 #include <System/DebugLog.h>
+
 
 void BillBoardRenderer::Init()
 {
@@ -59,7 +60,23 @@ void BillBoardRenderer::Draw(const DrawType::kind type)
 	DirectX::XMMATRIX mtx = DirectX::XMMatrixIdentity();
 	CalcBillBoard(mtx);
 	ShaderBuffer::GetInstance().SetWorld(mtx);
-	Geometory::GetInstance().DrawCharacterPolygon();
+	if (m_pMesh.expired())
+	{
+		m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
+		if (m_pMesh.expired())
+		{
+			DebugLog::GetInstance().FreeError("•`‰æ‚É•K—v‚ÈMesh‚ªÝ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+		}
+		else
+		{
+			m_pMesh.lock()->Bind();
+		}
+	}
+	else
+	{
+		m_pMesh.lock()->Bind();
+	}
+	//Geometory::GetInstance().DrawCharacterPolygon();
 }
 
 void BillBoardRenderer::CalcBillBoard(DirectX::XMMATRIX & mtx)

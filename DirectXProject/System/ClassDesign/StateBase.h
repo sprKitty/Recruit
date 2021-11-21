@@ -12,8 +12,8 @@ public:
 	using PTRLIST = std::vector<PTR>;
 
 private:
-	using ACTION_DELEGATE = std::shared_ptr<DelegateBase_void<const bool> >;
-	using TRANS_DELEGATE = std::shared_ptr<DelegateBase_void<const int> >;
+	using ACTION_DELEGATE = std::shared_ptr<DelegateBase<const bool> >;
+	using TRANS_DELEGATE = std::shared_ptr<DelegateBase<const int> >;
 
 	using ActionFunc = const bool(T::*)();
 	using TransFunc = const int(T::*)();
@@ -55,7 +55,7 @@ public:
 	*/
 	void AddActionFunc(const std::weak_ptr<T>& pT, const ActionFunc func)
 	{
-		m_pEventFuncList.push_back(Delegate_void<T, const bool>::CreateDelegator(pT, func));
+		m_pEventFuncList.push_back(Delegate<T, const bool>::CreateDelegator(pT, func));
 	}
 
 	/*
@@ -65,7 +65,7 @@ public:
 	*/
 	void SetTransitionFunc(const std::weak_ptr<T>& pT, const TransFunc func)
 	{
-		m_pTransFunc = Delegate_void<T, const int>::CreateDelegator(pT, func);
+		m_pTransFunc = Delegate<T, const int>::CreateDelegator(pT, func);
 	}
 
 private:

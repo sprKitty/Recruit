@@ -4,6 +4,7 @@
 
 class Camera;
 class TexAnimation;
+class Mesh;
 
 class BillBoardRenderer : public Renderer
 {
@@ -83,4 +84,5 @@ private:
 	std::weak_ptr<Camera> m_pCamera;
 	std::weak_ptr<TexAnimation> m_pMainTexAnim;
 	std::weak_ptr<TexAnimation> m_pBumpTexAnim;
+	std::weak_ptr<Mesh> m_pMesh;
 };

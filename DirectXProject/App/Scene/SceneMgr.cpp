@@ -2,6 +2,7 @@
 #include <App/RenderPipeline.h>
 #include <App/Scene/Game.h>
 #include <System/MessageWindow.h>
+#include <App/MeshData.h>
 #include <System/Geometory.h>
 #include <System/Sound/Sound.h>
 #include <System/Input.h>
@@ -18,6 +19,8 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	ShaderBuffer::GetInstance().Initialize();
 	RenderPipeline::GetInstance().Initialize();
 	MessageWindow::CreateOffsetMap();
+	MeshData::GetInstance().Initialize();
+	MeshData::GetInstance().Load("field2.obj");
 	srand(timeGetTime());
 
 	m_NowScene = Scene_Type::SCENE_GAME;
@@ -31,6 +34,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 void SceneMgr::Finalize()
 {
 	m_pSceneList[m_NowScene]->Uninit();
+	MeshData::GetInstance().Finalize();
 	RenderPipeline::GetInstance().Finalize();
 	ShaderBuffer::GetInstance().Finalize();
 	UninitInput();

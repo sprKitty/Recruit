@@ -1,6 +1,7 @@
 #pragma once
 
 #include <System/DrawBuffer.h>
+#include <App/MeshData.h>
 #include <MyMath.h>
 
 class OBJModel
@@ -9,6 +10,7 @@ public:
 	OBJModel();
 	~OBJModel();
 
+	static const MeshData::Info Load(const char* pPath);
 	bool Create(const char* fileName);
 	void Draw();
 

@@ -6,7 +6,7 @@ const bool  Character::PointAtoB_AStar()
 	return true;
 }
 
-const Chara_Direction::Kind Character::CalcDirection(const float fDeg)
+const Chara_Direction::Kind Character::CalcDirection8(const float fDeg)
 {
 	const float fDir = 22.5f;
 
@@ -46,5 +46,30 @@ const Chara_Direction::Kind Character::CalcDirection(const float fDeg)
 	{
 		return Chara_Direction::LEFT;
 	}
+	return Chara_Direction::MAX;
+}
+
+const Chara_Direction::Kind Character::CalcDirection4(const float fDeg)
+{
+	const float fDir = 45.0f;
+
+	if ((fDeg > -fDir) && (fDeg <= fDir))
+	{
+		return Chara_Direction::RIGHT;
+	}
+	else if ((fDeg > fDir) && (fDeg <= fDir * 3))
+	{
+		return Chara_Direction::UP;
+	}
+	else if ((fDeg > -fDir * 3) && (fDeg <= -fDir))
+	{
+		return Chara_Direction::DOWN;
+	}
+	else if ((fDeg > -fDir * 4) && (fDeg <= -fDir * 3)
+		|| (fDeg > fDir * 3) && (fDeg <= fDir * 4))
+	{
+		return Chara_Direction::LEFT;
+	}
+
 	return Chara_Direction::MAX;
 }

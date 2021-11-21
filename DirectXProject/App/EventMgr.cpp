@@ -25,10 +25,10 @@ void EventMgr::SetEventInfo(const std::weak_ptr<Event> pEvent, const Object::WOR
 		
 		if (pEventTrigger.lock()->GetType() != type)continue;
 	
-		std::shared_ptr<DelegateBase_void<bool> > pDelegate = Delegate_void<EventTrigger, bool>::CreateDelegator(pEventTrigger, &EventTrigger::Check);
+		std::shared_ptr<DelegateBase<bool> > pDelegate = Delegate<EventTrigger, bool>::CreateDelegator(pEventTrigger, &EventTrigger::Check);
 		ei.pEventTriggers.push_back(pDelegate);
 	}
-	ei.pEvent = Delegate_void<Event, void>::CreateDelegator(pEvent, &Event::EnablePlay);
+	ei.pEvent = Delegate<Event, void>::CreateDelegator(pEvent, &Event::EnablePlay);
 
 	m_EventInfos.push_back(ei);
 }

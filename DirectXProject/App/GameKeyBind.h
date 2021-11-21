@@ -22,7 +22,7 @@ namespace KeyBind
 	enum Kind
 	{
 		MOVE,
-		NORMALATTACK,
+		ATTACK,
 		//SKILLATTACK1,
 		//SKILLATTACK2,
 
@@ -37,7 +37,7 @@ private:
 	{
 		KeyType::Kind type;
 		int nKey;
-		std::shared_ptr<DelegateBase_void<void> > pAction;
+		std::shared_ptr<DelegateBase<void> > pAction;
 	};
 
 public:
@@ -48,7 +48,7 @@ public:
 	void Finalize();
 	void Update();
 
-	inline void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, int key, const std::shared_ptr<DelegateBase_void<void> >&  pFunc)
+	inline void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, int key, const std::shared_ptr<DelegateBase<void> >&  pFunc)
 	{
 		if (bind >= m_Info.size())return;
 

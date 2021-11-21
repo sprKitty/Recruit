@@ -167,9 +167,11 @@
     <ClCompile Include="App\Component\Character\Character.cpp" />
     <ClCompile Include="App\Component\Character\MasterWitch.cpp" />
     <ClCompile Include="App\Component\Character\Player.cpp" />
+    <ClCompile Include="App\Component\Collider.cpp" />
     <ClCompile Include="App\Component\Event\Event.cpp" />
     <ClCompile Include="App\Component\Event\EventTrigger.cpp" />
     <ClCompile Include="App\Component\Image.cpp" />
+    <ClCompile Include="App\Component\Mesh.cpp" />
     <ClCompile Include="App\Component\Object.cpp" />
     <ClCompile Include="App\Component\Renderer\BillBoardRenderer.cpp" />
     <ClCompile Include="App\Component\Renderer\Renderer2D.cpp" />
@@ -179,6 +181,7 @@
     <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Level.cpp" />
     <ClCompile Include="App\Light.cpp" />
+    <ClCompile Include="App\MeshData.cpp" />
     <ClCompile Include="App\MMDModel.cpp" />
     <ClCompile Include="App\OBJModel.cpp" />
     <ClCompile Include="App\RenderPipeline.cpp" />
@@ -210,10 +213,12 @@
     <ClInclude Include="App\Component\Character\Character.h" />
     <ClInclude Include="App\Component\Character\MasterWitch.h" />
     <ClInclude Include="App\Component\Character\Player.h" />
+    <ClInclude Include="App\Component\Collider.h" />
     <ClInclude Include="App\Component\Component.h" />
     <ClInclude Include="App\Component\Event\Event.h" />
     <ClInclude Include="App\Component\Event\EventTrigger.h" />
     <ClInclude Include="App\Component\Image.h" />
+    <ClInclude Include="App\Component\Mesh.h" />
     <ClInclude Include="App\Component\Object.h" />
     <ClInclude Include="App\Component\Renderer\BillBoardRenderer.h" />
     <ClInclude Include="App\Component\Renderer\Renderer.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="App\GameKeyBind.h" />
     <ClInclude Include="App\Level.h" />
     <ClInclude Include="App\Light.h" />
+    <ClInclude Include="App\MeshData.h" />
     <ClInclude Include="App\MMDModel.h" />
     <ClInclude Include="App\OBJModel.h" />
     <ClInclude Include="App\RenderPipeline.h" />

@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <System/ClassDesign/Singleton.h>
+#include <App/MeshData.h>
 #include <Vector.h>
 
 
@@ -14,6 +15,11 @@ public:
 	friend class Singleton<Geometory>;
 
 public:
+
+	static MeshData::Info CreateBoardPolygon();
+	static MeshData::Info CreateCharacterPolygon();
+	static MeshData::Info CreateCube();
+
 	void Initialize()override {}
 	void Finalize()override {}
 	HRESULT Create();

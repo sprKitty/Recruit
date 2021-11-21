@@ -9,7 +9,7 @@ const char* g_pPlayerAnimPath[Player_State::MAX] =
 {
 	"Assets/csv/playerwait.csv",
 	"Assets/csv/playerwalk.csv",
-	//"Assets/csv/playerattack.csv",
+	"Assets/csv/playerattack.csv",
 	//"Assets/csv/playerwalk.csv",
 	//"Assets/csv/playerwalk.csv",
 };
@@ -19,6 +19,7 @@ void Player::Init()
 	m_vDestination = 0;
 	m_vMove = 0;
 	m_isMove = false;
+	m_isAttack = false;
 	m_Direction = Chara_Direction::DOWN;
 	m_isChangeDestination = false;
 	m_state = Player_State::WAIT;
@@ -46,6 +47,10 @@ void Player::Init()
 		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::DestinationCollision);
 		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::Move);
 		m_pStateList[Player_State::WALK]->SetTransitionFunc(pThis, &Player::WalkStateChange);
+
+		m_pStateList[Player_State::ATTACK]->AddActionFunc(pThis, &Player::AttackAction);
+		m_pStateList[Player_State::ATTACK]->SetTransitionFunc(pThis, &Player::AttackStateChange);
+
 	}
 }
 
@@ -91,10 +96,34 @@ const bool Player::DestinationCollision()
 	return true;
 }
 
+const bool Player::AttackAction()
+{
+	if (m_isAttack)
+	{
+		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_vMousePos.x, m_vMousePos.z);
+		m_Direction = CalcDirection4(DEG(fRad));
+		m_isAttack = false;
+	}
+
+	if (m_pTexAnimList[m_state]->IsFinish())
+	{
+		return true;
+	}
+
+
+	return false;
+}
+
 const int Player::WaitStateChange()
 {
 	Vector2 vMove = m_vMove;
 	vMove.Abs();
+
+	if (m_isAttack)
+	{
+		return Player_State::ATTACK;
+	}
+
 	if (vMove.x < 0.001f
 		&& vMove.y < 0.001f)
 	{
@@ -107,11 +136,32 @@ const int Player::WalkStateChange()
 {
 	Vector2 vMove = m_vMove;
 	vMove.Abs();
+	
+	if (m_isAttack)
+	{
+		return Player_State::ATTACK;
+	}
+
 	if (vMove.x < 0.001f
 		&& vMove.y < 0.001f)
 	{
 		return Player_State::WAIT;
 	}
+	return Player_State::WALK;
+}
+
+const int Player::AttackStateChange()
+{
+	Vector2 vMove = m_vMove;
+	vMove.Abs();
+	float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_Transform.pos.x + m_vMove.x, m_Transform.pos.z + m_vMove.y);
+	m_Direction = CalcDirection8(DEG(fRad));
+	if (vMove.x < 0.001f
+		&& vMove.y < 0.001f)
+	{
+		return Player_State::WAIT;
+	}
+
 	return Player_State::WALK;
 }
 
@@ -138,8 +188,8 @@ const bool Player::CalcDestination()
 		m_vMove.y = m_vDestination.y - m_Transform.pos.z;
 		m_vMove.Normalize();
 		m_vMove *= OneSecMoveSpeed;
-		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.y, m_Transform.pos.x + m_vMove.x, m_Transform.pos.y + m_vMove.y);
-		m_Direction = CalcDirection(DEG(fRad));
+		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_Transform.pos.x + m_vMove.x, m_Transform.pos.z + m_vMove.y);
+		m_Direction = CalcDirection8(DEG(fRad));
 		m_isChangeDestination = false;
 	}
 	return true;
@@ -151,5 +201,14 @@ void Player::EnableChangeDestination()
 		|| m_state == Player_State::WALK)
 	{
 		m_isChangeDestination = true;
+	}
+}
+
+void Player::EnableAttack()
+{
+	if (m_state == Player_State::WAIT
+		|| m_state == Player_State::WALK)
+	{
+		m_isAttack = true;
 	}
 }

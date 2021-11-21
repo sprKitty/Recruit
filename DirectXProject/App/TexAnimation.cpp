@@ -15,36 +15,41 @@ void TexAnimation::LoadData(const char * pPath)
 	m_vStartSheet = -1;
 	m_fTime = 0.0f;
 	m_fAnimSpeed = 0.0f;
+	m_isLoop = true;
+	m_isFinish = false;
 
 	if (strMap.empty())return;
 
 	m_pImage.reset(new Image());
 	for (const auto& itr : strMap)
 	{
-		if (itr.first == "2アニメーションスピード")
-		{
-			m_fAnimSpeed = std::stof(itr.second[0]);
-		}
-		else if (itr.first == "3分割数")
-		{
-			m_pImage->m_vTiling.x = 1.0f / std::stoi(itr.second[0]);
-			m_pImage->m_vTiling.y = 1.0f / std::stoi(itr.second[1]);
-		}
-		else if (itr.first == "5初期オフセット")
-		{
-			Vector2 vTile = m_pImage->m_vTiling;
-			for (int i = 0; i < itr.second.size(); i+=2)
-			{
-				m_vStartOffsetList.push_back(Vector2(std::stof(itr.second[i]) * vTile.x, std::stof(itr.second[i + 1]) * vTile.y));
-			}
-		}
-		else if (itr.first == "1ファイル名")
+		if (itr.first == "1ファイル名")
 		{
 			std::string path("Assets/characterchip/");
 			path += itr.second[0];
 			m_pImage->SetPath(path.c_str());
 		}
-		else if (itr.first == "4アニメーション枚数")
+		else if (itr.first == "2アニメーションスピード")
+		{
+			m_fAnimSpeed = std::stof(itr.second[0]);
+		}
+		else if (itr.first == "3ループ処理")
+		{
+			if (itr.second[0] == "する")
+			{
+				m_isLoop = true;
+			}
+			else if(itr.second[0] == "しない")
+			{
+				m_isLoop = false;
+			}
+		}
+		else if (itr.first == "4分割数")
+		{
+			m_pImage->m_vTiling.x = 1.0f / std::stoi(itr.second[0]);
+			m_pImage->m_vTiling.y = 1.0f / std::stoi(itr.second[1]);
+		}
+		else if (itr.first == "5アニメーション枚数")
 		{
 			m_vSheetsNum.x = std::stoi(itr.second[0]);
 			m_vSheetsNum.y = std::stoi(itr.second[1]);
@@ -65,7 +70,15 @@ void TexAnimation::LoadData(const char * pPath)
 				m_nAnimType = 3;
 			}
 		}
-		else if (itr.first == "6スタートシート")
+		else if (itr.first == "6初期オフセット")
+		{
+			Vector2 vTile = m_pImage->m_vTiling;
+			for (int i = 0; i < itr.second.size(); i+=2)
+			{
+				m_vStartOffsetList.push_back(Vector2(std::stof(itr.second[i]) * vTile.x, std::stof(itr.second[i + 1]) * vTile.y));
+			}
+		}
+		else if (itr.first == "7スタートシート")
 		{
 			m_vStartSheet.x = std::stoi(itr.second[0]);
 			m_vStartSheet.y = std::stoi(itr.second[1]);
@@ -111,6 +124,10 @@ void TexAnimation::Update(const int nType)
 		DebugLog::GetInstance().OutofRange("TexAnimationクラスのUpdate");
 		return;
 	}
+	if (!m_isLoop)
+	{
+		m_isFinish = false;
+	}
 
 	switch (m_nAnimType)
 	{
@@ -122,11 +139,16 @@ void TexAnimation::Update(const int nType)
 		}
 		else
 		{
-			m_fTime -= m_fAnimSpeed;
+			m_fTime = 0;
 			++m_vSheet.x;
 			if (m_vSheet.x >= m_vSheetsNum.x)
 			{
 				m_vSheet.x = 0;
+				if (!m_isLoop)
+				{
+					m_isFinish = true;
+					return;
+				}
 			}
 		}
 		m_pImage->m_vOffset.x = m_vStartOffsetList[nType].x + m_pImage->m_vTiling.x * m_vSheet.x;
@@ -141,11 +163,16 @@ void TexAnimation::Update(const int nType)
 		}
 		else
 		{
-			m_fTime -= m_fAnimSpeed;
+			m_fTime = 0;
 			++m_vSheet.y;
 			if (m_vSheet.y >= m_vSheetsNum.y)
 			{
 				m_vSheet.y = 0;
+				if (!m_isLoop)
+				{
+					m_isFinish = true;
+					return;
+				}
 			}
 		}
 		m_pImage->m_vOffset.x = m_vStartOffsetList[nType].x;

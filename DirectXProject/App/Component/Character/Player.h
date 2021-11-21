@@ -9,7 +9,7 @@ namespace Player_State
 	{
 		WAIT,
 		WALK,
-		//ATTACK,
+		ATTACK,
 		//SKILL1,
 		//SKILL2,
 
@@ -29,6 +29,7 @@ public:
 
 	void SetMousePos(const Vector3& vPos);
 	void EnableChangeDestination();
+	void EnableAttack();
 
 protected:
 	const bool Move()override;
@@ -36,9 +37,11 @@ protected:
 private:
 	const bool CalcDestination();
 	const bool DestinationCollision();
+	const bool AttackAction();
 
 	const int WaitStateChange();
 	const int WalkStateChange();
+	const int AttackStateChange();
 
 private:
 	const float OneSecMoveSpeed = 3.0f;
@@ -48,5 +51,6 @@ private:
 	Vector2 m_vDestination;
 	Vector2 m_vMove;
 	bool m_isMove;
+	bool m_isAttack;
 	bool m_isChangeDestination;
 };

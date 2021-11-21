@@ -131,7 +131,7 @@ const bool MasterWitch::CalcTarget()
 		else
 		{
 			float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
-			m_Direction = CalcDirection(DEG(fRad));
+			m_Direction = CalcDirection8(DEG(fRad));
 		}
 		return true;
 	}
@@ -139,7 +139,7 @@ const bool MasterWitch::CalcTarget()
 	case Witch_State::BOSS:
 	{
 		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
-		m_Direction = CalcDirection(DEG(fRad));
+		m_Direction = CalcDirection8(DEG(fRad));
 		return true;
 	}
 

@@ -7,6 +7,7 @@
 #include <App/Component/Event/Event.h>
 #include <App/Component/Renderer/Renderer3D.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
+#include <App/Component/Mesh.h>
 #include <App/Component/Object.h>
 #include <App/Component/Character/Player.h>
 #include <App/Component/Character/MasterWitch.h>
@@ -30,6 +31,11 @@ public:
 		Object::OWNER_OBJ pObj(new Object());
 		pObj->SetType(Object::Type::NONE);
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
+		std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+		if (!pMesh.expired())
+		{
+			pMesh.lock()->Set("board");
+		}
 		if (!pBBR.expired())
 		{
 			pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
@@ -53,6 +59,11 @@ public:
 		
 		std::weak_ptr<Player> pPlayer = pObj->AddComponent<Player>();
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
+		std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+		if (!pMesh.expired())
+		{
+			pMesh.lock()->Set("character");
+		}
 		if (!pPlayer.expired() && !pBBR.expired())
 		{
 			pPlayer.lock()->SetBillBoardRenderer(pBBR);
@@ -65,7 +76,8 @@ public:
 		}
 		if (!pGKB.expired())
 		{
-			pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate_void<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination));
+			pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination));
+			pGKB.lock()->SetKeyInfo(KeyBind::ATTACK, KeyType::TRIGGER, VK_LBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableAttack));
 		}
 		std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 		if (!pET.expired())
@@ -80,10 +92,14 @@ public:
 	{
 		Object::OWNER_OBJ pObj(new Object());
 		pObj->SetType(Object::Type::BOSS_WITCH);
+		pObj->AddComponent<Event>();
 		std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
-		pObj->AddComponent<Event>();
-		if (!pMasterWitch.expired() && !pBBR.expired())
+		std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+		if (!pMesh.expired())
+		{
+			pMesh.lock()->Set("character");
+		}	if (!pMasterWitch.expired() && !pBBR.expired())
 		{
 			pMasterWitch.lock()->SetBillBoardRenderer(pBBR);
 			pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
