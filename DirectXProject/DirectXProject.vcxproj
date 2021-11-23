@@ -177,6 +177,7 @@
     <ClCompile Include="App\Component\Renderer\BillBoardRenderer.cpp" />
     <ClCompile Include="App\Component\Renderer\Renderer2D.cpp" />
     <ClCompile Include="App\Component\Renderer\Renderer3D.cpp" />
+    <ClCompile Include="App\Component\Transform.cpp" />
     <ClCompile Include="App\EventMgr.cpp" />
     <ClCompile Include="App\Event\Talk.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
@@ -207,7 +208,6 @@
     <ClCompile Include="System\Sound\Sound.cpp" />
     <ClCompile Include="System\MessageWindow.cpp" />
     <ClCompile Include="System\Texture.cpp" />
-    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Camera.h" />
@@ -226,6 +226,7 @@
     <ClInclude Include="App\Component\Renderer\Renderer.h" />
     <ClInclude Include="App\Component\Renderer\Renderer2D.h" />
     <ClInclude Include="App\Component\Renderer\Renderer3D.h" />
+    <ClInclude Include="App\Component\Transform.h" />
     <ClInclude Include="App\EventMgr.h" />
     <ClInclude Include="App\Event\EventBase.h" />
     <ClInclude Include="App\Event\Talk.h" />
@@ -263,7 +264,6 @@
     <ClInclude Include="System\Sound\Sound.h" />
     <ClInclude Include="System\MessageWindow.h" />
     <ClInclude Include="System\Texture.h" />
-    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

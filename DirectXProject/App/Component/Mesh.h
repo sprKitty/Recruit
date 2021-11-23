@@ -2,6 +2,9 @@
 #include <App/Component/Component.h>
 #include <MyMath.h>
 
+
+class DrawBuffer;
+
 namespace PrimitiveType
 {
 	enum Kind
@@ -12,9 +15,6 @@ namespace PrimitiveType
 		MAX,
 	};
 }
-
-
-class DrawBuffer;
 
 class Mesh : public Component
 {

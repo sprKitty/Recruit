@@ -1,7 +1,5 @@
 #pragma once
 #include <App/Component/Component.h>
-#include <Vector.h>
-#include <DirectXMath.h>
 #include <MyMath.h>
 
 
@@ -31,7 +29,6 @@ public:
 	}
 
 public:
-	//DirectX::XMFLOAT4X4 world;
 	Vector3 localpos;
 	Vector3 localrot;
 	Vector3 localscale;

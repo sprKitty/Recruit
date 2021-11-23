@@ -1,7 +1,7 @@
 #include "BillBoardRenderer.h"
 #include <App/Component/Object.h>
 #include <App/Component/Mesh.h>
-#include <Transform.h>
+#include <App/Component/Transform.h>
 #include <App/TexAnimation.h>
 #include <App/Camera.h>
 #include <App/RenderPipeline.h>

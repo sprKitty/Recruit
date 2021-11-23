@@ -1,5 +1,5 @@
 #include "MasterWitch.h"
-#include <Transform.h>
+#include <App/Component/Transform.h>
 #include <App/Component/Object.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Event/Event.h>
@@ -15,6 +15,7 @@ const char* g_pWitchAnimPath[] =
 void MasterWitch::Init()
 {
 	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
+	m_pTransform.lock()->localscale = 2;
 	m_Direction = Chara_Direction::DOWN;
 	m_masterState = Witch_State::Master::WAIT;
 	m_bossState = Witch_State::Boss::WAIT;
