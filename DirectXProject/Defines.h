@@ -1,6 +1,4 @@
-#ifndef __DEFINES_H__
-#define __DEFINES_H__
-
+#pragma once
 #include <assert.h>
 #include <Windows.h>
 #include <vector>
@@ -21,11 +19,6 @@ constexpr float DEVISIONY = 22.5f / HALFSCREEN_HEIGHT;
 #define DEBUG ((bool)false)
 
 #define PTRNULLCHECK(ptr) ((ptr.use_count() == 0))
-// リソースパス
-#define ASSET(path)	"Assets/"path
 
 // 実行エラー
 #define FnAssert(fn, str) do { _ASSERT_EXPR(SUCCEEDED(fn), _CRT_WIDE(str)); } while(0)
-
-
-#endif // __DEFINES_H__

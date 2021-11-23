@@ -8,8 +8,6 @@
 // êßçÏì˙ÅF2021/03/13Å`15
 //
 //=================================
-#include <Transform.h>
-#include <MyMath.h>
 #include <Defines.h>
 #include <iostream>
 
@@ -101,26 +99,6 @@ public:
 		}
 	}
 
-	inline const Transform& GetTransform()
-	{
-		return m_Transform;
-	}
-
-	inline void SetPos(const Vector3& vPos)
-	{
-		m_Transform.pos = vPos;
-	}
-
-	inline void SetTransform(const Transform& transform)
-	{
-		m_Transform = transform;
-	}
-
-	inline const DirectX::XMMATRIX GetWorldMatrix()
-	{
-		return MyMath::ConvertMatrix(m_Transform.scale, m_Transform.rot, m_Transform.pos);
-	}
-
 	inline const std::weak_ptr<Object>& GetParent()const
 	{
 		return m_pParent;
@@ -143,7 +121,6 @@ public:
 
 private:
 	std::vector<std::shared_ptr<Component> > ComponentList;
-	Transform m_Transform;
 	Type m_type;
 	std::weak_ptr<Object> m_pParent;
 };

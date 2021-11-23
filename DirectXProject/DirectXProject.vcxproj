@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App\Camera.cpp" />
+    <ClCompile Include="App\Collision.cpp" />
     <ClCompile Include="App\Component\Character\Character.cpp" />
     <ClCompile Include="App\Component\Character\MasterWitch.cpp" />
     <ClCompile Include="App\Component\Character\Player.cpp" />
@@ -192,7 +193,6 @@
     <ClCompile Include="Shader\ShaderBuffer.cpp" />
     <ClCompile Include="Startup.cpp" />
     <ClCompile Include="System\Clocker.cpp" />
-    <ClCompile Include="System\Collision.cpp" />
     <ClCompile Include="System\DebugLog.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="System\DrawBuffer.cpp" />
@@ -207,9 +207,11 @@
     <ClCompile Include="System\Sound\Sound.cpp" />
     <ClCompile Include="System\MessageWindow.cpp" />
     <ClCompile Include="System\Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Camera.h" />
+    <ClInclude Include="App\Collision.h" />
     <ClInclude Include="App\Component\Character\Character.h" />
     <ClInclude Include="App\Component\Character\MasterWitch.h" />
     <ClInclude Include="App\Component\Character\Player.h" />
@@ -247,7 +249,6 @@
     <ClInclude Include="System\ClassDesign\Singleton.h" />
     <ClInclude Include="System\ClassDesign\StateBase.h" />
     <ClInclude Include="System\Clocker.h" />
-    <ClInclude Include="System\Collision.h" />
     <ClInclude Include="System\DebugLog.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="System\DrawBuffer.h" />

@@ -125,9 +125,9 @@ void ShaderBuffer::InitParam()
 	m_ps1.nWidth = SCREEN_WIDTH;
 	m_ps1.nHeight = SCREEN_HEIGHT;
 	m_ps1.nDummy = 0;
-	m_ps2.tiling = MyMath::V2ConvertXM2(1);
-	m_ps2.offset = MyMath::V2ConvertXM2(0);
-	m_ps2.color = MyMath::V4ConvertXM4(1);
+	m_ps2.tiling = DirectX::XMFLOAT2(1, 1);
+	m_ps2.offset = DirectX::XMFLOAT2(0, 0);
+	m_ps2.color = DirectX::XMFLOAT4(1, 1, 1, 1);
 	m_ps2.nWrap = 1;
 	m_ps2.fAlpha = 0;
 	m_ps2.fTime = 0;
@@ -195,14 +195,14 @@ void ShaderBuffer::SetTexture(ID3D11ShaderResourceView * pTex, ShaderResource::T
 
 void ShaderBuffer::SetTexTilingOffset(Vector2& scale, Vector2& offset)
 {
-	m_ps2.tiling = MyMath::V2ConvertXM2(scale);
-	m_ps2.offset = MyMath::V2ConvertXM2(offset);
+	m_ps2.tiling = scale.Convert();
+	m_ps2.offset =offset.Convert();
 	Write(CB_TYPE::P_REGIST2);
 }
 
 void ShaderBuffer::SetMultiplyColor(Vector4 & color)
 {
-	m_ps2.color = MyMath::V4ConvertXM4(color);
+	m_ps2.color = color.Convert();
 	Write(CB_TYPE::P_REGIST2);
 }
 

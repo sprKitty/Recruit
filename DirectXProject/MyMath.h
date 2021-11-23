@@ -2,7 +2,6 @@
 #include <DirectXMath.h>
 #include <Vector.h>
 #include <math.h>
-#include <Transform.h>
 
 #define RAD(rot)rot* DirectX::XM_PI/180.0f
 #define DEG(deg)deg*180.0f/DirectX::XM_PI
@@ -25,58 +24,6 @@ namespace MyMath
 	* @param[Vector3] pos ローカル座標
 	*************************************************/
 	DirectX::XMMATRIX ConvertMatrix(Vector3 scale, Vector3 rot, Vector3 pos);
-	
-	/*************************************************
-	* @brief DirectXFloat2を自作Vector2に変換
-	* @return Vector2
-	*************************************************/
-	Vector2 XM2ConvertV2(DirectX::XMFLOAT2 xm2);
-	
-	/*************************************************
-	* @brief 自作Vector2をDirectXFloat2に変換
-	* @return XMFLOAT4
-	*************************************************/
-	DirectX::XMFLOAT2 V2ConvertXM2(Vector2 v2);
-	
-	/*************************************************
-	* @brief DirectXFloat3を自作Vector3に変換
-	* @return Vector3
-	*************************************************/
-	Vector3 XM3ConvertV3(DirectX::XMFLOAT3 xm3);
-	
-	/*************************************************
-	* @brief 自作Vector4をDirectXFloat4に変換
-	* @return XMFLOAT4
-	*************************************************/
-	DirectX::XMFLOAT3 V3ConvertXM3(Vector3 v3);
-	
-	/*************************************************
-	* @brief DirectXFloat4を自作Vector4に変換
-	* @return Vector4
-	*************************************************/
-	Vector4 XM4ConvertV4(DirectX::XMFLOAT4 xm4);
-	
-	/*************************************************
-	* @brief 自作Vector2をDirectXFloat2に変換
-	* @return XMFLOAT4
-	*************************************************/
-	DirectX::XMFLOAT4 V4ConvertXM4(Vector4 v4);
-
-	/*************************************************
-	* @brief 内積計算
-	* @param Vector3 pos0 頂点座標0
-	* @param Vector3 pos1 頂点座標1
-	* @return Vector3 内積計算結果
-	*************************************************/
-	Vector3 Cross(Vector3* pPos0, Vector3* pPos1);
-	
-	/*************************************************
-	* @brief 正規化計算
-	* @param Vector3 pos0 頂点座標0
-	* @param Vector3 pos1 頂点座標1
-	* @return Vector3 正規化計算結果
-	*************************************************/
-	Vector3 Normalize(Vector3 v);
 
 	/*************************************************
 	* @brief 接空間、従法線計算
@@ -87,21 +34,6 @@ namespace MyMath
 	* @param Vector3* pTangent 従法線計算結果
 	*************************************************/
 	bool TangentandBinormal(const Vertex& v0, const Vertex& v1, const Vertex& v2, Vector3* pTangent, Vector3* pBinormal);
-
-	/*************************************************
-	* @brief 長さ計算
-	* @param Vector3 dir 方向
-	* @return float 長さ計算結果
-	*************************************************/
-	float Length(Vector3* pDir);
-	
-	/*************************************************
-	* @brief 外積計算
-	* @param Vector3 pos0 頂点座標0
-	* @param Vector3 pos1 頂点座標1
-	* @return float 外積計算結果
-	*************************************************/
-	float Dot(Vector3* pPos0, Vector3* pPos1);
 	
 	/*************************************************
 	* @brief ラジアン角計算

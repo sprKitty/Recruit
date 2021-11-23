@@ -12,55 +12,6 @@ DirectX::XMMATRIX MyMath::ConvertMatrix(Vector3 scale, Vector3 rot, Vector3 pos)
 	);
 }
 
-Vector2 MyMath::XM2ConvertV2(DirectX::XMFLOAT2 xm2)
-{
-	return Vector2(xm2.x, xm2.y);
-}
-
-DirectX::XMFLOAT2 MyMath::V2ConvertXM2(Vector2 v2)
-{
-	return DirectX::XMFLOAT2(v2.x, v2.y);
-}
-
-Vector3 MyMath::XM3ConvertV3(DirectX::XMFLOAT3 xm3)
-{
-	return Vector3(xm3.x, xm3.y, xm3.z);
-}
-
-DirectX::XMFLOAT3 MyMath::V3ConvertXM3(Vector3 v3)
-{
-	return DirectX::XMFLOAT3(v3.x, v3.y, v3.z);
-}
-
-Vector4 MyMath::XM4ConvertV4(DirectX::XMFLOAT4 xm4)
-{
-	return Vector4(xm4.x, xm4.y, xm4.z, xm4.w);
-}
-
-DirectX::XMFLOAT4 MyMath::V4ConvertXM4(Vector4 v4)
-{
-	return DirectX::XMFLOAT4(v4.x, v4.y, v4.z, v4.w);
-}
-
-Vector3 MyMath::Cross(Vector3* pPos0, Vector3* pPos1)
-{
-	Vector3 pos0 = *pPos0;
-	Vector3 pos1 = *pPos1;
-	return Vector3(
-		pos0.z * pos1.y - pos0.y * pos1.z,
-		pos0.x * pos1.z - pos0.z * pos1.x,
-		pos0.x * pos1.y - pos0.y * pos1.x
-	);
-}
-
-Vector3 MyMath::Normalize(Vector3 v)
-{
-	float length = Length(&v);
-	v /= length;
-	return Vector3(v);
-}
-
-
 bool MyMath::TangentandBinormal(const Vertex& v0, const Vertex& v1, const Vertex& v2, Vector3* pTangent, Vector3* pBinormal)
 {
 	Vector3 CP0[3] =
@@ -98,8 +49,10 @@ bool MyMath::TangentandBinormal(const Vertex& v0, const Vertex& v1, const Vertex
 		U[i] = -(ABC.y / ABC.x);
 		V[i] = -(ABC.z / ABC.x);
 	}
-	Vector3 vTangent = MyMath::Normalize(Vector3(U[0], U[1], U[2]));
-	Vector3 vNormal = MyMath::Normalize(Vector3(V[0], V[1], V[2]));
+	Vector3 vTangent(U[0], U[1], U[2]);
+	Vector3 vNormal(V[0], V[1], V[2]);
+	vNormal.Normalize();
+	vTangent.Normalize();
 
 	// nullptrÇ™ì¸Ç¡ÇƒÇ¢ÇΩèÍçáílÇäiî[ÇµÇ»Ç¢
 	if (pTangent)
@@ -107,20 +60,6 @@ bool MyMath::TangentandBinormal(const Vertex& v0, const Vertex& v1, const Vertex
 	if (pBinormal)
 		*pBinormal = vNormal;
 	return true;
-}
-
-float MyMath::Length(Vector3* pDir)
-{
-	Vector3 vDir = *pDir;
-	float length = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
-	return length;
-}
-
-float MyMath::Dot(Vector3* pPos0, Vector3* pPos1)
-{
-	Vector3 pos0 = *pPos0;
-	Vector3 pos1 = *pPos1;
-	return pos0.x * pos1.x + pos0.y * pos1.y + pos0.z * pos1.z;
 }
 
 float MyMath::Radian(float x1, float y1, float x2, float y2)

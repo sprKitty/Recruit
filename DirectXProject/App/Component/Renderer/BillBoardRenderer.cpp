@@ -1,6 +1,7 @@
 #include "BillBoardRenderer.h"
 #include <App/Component/Object.h>
 #include <App/Component/Mesh.h>
+#include <Transform.h>
 #include <App/TexAnimation.h>
 #include <App/Camera.h>
 #include <App/RenderPipeline.h>
@@ -9,6 +10,7 @@
 
 void BillBoardRenderer::Init()
 {
+	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
 	m_isXaxisLock = false;
 	m_isYaxisLock = false;
 	m_isZaxisLock = true;
@@ -33,12 +35,16 @@ void BillBoardRenderer::Uninit()
 
 void BillBoardRenderer::Update()
 {
+	if (m_pMesh.expired())
+	{
+		m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
+	}
+	CalcBillBoard();
 }
 
 void BillBoardRenderer::Write(const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
-
 }
 
 void BillBoardRenderer::Draw(const DrawType::kind type)
@@ -57,29 +63,18 @@ void BillBoardRenderer::Draw(const DrawType::kind type)
 		m_pBumpTexAnim.lock()->Bind();
 	}
 
-	DirectX::XMMATRIX mtx = DirectX::XMMatrixIdentity();
-	CalcBillBoard(mtx);
-	ShaderBuffer::GetInstance().SetWorld(mtx);
-	if (m_pMesh.expired())
+	if (!m_pTransform.expired())
 	{
-		m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
-		if (m_pMesh.expired())
-		{
-			DebugLog::GetInstance().FreeError("•`‰æ‚É•K—v‚ÈMesh‚ªÝ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-		}
-		else
-		{
-			m_pMesh.lock()->Bind();
-		}
+		ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
 	}
-	else
+
+	if(!m_pMesh.expired())
 	{
 		m_pMesh.lock()->Bind();
 	}
-	//Geometory::GetInstance().DrawCharacterPolygon();
 }
 
-void BillBoardRenderer::CalcBillBoard(DirectX::XMMATRIX & mtx)
+void BillBoardRenderer::CalcBillBoard()
 {
 	if (m_pCamera.expired())return;
 	DirectX::XMMATRIX mInvCam = DirectX::XMMatrixInverse(nullptr, m_pCamera.lock()->GetView());
@@ -111,9 +106,17 @@ void BillBoardRenderer::CalcBillBoard(DirectX::XMMATRIX & mtx)
 	}
 
 	mInvCam = DirectX::XMLoadFloat4x4(&vW);
-	Transform t = m_pOwner.lock()->GetTransform();
-	mtx = DirectX::XMMATRIX(
-		DirectX::XMMatrixScaling(t.scale.x, t.scale.y, 0)
-		* mInvCam
-		* DirectX::XMMatrixTranslation(t.pos.x, t.pos.y, t.pos.z));
+	if (!m_pTransform.expired())
+	{
+		m_pTransform.lock()->SetMatrix(mInvCam);
+	}
+	else
+	{
+		m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
+	}
+	//mtx = DirectX::XMMATRIX(
+	//	DirectX::XMMatrixScaling(t.localscale.x, t.localscale.y, 0)
+	//	* mInvCam
+	//	* DirectX::XMMatrixTranslation(t.localpos.x, t.localpos.y, t.localpos.z));
+	//m_pOwner.lock()->SetWorldMatrix(mtx);
 }

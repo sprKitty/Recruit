@@ -1,6 +1,6 @@
 #pragma once
 #include <App/Component/Component.h>
-
+#include <MyMath.h>
 
 namespace PrimitiveType
 {

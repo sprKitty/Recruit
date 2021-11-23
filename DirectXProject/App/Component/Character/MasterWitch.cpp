@@ -1,4 +1,5 @@
 #include "MasterWitch.h"
+#include <Transform.h>
 #include <App/Component/Object.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Event/Event.h>
@@ -13,13 +14,11 @@ const char* g_pWitchAnimPath[] =
 
 void MasterWitch::Init()
 {
+	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
 	m_Direction = Chara_Direction::DOWN;
 	m_masterState = Witch_State::Master::WAIT;
 	m_bossState = Witch_State::Boss::WAIT;
 	m_state = Witch_State::MASTER;
-	Transform transform;
-	transform.scale = 2;
-	m_pOwner.lock()->SetTransform(transform);
 	for (int i = 0; i < Witch_State::MAX; ++i)
 	{
 		std::shared_ptr<TexAnimation> pImage(new TexAnimation());
@@ -61,8 +60,6 @@ void MasterWitch::Uninit()
 
 void MasterWitch::Update()
 {
-	m_Transform = m_pOwner.lock()->GetTransform();
-
 	switch (m_state)
 	{
 	case Witch_State::MASTER:
@@ -105,7 +102,6 @@ void MasterWitch::Update()
 	default:
 		break;
 	}
-	m_pOwner.lock()->SetTransform(m_Transform);
 }
 
 const bool MasterWitch::CalcTarget()
@@ -115,13 +111,15 @@ const bool MasterWitch::CalcTarget()
 		DebugLog::GetInstance().FreeError("MasterWitchクラスでターゲットが設定されていません。");
 		return true;
 	}
-	Transform targetT = m_pTarget.lock()->GetTransform();
+	std::weak_ptr<Transform> pTargetT = m_pTarget.lock()->GetComponent<Transform>();
+	Vector3 vTargetPos = pTargetT.lock()->localpos;
+	Vector3 vPos = m_pTransform.lock()->localpos;
 
 	switch (m_state)
 	{
 	case Witch_State::MASTER:
 	{
-		Vector2 vDistance = Vector2(m_Transform.pos.x - targetT.pos.x, m_Transform.pos.z - targetT.pos.z);
+		Vector2 vDistance = Vector2(vPos.x - vTargetPos.x, vPos.z - vTargetPos.z);
 		float fLength = vDistance.Length();
 
 		if (fLength > 5)
@@ -130,7 +128,7 @@ const bool MasterWitch::CalcTarget()
 		}
 		else
 		{
-			float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
+			float fRad = MyMath::Radian(vPos.x, vPos.z, vTargetPos.x, vTargetPos.z);
 			m_Direction = CalcDirection8(DEG(fRad));
 		}
 		return true;
@@ -138,7 +136,7 @@ const bool MasterWitch::CalcTarget()
 
 	case Witch_State::BOSS:
 	{
-		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, targetT.pos.x, targetT.pos.z);
+		float fRad = MyMath::Radian(vPos.x, vPos.z, vTargetPos.x, vTargetPos.z);
 		m_Direction = CalcDirection8(DEG(fRad));
 		return true;
 	}

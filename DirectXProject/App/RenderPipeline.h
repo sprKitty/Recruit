@@ -14,7 +14,7 @@ public:
 	friend class Singleton<RenderPipeline>;
 
 private:
-	using RENDERER_PTR = std::weak_ptr<Renderer>;
+	using RendererPtrList = std::vector<std::weak_ptr<Renderer> >;
 
 public:
 	
@@ -46,18 +46,15 @@ public:
 	* @brief レンダーパイプラインにオブジェクトを追加
 	* @param[Renderer3D_PTR&] pRenderer3D 描くオブジェクト
 	*************************************************/
-	inline void AddRenderer(const std::weak_ptr<Component>& pComponent)
-	{
-		std::weak_ptr<Renderer> pRenderer = std::dynamic_pointer_cast<Renderer>(pComponent.lock());
-		m_pDraws.push_back(pRenderer);
-	}
+	void AddRenderer(const std::weak_ptr<Component>& pComponent);
 
-	void SetCamera(const std::weak_ptr<Camera> pCam)
+
+	inline void SetCamera(const std::weak_ptr<Camera> pCam)
 	{
 		m_pRentCamera = pCam;
 	}
 
-	void SetLight(const std::weak_ptr<Light> pLight)
+	inline void SetLight(const std::weak_ptr<Light> pLight)
 	{
 		m_pRentLight = pLight;
 	}
@@ -71,8 +68,8 @@ private:
 	void Call(WriteType::kind typeW, DrawType::kind typeD);
 
 private:
-	std::vector<RENDERER_PTR> m_pDraws;
-	std::vector<std::shared_ptr<RenderTarget> > m_pRenderTargets;
+	RendererPtrList m_pDrawList;
+	std::vector<std::shared_ptr<RenderTarget> > m_pRenderTargetList;
 
 	std::weak_ptr<Camera> m_pRentCamera;
 	std::weak_ptr<Light> m_pRentLight;

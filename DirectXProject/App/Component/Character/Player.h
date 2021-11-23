@@ -3,6 +3,7 @@
 #include <System/ClassDesign/StateBase.h>
 
 
+
 namespace Player_State
 {
 	enum Kind
@@ -45,6 +46,7 @@ private:
 
 private:
 	const float OneSecMoveSpeed = 3.0f;
+
 	State<Player>::PTRLIST m_pStateList;
 	Player_State::Kind m_state;
 	Vector3 m_vMousePos;

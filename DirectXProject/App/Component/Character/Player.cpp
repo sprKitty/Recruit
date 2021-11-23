@@ -1,9 +1,11 @@
 #include "Player.h"
+#include <Transform.h>
 #include <App/Component/Object.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <System/Clocker.h>
 #include <System/Input.h>
 #include <MyMath.h>
+
 
 const char* g_pPlayerAnimPath[Player_State::MAX] =
 {
@@ -16,6 +18,7 @@ const char* g_pPlayerAnimPath[Player_State::MAX] =
 
 void Player::Init()
 {
+	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
 	m_vDestination = 0;
 	m_vMove = 0;
 	m_isMove = false;
@@ -61,7 +64,6 @@ void Player::Uninit()
 
 void Player::Update()
 {
-	m_Transform = m_pOwner.lock()->GetTransform();
 	Player_State::Kind oldState = m_state;
 
 	if (m_pStateList[m_state]->Action())
@@ -80,13 +82,12 @@ void Player::Update()
 	{
 		m_pBBR.lock()->SetMainImage(m_pTexAnimList[m_state]);
 	}
-
-	m_pOwner.lock()->SetTransform(m_Transform);
 }
 
 const bool Player::DestinationCollision()
 {
-	Vector2 vDis(m_Transform.pos.x - m_vDestination.x, m_Transform.pos.z - m_vDestination.y);
+	Vector3 vPos = m_pTransform.lock()->localpos;
+	Vector2 vDis(vPos.x - m_vDestination.x, vPos.z - m_vDestination.y);
 	float fLength = vDis.Length();
 	if (fLength < OneSecMoveSpeed * 0.05f)
 	{
@@ -98,9 +99,10 @@ const bool Player::DestinationCollision()
 
 const bool Player::AttackAction()
 {
+	Vector3 vPos = m_pTransform.lock()->localpos;
 	if (m_isAttack)
 	{
-		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_vMousePos.x, m_vMousePos.z);
+		float fRad = MyMath::Radian(vPos.x, vPos.z, m_vMousePos.x, m_vMousePos.z);
 		m_Direction = CalcDirection4(DEG(fRad));
 		m_isAttack = false;
 	}
@@ -152,9 +154,10 @@ const int Player::WalkStateChange()
 
 const int Player::AttackStateChange()
 {
+	Vector3 vPos = m_pTransform.lock()->localpos;
 	Vector2 vMove = m_vMove;
 	vMove.Abs();
-	float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_Transform.pos.x + m_vMove.x, m_Transform.pos.z + m_vMove.y);
+	float fRad = MyMath::Radian(vPos.x, vPos.z, vPos.x + m_vMove.x, vPos.z + m_vMove.y);
 	m_Direction = CalcDirection8(DEG(fRad));
 	if (vMove.x < 0.001f
 		&& vMove.y < 0.001f)
@@ -167,9 +170,9 @@ const int Player::AttackStateChange()
 
 const bool Player::Move()
 {
-	m_Transform.move.x = m_vMove.x * static_cast<float>(Clocker::GetInstance().GetFrameTime());
-	m_Transform.move.z = m_vMove.y * static_cast<float>(Clocker::GetInstance().GetFrameTime());
-	m_Transform.pos += m_Transform.move;
+	m_pTransform.lock()->localpos.x += m_vMove.x * static_cast<float>(Clocker::GetInstance().GetFrameTime());
+	m_pTransform.lock()->localpos.z += m_vMove.y * static_cast<float>(Clocker::GetInstance().GetFrameTime());
+
 	return true;
 }
 
@@ -182,13 +185,14 @@ const bool Player::CalcDestination()
 {
 	if (m_isChangeDestination)
 	{ 
+		Vector3 vPos = m_pTransform.lock()->localpos;
 		m_vDestination.x = m_vMousePos.x;
 		m_vDestination.y = m_vMousePos.z;
-		m_vMove.x = m_vDestination.x - m_Transform.pos.x;
-		m_vMove.y = m_vDestination.y - m_Transform.pos.z;
+		m_vMove.x = m_vDestination.x - vPos.x;
+		m_vMove.y = m_vDestination.y - vPos.z;
 		m_vMove.Normalize();
 		m_vMove *= OneSecMoveSpeed;
-		float fRad = MyMath::Radian(m_Transform.pos.x, m_Transform.pos.z, m_Transform.pos.x + m_vMove.x, m_Transform.pos.z + m_vMove.y);
+		float fRad = MyMath::Radian(vPos.x, vPos.z, vPos.x + m_vMove.x, vPos.z + m_vMove.y);
 		m_Direction = CalcDirection8(DEG(fRad));
 		m_isChangeDestination = false;
 	}

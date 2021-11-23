@@ -11,6 +11,7 @@
 #include <App/Component/Object.h>
 #include <App/Component/Character/Player.h>
 #include <App/Component/Character/MasterWitch.h>
+#include <Transform.h>
 #include <App/Event/Talk.h>
 #include <App/EventMgr.h>
 #include <App/GameKeyBind.h>
@@ -29,6 +30,7 @@ public:
 	Object::OWNER_OBJ CreateObject()
 	{
 		Object::OWNER_OBJ pObj(new Object());
+		pObj->Init();
 		pObj->SetType(Object::Type::NONE);
 		std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 		std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
@@ -46,7 +48,7 @@ public:
 		}
 		if (!m_pMouse.expired())
 		{
-			m_pMouse.lock()->SetExecuteFunc(Delegate<Object, void, const Vector3&>::CreateDelegator(pObj, &Object::SetPos));
+			m_pMouse.lock()->SetExecuteFunc(Delegate<Transform, void, const Vector3&>::CreateDelegator(pObj->GetComponent<Transform>(), &Transform::SetPos));
 		}
 		return std::move(pObj);
 	}
@@ -54,6 +56,7 @@ public:
 	Object::OWNER_OBJ CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB)
 	{
 		Object::OWNER_OBJ pObj(new Object());
+		pObj->Init();
 		pObj->SetType(Object::Type::PLAYER);
 		
 		
@@ -91,6 +94,7 @@ public:
 	Object::OWNER_OBJ CreateBossWitchObject()
 	{
 		Object::OWNER_OBJ pObj(new Object());
+		pObj->Init();
 		pObj->SetType(Object::Type::BOSS_WITCH);
 		pObj->AddComponent<Event>();
 		std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
@@ -116,12 +120,14 @@ public:
 	Object::OWNER_OBJ CreateBoss1Object()
 	{
 		Object::OWNER_OBJ pObj(new Object());
+		pObj->Init();
 		return std::move(pObj);
 	}
 
 	Object::OWNER_OBJ CreateEventObject()
 	{
 		Object::OWNER_OBJ pObj(new Object());
+		pObj->Init();
 		pObj->AddComponent<Event>();
 		return std::move(pObj);
 	}

@@ -1,10 +1,10 @@
 #include "Object.h"
 #include "Component.h"
+#include <Transform.h>
 #include <memory>
 
 Object::Object()
 {
-
 }
 
 Object::~Object()
@@ -19,6 +19,7 @@ Object::~Object()
 
 void Object::Init()
 {
+	shared_from_this()->AddComponent<Transform>();
 	auto buff = ComponentList;
 	for (auto com : buff)
 	{
@@ -37,18 +38,9 @@ void Object::Uninit()
 
 void Object::Update()
 {
-	m_Transform.move = 0;
 	auto buff = ComponentList;
 	for (auto com : buff)
 	{
 		com->Update();
 	}
-	if (m_Transform.rot.x > 180)m_Transform.rot.x -= 360;
-	if (m_Transform.rot.x < -180)m_Transform.rot.x += 360;
-
-	if (m_Transform.rot.y > 180)m_Transform.rot.y -= 360;
-	if (m_Transform.rot.y < -180)m_Transform.rot.y += 360;
-
-	if (m_Transform.rot.z > 180)m_Transform.rot.z -= 360;
-	if (m_Transform.rot.z < -180)m_Transform.rot.z += 360;
 }

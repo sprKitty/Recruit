@@ -5,6 +5,8 @@
 #include <System/DrawBuffer.h>
 
 
+class Transform;
+
 class Renderer3D : public Renderer
 {
 public:
@@ -35,6 +37,7 @@ private:
 
 	std::vector<bool> m_isWriteType;
 	std::vector<bool> m_isDrawType;
+	std::weak_ptr<Transform> m_pTransform;
 
 	MMDModel* m_pMMDModel;
 	OBJModel* m_pOBJModel;

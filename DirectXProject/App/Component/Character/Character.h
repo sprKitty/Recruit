@@ -4,6 +4,7 @@
 
 
 class BillBoardRenderer;
+class Transform;
 
 namespace Chara_Direction
 {
@@ -46,7 +47,7 @@ protected:
 protected:
 	std::vector<std::shared_ptr<TexAnimation> > m_pTexAnimList;
 	std::weak_ptr<BillBoardRenderer> m_pBBR;  // BillBoardRendererコンポーネント
-	Transform m_Transform;
+	std::weak_ptr<Transform> m_pTransform;
 	Chara_Direction::Kind m_Direction;
 
 private:

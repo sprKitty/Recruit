@@ -8,35 +8,34 @@ void RenderPipeline::Initialize()
 	for (int i = 0; i < WriteType::MAX; ++i)
 	{
 		std::shared_ptr<RenderTarget> pRT(new RenderTarget());
-		m_pRenderTargets.push_back(std::move(pRT));
+		m_pRenderTargetList.push_back(std::move(pRT));
 	}
-	m_pRenderTargets[WriteType::DEPTH_OF_SHADOW]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
-	m_pRenderTargets[WriteType::DEPTH_OF_FIELD]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
+	m_pRenderTargetList[WriteType::DEPTH_OF_SHADOW]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
+	m_pRenderTargetList[WriteType::DEPTH_OF_FIELD]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void RenderPipeline::Finalize()
 {
-	m_pRenderTargets.clear();
+	m_pRenderTargetList.clear();
 }
 
-void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pRenderer3D)
+void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pComponent)
 {
-	if(pRenderer3D.expired())return;
+	if(pComponent.expired())return;
 
-	for (std::vector<RENDERER_PTR>::iterator itr = m_pDraws.begin(); itr != m_pDraws.end();)
+	for (RendererPtrList::iterator itr = m_pDrawList.begin(); itr != m_pDrawList.end();)
 	{
 		if (itr->expired())continue;
 
-		if (itr->lock() == pRenderer3D.lock())
+		if (itr->lock() == pComponent.lock())
 		{
-			itr = m_pDraws.erase(itr);
+			itr = m_pDrawList.erase(itr);
 		}
 
-		if (itr == m_pDraws.end())break;
+		if (itr == m_pDrawList.end())break;
 
 		++itr;
 	}
-
 }
 
 void RenderPipeline::Write(const WriteType::kind & typeW)
@@ -51,7 +50,7 @@ void RenderPipeline::Write(const WriteType::kind & typeW)
 	}
 
 	
-	m_pRenderTargets[typeW]->Draw(Vector4(1), GetContext(), GetDepthStencil(), true);
+	m_pRenderTargetList[typeW]->Draw(Vector4(1), GetContext(), GetDepthStencil(), true);
 	switch (typeW)
 	{
 	case WriteType::DEPTH_OF_FIELD:
@@ -103,18 +102,24 @@ void RenderPipeline::Draw(const DrawType::kind & typeD)
 	Call(WriteType::MAX, typeD);
 }
 
+void RenderPipeline::AddRenderer(const std::weak_ptr<Component>& pComponent)
+{
+	std::weak_ptr<Renderer> pRenderer = std::dynamic_pointer_cast<Renderer>(pComponent.lock());
+	m_pDrawList.push_back(pRenderer);
+}
+
 void RenderPipeline::Call(WriteType::kind typeW, DrawType::kind typeD)
 {
 	if (typeW == WriteType::MAX)
 	{
-		for (const auto& itr : m_pDraws)
+		for (const auto& itr : m_pDrawList)
 		{
 			itr.lock()->Draw(typeD);
 		}
 	}
 	else if(typeD == DrawType::MAX)
 	{
-		for (const auto& itr : m_pDraws)
+		for (const auto& itr : m_pDrawList)
 		{
 			itr.lock()->Write(typeW);
 		}

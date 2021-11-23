@@ -86,9 +86,6 @@
     <ClCompile Include="System\Sound\Sound.cpp">
       <Filter>C++ファイル\System\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="System\Collision.cpp">
-      <Filter>C++ファイル\System</Filter>
-    </ClCompile>
     <ClCompile Include="System\DirectX.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
@@ -177,6 +174,8 @@
     <ClCompile Include="App\Component\Collider.cpp">
       <Filter>C++ファイル\App\Component</Filter>
     </ClCompile>
+    <ClCompile Include="App\Collision.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -241,9 +240,6 @@
     </ClInclude>
     <ClInclude Include="App\Component\Object.h">
       <Filter>C++ファイル\App\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Collision.h">
-      <Filter>C++ファイル\System</Filter>
     </ClInclude>
     <ClInclude Include="App\RenderPipeline.h">
       <Filter>C++ファイル\App</Filter>
@@ -343,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="App\Component\Collider.h">
       <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Collision.h">
+      <Filter>C++ファイル\App</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

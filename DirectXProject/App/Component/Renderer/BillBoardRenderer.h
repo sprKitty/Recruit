@@ -5,6 +5,7 @@
 class Camera;
 class TexAnimation;
 class Mesh;
+class Transform;
 
 class BillBoardRenderer : public Renderer
 {
@@ -71,7 +72,7 @@ public:
 	inline void DisableDraw(const DrawType::kind type) { m_isDrawType[type] = false; }
 
 private:
-	void CalcBillBoard(DirectX::XMMATRIX& mtx);
+	void CalcBillBoard();
 
 private:
 	std::vector<bool> m_isWriteType;
@@ -82,6 +83,7 @@ private:
 	bool m_isZaxisLock;
 
 	std::weak_ptr<Camera> m_pCamera;
+	std::weak_ptr<Transform> m_pTransform;
 	std::weak_ptr<TexAnimation> m_pMainTexAnim;
 	std::weak_ptr<TexAnimation> m_pBumpTexAnim;
 	std::weak_ptr<Mesh> m_pMesh;

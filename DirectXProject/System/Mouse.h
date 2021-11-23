@@ -1,6 +1,8 @@
 #include <App/Component/Object.h>
 #include <System/ClassDesign/Delegate.h>
 #include <System/ClassDesign/Manager.h>
+#include <DirectXMath.h>
+#include <Vector.h>
 
 class Mouse : public Manager
 {
