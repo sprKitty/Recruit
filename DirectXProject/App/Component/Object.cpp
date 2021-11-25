@@ -9,9 +9,9 @@ Object::Object()
 
 Object::~Object()
 {
+	Uninit();
 	for (auto com : ComponentList)
 	{
-		com->Uninit();
 		com.reset();
 	}
 	ComponentList.clear();
@@ -21,6 +21,8 @@ void Object::Init()
 {
 	shared_from_this()->AddComponent<Transform>();
 	auto buff = ComponentList;
+	m_isDelete = false;
+	m_isActive = true;
 	for (auto com : buff)
 	{
 		com->Init();

@@ -2,9 +2,20 @@
 #include <App/RenderPipeline.h>
 #include <App/FactoryMethod.h>
 #include <App/Level.h>
+#include <App/Collision.h>
+#include <App/Camera.h>
+#include <App/Light.h>
+#include <App/GameKeyBind.h>
+#include <App/Component/Event/Event.h>
+#include <App/Component/Character/MasterWitch.h>
+#include <App/Component/Event/EventTrigger.h>
+#include <App/Event/Talk.h>
+#include <App/EventMgr.h>
 #include <System/MessageWindow.h>
 #include <System/Geometory.h>
 #include <System/Sound/Sound.h>
+#include <System/Mouse.h>
+
 
 void Game::Init()
 {
@@ -26,29 +37,26 @@ void Game::Init()
 
 	FactoryMethod::GetInstance().SetCamera(m_pCamera);
 	FactoryMethod::GetInstance().SetMouse(m_pMouse);
+	Collision::GetInstance().SetMouse(m_pMouse);
+	m_pMouse->SetCamera(m_pCamera);
 
-	Object::OWNER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
+	Object::WORKER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
 
-	Object::OWNER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
+	Object::WORKER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
 	
-	Object::OWNER_OBJ pBoss1 = FactoryMethod::GetInstance().CreateBoss1Object();
+	Object::WORKER_OBJ pBoss1 = FactoryMethod::GetInstance().CreateBoss1Object();
 
-	Object::OWNER_OBJ pMasterWitch = FactoryMethod::GetInstance().CreateBossWitchObject();
-	std::weak_ptr<Event> pTalkEvent = pMasterWitch->GetComponent<Event>();
+	Object::WORKER_OBJ pMasterWitch = FactoryMethod::GetInstance().CreateBossWitchObject();
+	std::weak_ptr<Event> pTalkEvent = pMasterWitch.lock()->GetComponent<Event>();
 
 	std::shared_ptr<Talk> pTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
 	pTalk->SetMessageWindow(m_pMessageWindow);
 
 	
-	if (!pMasterWitch->GetComponent<MasterWitch>().expired())
+	if (!pMasterWitch.lock()->GetComponent<MasterWitch>().expired())
 	{
-		pMasterWitch->GetComponent<MasterWitch>().lock()->SetTarget(pPlayer);
+		pMasterWitch.lock()->GetComponent<MasterWitch>().lock()->SetTarget(pPlayer);
 	}
-
-	m_pObjList.push_back(pObj);
-	m_pObjList.push_back(pPlayer);
-	m_pObjList.push_back(pBoss1);
-	m_pObjList.push_back(pMasterWitch);
 
 	Object::WORKER_OBJECTLIST pObjects = Object::ConvertWorker(m_pObjList);
 	if (!pTalkEvent.expired())
@@ -71,9 +79,10 @@ void Game::Uninit()
 Scene_Type::kind Game::Update()
 {
 	Scene_Type::kind scene = Scene_Type::SCENE_GAME;
-	m_pMouse->SetScreenPos(GetMousePosX(), GetMousePosY());
-	m_pMouse->CalcScreentoXZ(m_pCamera->GetView(), m_pCamera->GetProj());
+	FactoryMethod::GetInstance().MoveObjectList(m_pObjList);
 	m_pKeyBind->Update();
+	m_pMouse->SetScreenPos(GetMousePosX(), GetMousePosY());
+	m_pMouse->CalcScreentoXZ();
 
 	EventMgr::GetInstance().CallFunc();
 	for (auto pObj : m_pObjList)

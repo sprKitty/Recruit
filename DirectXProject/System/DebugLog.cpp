@@ -11,6 +11,9 @@ void DebugLog::Initialize()
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	SetConsoleTitle("Debug Console");
+	SMALL_RECT rect = { 0,0,50,25 };
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleWindowInfo(handle, true, &rect);
 #endif // _DEBUG
 
 	std::string fileName = "Assets/log/errorlog.txt";

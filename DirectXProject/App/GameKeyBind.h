@@ -37,6 +37,7 @@ private:
 	{
 		KeyType::Kind type;
 		int nKey;
+		std::shared_ptr<DelegateBase<const bool> > pState;
 		std::shared_ptr<DelegateBase<void> > pAction;
 	};
 
@@ -48,13 +49,17 @@ public:
 	void Finalize();
 	void Update();
 
-	inline void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, int key, const std::shared_ptr<DelegateBase<void> >&  pFunc)
+	inline void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, int key, const std::shared_ptr<DelegateBase<void> >&  pAction, const std::shared_ptr<DelegateBase<const bool> > pState = nullptr)
 	{
 		if (bind >= m_Info.size())return;
 
 		m_Info[bind].type = type;
 		m_Info[bind].nKey = key;
-		m_Info[bind].pAction = pFunc;
+		m_Info[bind].pAction = pAction;
+		if (pState)
+		{
+			m_Info[bind].pState = pState;
+		}
 	}
 
 private:

@@ -50,8 +50,8 @@ private:
 	State<Player>::PTRLIST m_pStateList;
 	Player_State::Kind m_state;
 	Vector3 m_vMousePos;
-	Vector2 m_vDestination;
-	Vector2 m_vMove;
+	Vector3 m_vDestination;
+	Vector3 m_vMove;
 	bool m_isMove;
 	bool m_isAttack;
 	bool m_isChangeDestination;

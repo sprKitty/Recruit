@@ -196,6 +196,13 @@ inline DirectX::XMMATRIX Camera::GetZoomProj()
 		);
 }
 
+const Vector3 Camera::GetNormal()
+{
+	Vector3 N(m_vLook.x - m_vPos.x, m_vLook.y - m_vPos.y, m_vLook.z - m_vPos.z);
+	N.Normalize();
+	return N;
+}
+
 
 void Camera::Bind3D(bool zoom)
 {

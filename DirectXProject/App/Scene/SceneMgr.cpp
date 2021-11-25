@@ -51,6 +51,7 @@ void SceneMgr::Update()
 	ShaderBuffer::GetInstance().InitParam();
 	UpdateInput();
 	m_pSceneList[m_NowScene]->Update();
+	m_pSceneList[m_NowScene]->DeleteObject();
 	Collision::GetInstance().Update();
 }
 

@@ -332,9 +332,9 @@ public:
 		return *this;
 	}
 
-	const float Dot(const Vector3& vA, const Vector3& vB)
+	const float Dot(const Vector3& vB)
 	{
-		return vA.x * vB.x + vA.y * vB.y + vA.z * vB.z;
+		return x * vB.x + y * vB.y + z * vB.z;
 	}
 
 	const Vector3& Abs()

@@ -20,6 +20,7 @@ public:
 	{
 		NONE,
 		PLAYER,
+		PLAYERATTACK,
 		BOSS_WITCH,
 		LEVEL,
 
@@ -109,7 +110,7 @@ public:
 		m_pParent = pObj;
 	}
 
-	inline const Type& GetType()
+	inline const Type GetType()
 	{ 
 		return m_type; 
 	}
@@ -119,8 +120,36 @@ public:
 		m_type = type;
 	}
 
+	inline void EnableDelete()
+	{
+		m_isDelete = true;
+	}
+
+	inline const bool IsDelete()
+	{
+		return m_isDelete;
+	}
+
+	inline void EnableActive()
+	{
+		m_isActive = true;
+	}
+
+	inline void DisableActive()
+	{
+		m_isActive = true;
+	}
+
+	inline const bool IsActive()
+	{
+		return m_isActive;
+	}
+
+
 private:
-	std::vector<std::shared_ptr<Component> > ComponentList;
 	Type m_type;
 	std::weak_ptr<Object> m_pParent;
+	std::vector<std::shared_ptr<Component> > ComponentList;
+	bool m_isDelete;
+	bool m_isActive;
 };

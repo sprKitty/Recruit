@@ -1,5 +1,7 @@
 #include "Mouse.h"
 #include <Defines.h>
+#include <App/Camera.h>
+
 
 void Mouse::Initialize()
 {
@@ -16,6 +18,16 @@ void Mouse::Update()
 void Mouse::SetExecuteFunc(const std::shared_ptr<DelegateBase<void, const Vector3&> > pFunc)
 {
 	m_pFunctionList.push_back(pFunc);
+}
+
+const bool Mouse::IsHitAnyObject()
+{
+	return m_HitType != Object::Type::LEVEL;
+}
+
+const bool Mouse::IsNotHitObject()
+{
+	return m_HitType == Object::Type::LEVEL;
 }
 
 Vector3 Mouse::CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj)
@@ -40,8 +52,11 @@ Vector3 Mouse::CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX:
 	return Vector3().Convert(out);
 }
 
-void Mouse::CalcScreentoXZ(DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj)
+void Mouse::CalcScreentoXZ()
 {
+	if (m_pCamera.expired())return;
+	DirectX::XMMATRIX mView = m_pCamera.lock()->GetView();
+	DirectX::XMMATRIX mProj = m_pCamera.lock()->GetProj();
 	Vector3 vNear, vFar, vRay;
 	vNear = CalcScreenToWorld(0.0f, mView, mProj);
 	vFar = CalcScreenToWorld(1.0f, mView, mProj);
@@ -50,11 +65,12 @@ void Mouse::CalcScreentoXZ(DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj)
 
 	if (vRay.y <= 0)
 	{
-		float Lray = vRay.Dot(vRay, Vector3(0, 1, 0));
+		float Lray = vRay.Dot(Vector3(0, 1, 0));
 		vNear *= -1.0f;
-		float LP0 = vNear.Dot(vNear, Vector3(0, 1, 0));
+		float LP0 = vNear.Dot(Vector3(0, 1, 0));
 		vNear *= -1.0f;
 		m_vWorldpos = vNear + vRay * (LP0 / Lray);
+		m_HitType = Object::Type::LEVEL;
 		for (const auto itr : m_pFunctionList)
 		{
 			itr->Execute(m_vWorldpos);		// é¿çs

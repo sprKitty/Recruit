@@ -1,6 +1,6 @@
 #pragma once
-
 #include <MyMath.h>
+
 
 class Camera
 {
@@ -18,6 +18,7 @@ public:
 	inline DirectX::XMMATRIX GetView(Vector3* pUp = nullptr);
 	inline DirectX::XMMATRIX GetProj();
 	inline DirectX::XMMATRIX GetZoomProj();
+	const Vector3 GetNormal();
 	inline void SetZoom(int zoom) { m_nZoom = zoom; }
 	inline void SetSensivility(float sensi) { m_fSensivility = sensi; }
 	void Bind3D(bool zoom);

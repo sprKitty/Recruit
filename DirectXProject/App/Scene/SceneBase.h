@@ -37,40 +37,22 @@ public:
 		}
 	}
 
-	//virtual void DeleteObj()
-	//{
-	//	for (auto pObj = m_pObjList.begin(); pObj != m_pObjList.end();)
-	//	{
-	//		if (!(*pObj)->GetParent().expired())
-	//		{
-	//			if ((*pObj)->GetParent().lock())
-	//			{
-	//				(*pObj)->Uninit();
-	//				delete *pObj;
-	//				*pObj = nullptr;
-	//				pObj = m_pObjList.erase(pObj);
-	//				continue;
-	//			}
-	//		}
-	//		if (pObj == m_pObjList.end())
-	//			break;
-	//		++pObj;
-	//	}
-	//	for (auto pObj = m_pObjList.begin(); pObj != m_pObjList.end();)
-	//	{
-	//		if ((*pObj)->GetDelete())
-	//		{
-	//			(*pObj)->Uninit();
-	//			delete *pObj;
-	//			*pObj = nullptr;
-	//			pObj = m_pObjList.erase(pObj);
-	//			continue;
-	//		}
-	//		if (pObj == m_pObjList.end())
-	//			break;
-	//		++pObj;
-	//	}
-	//}
+	void DeleteObject()
+	{
+		for (auto itr = m_pObjList.begin(); itr != m_pObjList.end();)
+		{
+			if ((*itr)->IsDelete())
+			{
+				itr->reset();
+				itr = m_pObjList.erase(itr);
+			}
+			if (itr == m_pObjList.end())
+			{
+				break;
+			}
+			++itr;
+		}
+	}
 
 protected:
 	Object::OWNER_OBJECTLIST m_pObjList;

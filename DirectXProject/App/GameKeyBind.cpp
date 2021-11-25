@@ -50,6 +50,13 @@ void GameKeyBind::Update()
 			}
 			if (isInput)
 			{
+				if (itr.pState.use_count() > 0)
+				{
+					isInput = itr.pState->Execute();
+				}
+			}
+			if (isInput)
+			{
 				itr.pAction->Execute();
 			}
 		}

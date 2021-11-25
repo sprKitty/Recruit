@@ -45,6 +45,9 @@
     <Filter Include="C++ファイル\App\Component\Event">
       <UniqueIdentifier>{1c84f0c2-bf2b-45f9-baef-5739c75cb467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C++ファイル\App\Component\Magic">
+      <UniqueIdentifier>{c2b9bbda-0f9b-49e0-b0d3-4200df4a12a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader\ShaderBuffer.cpp">
@@ -182,6 +185,8 @@
     <ClCompile Include="System\MessageWindow.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
+    <ClCompile Include="App\Component\Magic\MagicBullet.cpp" />
+    <ClCompile Include="App\FactoryMethod.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -348,6 +353,12 @@
     </ClInclude>
     <ClInclude Include="App\Component\Transform.h">
       <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Magic\MagicBase.h">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Magic\MagicBullet.h">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

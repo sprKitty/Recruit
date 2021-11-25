@@ -82,7 +82,10 @@ float4 main(PS_IN pin) : SV_Target
     float4 color = TEX_MAIN.Sample(WRAP, pin.uv * scale + offset)/* * nWrap*/;
     color += TEX_MAIN.Sample(CRAMP, pin.uv * scale + offset) * nCramp;
     color *= multiply;
-    clip(color.a - 0.1f);
+    if(color.a < 0.1f)
+    {
+        color = float4(1.0f, 0.0f, 0.0f, 0.4f);
+    }
     
     return color;
 }

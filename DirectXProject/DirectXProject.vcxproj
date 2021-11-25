@@ -172,6 +172,7 @@
     <ClCompile Include="App\Component\Event\Event.cpp" />
     <ClCompile Include="App\Component\Event\EventTrigger.cpp" />
     <ClCompile Include="App\Component\Image.cpp" />
+    <ClCompile Include="App\Component\Magic\MagicBullet.cpp" />
     <ClCompile Include="App\Component\Mesh.cpp" />
     <ClCompile Include="App\Component\Object.cpp" />
     <ClCompile Include="App\Component\Renderer\BillBoardRenderer.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="App\Component\Transform.cpp" />
     <ClCompile Include="App\EventMgr.cpp" />
     <ClCompile Include="App\Event\Talk.cpp" />
+    <ClCompile Include="App\FactoryMethod.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Level.cpp" />
     <ClCompile Include="App\Light.cpp" />
@@ -220,6 +222,8 @@
     <ClInclude Include="App\Component\Event\Event.h" />
     <ClInclude Include="App\Component\Event\EventTrigger.h" />
     <ClInclude Include="App\Component\Image.h" />
+    <ClInclude Include="App\Component\Magic\MagicBase.h" />
+    <ClInclude Include="App\Component\Magic\MagicBullet.h" />
     <ClInclude Include="App\Component\Mesh.h" />
     <ClInclude Include="App\Component\Object.h" />
     <ClInclude Include="App\Component\Renderer\BillBoardRenderer.h" />
