@@ -189,7 +189,7 @@ void ShaderBuffer::BindPS(PS_TYPE ps)
 
 void ShaderBuffer::SetTexture(ID3D11ShaderResourceView * pTex, ShaderResource::TEX_TYPE type)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->PSSetShaderResources(static_cast<int>(type), 1, &pTex);
 }
 
@@ -285,6 +285,6 @@ void ShaderBuffer::SetBlur(bool flg)
 
 void ShaderBuffer::SetToonMap(ID3D11ShaderResourceView* pMap)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->PSSetShaderResources(static_cast<int>(ShaderResource::TEX_TYPE::TOONMAP), 1, &pMap);
 }

@@ -82,5 +82,5 @@ SamplerState samp : register(s0);
 
 float4 main(PS_IN pin) : SV_Target
 {
-	return 1.0f;
+    return float4(0, 0, 1.0f, 0.4f);
 }

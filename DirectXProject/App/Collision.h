@@ -7,6 +7,7 @@
 
 class Mouse;
 class Camera;
+class Mesh;
 
 class Collision : public Singleton<Collision>
 {
@@ -20,6 +21,7 @@ public:
 	void Initialize()override;
 	void Finalize()override;
 	void Update();
+	void Draw();
 
 	void AddCollider(const std::weak_ptr<Component>& pComponent);
 
@@ -37,10 +39,12 @@ protected:
 private:
 	void AABB(ColliderPtrList::iterator itrA, ColliderPtrList::iterator itrB);
 	void OBB(ColliderPtrList::iterator itrA, ColliderPtrList::iterator itrB);
+	void BC(ColliderPtrList::iterator itrA, ColliderPtrList::iterator itrB);
 	void RayMesh(ColliderPtrList::iterator itrRay, ColliderPtrList::iterator itrMesh);
 	void MouseMesh(ColliderPtrList::iterator itrMesh);
 
 private:
 	ColliderPtrList m_pColliderList;
 	std::weak_ptr<Mouse> m_pMouse;
+	std::shared_ptr<Mesh> m_pCube;
 };

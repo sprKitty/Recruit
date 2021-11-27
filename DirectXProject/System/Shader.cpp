@@ -62,7 +62,7 @@ VertexShader::~VertexShader()
 HRESULT VertexShader::MakeShader(void * pData, UINT size, int num)
 {
 	HRESULT hr;
-	ID3D11Device *pDevice = GetDevice();
+	ID3D11Device *pDevice = DirectX11::GetInstance().GetDevice();
 
 	// シェーダー作成
 	hr = pDevice->CreateVertexShader(pData, size, nullptr,&m_pVS);
@@ -111,7 +111,7 @@ HRESULT VertexShader::MakeShader(void * pData, UINT size, int num)
 
 void VertexShader::Bind(void)
 {
-	ID3D11DeviceContext *pContext = GetContext();
+	ID3D11DeviceContext *pContext = DirectX11::GetInstance().GetContext();
 	pContext->VSSetShader(m_pVS, nullptr, 0);
 	pContext->IASetInputLayout(m_pInputLayOut);
 }
@@ -134,7 +134,7 @@ PixelShader::~PixelShader()
 HRESULT PixelShader::MakeShader(void * pData, UINT size, int num)
 {
 	HRESULT hr;
-	ID3D11Device *pDevice = GetDevice();
+	ID3D11Device *pDevice = DirectX11::GetInstance().GetDevice();
 
 	// シェーダー作成
 	hr = pDevice->CreatePixelShader(pData, size, nullptr, &m_pPS);
@@ -143,7 +143,7 @@ HRESULT PixelShader::MakeShader(void * pData, UINT size, int num)
 
 void PixelShader::Bind(void)
 {
-	ID3D11DeviceContext *pContext = GetContext();
+	ID3D11DeviceContext *pContext = DirectX11::GetInstance().GetContext();
 	pContext->PSSetShader(m_pPS, nullptr, 0);
 }
 
@@ -164,7 +164,7 @@ GeometoryShader::~GeometoryShader()
 HRESULT GeometoryShader::MakeShader(void * pData, UINT size, int num)
 {
 	HRESULT hr;
-	ID3D11Device *pDevice = GetDevice();
+	ID3D11Device *pDevice = DirectX11::GetInstance().GetDevice();
 
 	hr = pDevice->CreateGeometryShader(pData, size, nullptr, &m_pGS);
 	return hr;
@@ -172,7 +172,7 @@ HRESULT GeometoryShader::MakeShader(void * pData, UINT size, int num)
 
 void GeometoryShader::Bind(void)
 {
-	ID3D11DeviceContext *pContext = GetContext();
+	ID3D11DeviceContext *pContext = DirectX11::GetInstance().GetContext();
 	pContext->GSSetShader(m_pGS, nullptr, 0);
 }
 
@@ -206,7 +206,7 @@ HRESULT ConstantBuffer::Create(UINT size)
 	bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;	
 	
 	//--- 頂点バッファの作成
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetDevice();
 	hr = pDevice->CreateBuffer(&bufDesc, nullptr, &m_pBuffer);
 	
 	return hr;
@@ -215,7 +215,7 @@ HRESULT ConstantBuffer::Create(UINT size)
 void ConstantBuffer::Write(void * pData)
 {
 	// 定数バッファへの書き込み
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
 	pContext->UpdateSubresource(m_pBuffer, 0, nullptr, pData, 0, 0);
 }
 
@@ -226,19 +226,19 @@ void ConstantBuffer::BindVS(UINT slot)
 	どの位置に格納するか一つ目の引数(StartSlot)に指定する
 	hlslのコードではregister(bX)でバッファの格納位置を決めておく
 	*/
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
 	pContext->VSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 
 void ConstantBuffer::BindPS(UINT slot)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
 	pContext->PSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 
 void ConstantBuffer::BindGS(UINT slot)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
 	pContext->GSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 

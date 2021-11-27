@@ -34,7 +34,7 @@ HRESULT DrawBuffer::CreateVertexBuffer(const void* pVtx, UINT size, UINT count, 
 
 	//--- 頂点バッファの作成
 	HRESULT hr;
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 	hr = pDevice->CreateBuffer(&bufDesc, &subResource, &m_pVertexBuffer);
 
 	//--- そのほかの情報を設定
@@ -58,7 +58,7 @@ HRESULT DrawBuffer::CreateIndexBuffer(const void* pIdx, UINT size, UINT count)
 	subResource.pSysMem = pIdx;
 
 	// インデックスバッファ生成
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 	HRESULT hr;
 	hr = pDevice->CreateBuffer(&bufDesc, &subResource, &m_pIndexBuffer);
 	if (SUCCEEDED(hr))
@@ -83,7 +83,7 @@ HRESULT DrawBuffer::CreateIndex(const long * pIdx, UINT count)
 	subResource.pSysMem = pIdx;
 
 	// インデックスバッファ生成
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 	HRESULT hr;
 	hr = pDevice->CreateBuffer(
 		&bufDesc, &subResource,
@@ -98,7 +98,7 @@ HRESULT DrawBuffer::CreateIndex(const long * pIdx, UINT count)
 
 void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	UINT stride = m_vtxSize;
 	UINT offset = 0;
 
@@ -127,7 +127,7 @@ void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive)
 
 void DrawBuffer::Draw1(D3D11_PRIMITIVE_TOPOLOGY primitive, int start, int count)
 {
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	UINT stride = m_vtxSize;
 	UINT offset = 0;
 
@@ -152,8 +152,8 @@ void DrawBuffer::Draw1(D3D11_PRIMITIVE_TOPOLOGY primitive, int start, int count)
 HRESULT DrawBuffer::Write(void* pVtx)
 {
 	HRESULT hr;
-	ID3D11Device* pDevice = GetDevice();
-	ID3D11DeviceContext* pContext = GetContext();
+	ID3D11Device* pDevice = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetDevice();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	D3D11_MAPPED_SUBRESOURCE mapResource;
 
 	// データコピー

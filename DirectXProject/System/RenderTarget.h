@@ -9,7 +9,7 @@ public:
 	~RenderTarget();
 
 	void Create(int nNum,int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT rtvFormat);
-	void Draw(Vector4 rgb, ID3D11DeviceContext* pContext, ID3D11DepthStencilView* pDepthStencil, bool depth = true);
+	void Draw(Vector4 rgb, ID3D11DepthStencilView* pDepthStencil);
 	ID3D11RenderTargetView* GetRTV(int num) { return m_ppRTV[num]; }
 	ID3D11ShaderResourceView* GetTexture(int num) { return m_ppTex[num]; }
 private:

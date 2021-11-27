@@ -6,7 +6,7 @@
 
 void Mesh::Init()
 {
-	m_primitiveType = PrimitiveType::MAX;
+	m_primitiveType = PrimitiveType::TRIANGLELIST;
 }
 
 void Mesh::Uninit()

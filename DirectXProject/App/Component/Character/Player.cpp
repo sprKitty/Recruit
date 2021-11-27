@@ -114,10 +114,12 @@ const bool Player::AttackAction()
 			if (!pMB.expired())
 			{
 				Vector3 vDir = m_vMousePos - m_pTransform.lock()->localpos;
+				vDir.y = 0.0f;
 				vDir.Normalize();
 				pMB.lock()->SetStartPos(vPos);
 				pMB.lock()->SetType(MagicType::FIRE);
 				pMB.lock()->SetDiretion(vDir);
+				pMB.lock()->m_pOwner.lock()->Update();
 			}
 		}
 		m_isAttack = false;

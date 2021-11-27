@@ -6,7 +6,7 @@
 
 
 float MagicBullet::MOVE_SPEED = 10.0f;
-float MagicBullet::MAX_SURVIVETIME = 2.0f;
+float MagicBullet::MAX_SURVIVETIME = 1.0f;
 
 void MagicBullet::Init()
 {
@@ -27,17 +27,7 @@ void MagicBullet::Update()
 	}
 	else
 	{
-		Collider::HitInfo hitInfo = m_pCollider.lock()->IsHitInfo(Collision_Type::BC);
-		if (hitInfo.isFlg)
-		{
-			if (!hitInfo.pObj.expired())
-			{
-				if (hitInfo.pObj.lock()->GetType() == Object::Type::BOSS_WITCH)
-				{
-					m_pOwner.lock()->EnableDelete();
-				}
-			}
-		}
+		CollideUpdate();
 	}
 
 	m_fSurviveTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
@@ -56,4 +46,35 @@ void MagicBullet::SetStartPos(const Vector3 & vPos)
 {
 	if (m_pTransform.expired())return;
 	m_pTransform.lock()->localpos = vPos;
+}
+
+void MagicBullet::CollideUpdate()
+{
+	Collider::HitInfo hitInfo = m_pCollider.lock()->IsHitInfo(Collision_Type::BC);
+	if (hitInfo.isFlg)
+	{
+		if (!hitInfo.pObj.expired())
+		{
+			switch (m_pOwner.lock()->GetType())
+			{
+			case ObjectType::PLAYERATTACK:
+				if (hitInfo.pObj.lock()->GetType() == ObjectType::BOSSWITCH)
+				{
+					m_pOwner.lock()->EnableDelete();
+				}
+				break;
+
+			case ObjectType::BOSSATTACK:
+				if (hitInfo.pObj.lock()->GetType() == ObjectType::PLAYER)
+				{
+					m_pOwner.lock()->EnableDelete();
+				}
+				break;
+
+			default:
+				break;
+			}
+
+		}
+	}
 }

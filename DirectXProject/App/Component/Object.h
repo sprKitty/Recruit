@@ -11,26 +11,31 @@
 #include <Defines.h>
 #include <iostream>
 
+
 class Component;
 
-class Object : public std::enable_shared_from_this<Object>
+namespace ObjectType
 {
-public:
-	enum class Type
+	enum Kind
 	{
 		NONE,
 		PLAYER,
 		PLAYERATTACK,
-		BOSS_WITCH,
+		BOSSWITCH,
+		BOSSATTACK,
 		LEVEL,
 
 		MAX
 	};
+}
 
-	using OWNER_OBJECTLIST = std::vector<std::shared_ptr<Object> >;
-	using WORKER_OBJECTLIST = std::vector<std::weak_ptr<Object> >;
+class Object : public std::enable_shared_from_this<Object>
+{
+public:
 	using OWNER_OBJ = std::shared_ptr<Object>;
 	using WORKER_OBJ = std::weak_ptr<Object>;
+	using OWNER_OBJECTLIST = std::vector<OWNER_OBJ>;
+	using WORKER_OBJECTLIST = std::vector<WORKER_OBJ>;
 
 	inline static WORKER_OBJECTLIST ConvertWorker(OWNER_OBJECTLIST& pObjects)
 	{
@@ -110,12 +115,12 @@ public:
 		m_pParent = pObj;
 	}
 
-	inline const Type GetType()
+	inline const ObjectType::Kind GetType()
 	{ 
 		return m_type; 
 	}
 
-	inline void SetType(const Type& type) 
+	inline void SetType(const ObjectType::Kind type)
 	{ 
 		m_type = type;
 	}
@@ -147,7 +152,7 @@ public:
 
 
 private:
-	Type m_type;
+	ObjectType::Kind m_type;
 	std::weak_ptr<Object> m_pParent;
 	std::vector<std::shared_ptr<Component> > ComponentList;
 	bool m_isDelete;

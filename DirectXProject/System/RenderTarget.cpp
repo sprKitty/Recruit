@@ -1,4 +1,5 @@
 #include "RenderTarget.h"
+#include <System/DirectX.h>
 
 RenderTarget::RenderTarget()
 	: m_ppTex(nullptr)
@@ -53,24 +54,23 @@ void RenderTarget::Create(int nNum, int width, int height, DXGI_FORMAT texFormat
 	srvDesc.Texture2D.MipLevels = 1;
 	for (int i = 0; i < m_nNum; ++i)
 	{
-		hr = GetDevice()->CreateTexture2D(&texDesc, nullptr, &ppTex[i]);
-		hr = GetDevice()->CreateRenderTargetView(ppTex[i], &rtvDesc, &m_ppRTV[i]);
-		hr = GetDevice()->CreateShaderResourceView(ppTex[i], &srvDesc, &m_ppTex[i]);
+		hr = DirectX11::GetInstance().GetDevice()->CreateTexture2D(&texDesc, nullptr, &ppTex[i]);
+		hr = DirectX11::GetInstance().GetDevice()->CreateRenderTargetView(ppTex[i], &rtvDesc, &m_ppRTV[i]);
+		hr = DirectX11::GetInstance().GetDevice()->CreateShaderResourceView(ppTex[i], &srvDesc, &m_ppTex[i]);
 		SAFE_RELEASE(ppTex[i]);
 	}
 	delete[] ppTex;
 }
 
 
-void RenderTarget::Draw(Vector4 rgba, ID3D11DeviceContext* pContext, ID3D11DepthStencilView * pDepthStencil,bool depth)
+void RenderTarget::Draw(Vector4 rgba, ID3D11DepthStencilView * pDepthStencil)
 {
 	float color[4] = { rgba.x,rgba.y ,rgba.z ,rgba.w };
-	pContext->OMSetRenderTargets(m_nNum, m_ppRTV, pDepthStencil);
+	DirectX11::GetInstance().GetContext()->OMSetRenderTargets(m_nNum, m_ppRTV, pDepthStencil);
 	for (int i = 0; i < m_nNum; ++i)
 	{
-		pContext->ClearRenderTargetView(m_ppRTV[i], color);
+		DirectX11::GetInstance().GetContext()->ClearRenderTargetView(m_ppRTV[i], color);
 	}
-	if (depth)
-		pContext->ClearDepthStencilView(pDepthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	DirectX11::GetInstance().GetContext()->ClearDepthStencilView(pDepthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

@@ -86,7 +86,7 @@ void Camera::Update()
 	//else if (mouseMoveX != 0 || mouseMoveY != 0)
 	//{
 	//	// 左ボタン(カメラ回り込み
-	//	if (IsKeyPress(VK_RBUTTON))
+	//	if (IsKeyPress(VK_LBUTTON))
 	//	{
 	//		// 回転量
 	//		float angleX = 360.f * mouseMoveX / SCREEN_WIDTH;	// 画面一周で360度回転(画面サイズの半分で180度回転)
@@ -210,7 +210,7 @@ void Camera::Bind3D(bool zoom)
 	cam.pos = m_vPos;
 	ShaderBuffer::GetInstance().SetCameraVP(GetView(), GetProj());
 	ShaderBuffer::GetInstance().SetCameraInfo(cam);
-	SetCulling(CULL_BACK);
+	DirectX11::GetInstance().SetCulling(CullingMode::CULL_BACK);
 	//SetCulling(CULL_NONE);
 }
 
@@ -233,7 +233,7 @@ void Camera::Bind2D()
 	mProj = DirectX::XMMatrixOrthographicOffCenterLH(0, SCREEN_WIDTH, SCREEN_HEIGHT, (0), m_fNearClip, m_fFarClip);
 	ShaderBuffer::GetInstance().SetCameraVP(mView,mProj);
 
-	SetCulling(CULL_FRONT);
+	DirectX11::GetInstance().SetCulling(CullingMode::CULL_FRONT);
 }
 
 

@@ -97,14 +97,13 @@ Scene_Type::kind Game::Update()
 
 void Game::Draw()
 {
-	BeginDrawDX();
 
 	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_NORMAL);
+	Collision::GetInstance().Draw();
 
 	m_pCamera->Bind2D();
 	ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
 	ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
 	m_pMessageWindow->Draw();
 
-	EndDrawDX();
 }

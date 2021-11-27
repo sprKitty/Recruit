@@ -28,6 +28,8 @@ public:
 
 	Object::WORKER_OBJ CreateBossWitchObject();
 
+	Object::WORKER_OBJ CreateBossWitchMagic();
+
 	Object::WORKER_OBJ CreateBoss1Object();
 
 	Object::WORKER_OBJ CreateEventObject();

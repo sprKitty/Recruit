@@ -10,7 +10,7 @@ void Level::Create(std::weak_ptr<SceneBase> pScene)
 
 	Object::OWNER_OBJ pLand(new Object());
 	pLand->Init();
-	pLand->SetType(Object::Type::LEVEL);
+	pLand->SetType(ObjectType::LEVEL);
 	std::weak_ptr<Transform> pTransform = pLand->GetComponent<Transform>();
 	pTransform.lock()->localscale.x = 10.0f;
 	pTransform.lock()->localscale.z = 10.0f;

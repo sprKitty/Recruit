@@ -10,13 +10,14 @@ void TexAnimation::LoadData(const char * pPath)
 	LoadFiles lf;
 	STRINGMAP strMap = lf.CSV(pPath);
 	m_nAnimType = -1;
+	m_nNowAnim = 0;
 	m_vSheet = 0;
 	m_vSheetsNum = -1;
 	m_vStartSheet = -1;
 	m_fTime = 0.0f;
 	m_fAnimSpeed = 0.0f;
 	m_isLoop = true;
-	m_isFinish = false;
+	m_isFinish = m_isSheetUpdate = false;
 
 	if (strMap.empty())return;
 
@@ -90,6 +91,7 @@ void TexAnimation::LoadData(const char * pPath)
 void TexAnimation::Reset(const int nType)
 {
 	m_vSheet = m_vStartSheet;
+	m_nNowAnim = 0;
 	switch (m_nAnimType)
 	{
 	case 0:
@@ -128,7 +130,7 @@ void TexAnimation::Update(const int nType)
 	{
 		m_isFinish = false;
 	}
-
+	m_isSheetUpdate = false;
 	switch (m_nAnimType)
 	{
 	case 0:
@@ -140,14 +142,19 @@ void TexAnimation::Update(const int nType)
 		else
 		{
 			m_fTime = 0;
+			m_isSheetUpdate = true;
 			++m_vSheet.x;
+			++m_nNowAnim;
 			if (m_vSheet.x >= m_vSheetsNum.x)
 			{
 				m_vSheet.x = 0;
+			}
+			if (m_nNowAnim >= m_vSheetsNum.x)
+			{
+				m_nNowAnim = 0;
 				if (!m_isLoop)
 				{
 					m_isFinish = true;
-					return;
 				}
 			}
 		}
@@ -164,14 +171,19 @@ void TexAnimation::Update(const int nType)
 		else
 		{
 			m_fTime = 0;
+			m_isSheetUpdate = true;
 			++m_vSheet.y;
+			++m_nNowAnim;
 			if (m_vSheet.y >= m_vSheetsNum.y)
 			{
 				m_vSheet.y = 0;
+			}
+			if (m_nNowAnim >= m_vSheetsNum.y)
+			{
+				m_nNowAnim = 0;
 				if (!m_isLoop)
 				{
 					m_isFinish = true;
-					return;
 				}
 			}
 		}
@@ -199,4 +211,30 @@ void TexAnimation::Update(const int nType)
 void TexAnimation::Bind()
 {
 	m_pImage->Bind();
+}
+
+const bool TexAnimation::IsSheetUpdate(const VectorInt2& vSheet)
+{
+	switch (m_nAnimType)
+	{
+	case 0:
+		if (m_nNowAnim == vSheet.x)
+		{
+			if (m_isSheetUpdate)return true;
+		}
+		break;
+	case 1:
+		if (m_nNowAnim == vSheet.y)
+		{
+			if (m_isSheetUpdate)return true;
+		}
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	default:
+		break;
+	}
+	return false;
 }

@@ -50,7 +50,7 @@ void RenderPipeline::Write(const WriteType::kind & typeW)
 	}
 
 	
-	m_pRenderTargetList[typeW]->Draw(Vector4(1), GetContext(), GetDepthStencil(), true);
+	m_pRenderTargetList[typeW]->Draw(Vector4(1), DirectX11::GetInstance().GetDepthStencil().lock()->Get());
 	switch (typeW)
 	{
 	case WriteType::DEPTH_OF_FIELD:

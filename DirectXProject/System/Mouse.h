@@ -31,7 +31,7 @@ public:
 
 	const bool IsNotHitObject();
 
-	void SetHitType(const Object::Type type)
+	void SetHitType(const ObjectType::Kind type)
 	{
 		m_HitType = type;
 	}
@@ -66,5 +66,5 @@ private:
 	Vector2 m_vScreenPos;
 	std::vector<std::shared_ptr<DelegateBase<void, const Vector3&> > > m_pFunctionList;
 	std::weak_ptr<Camera> m_pCamera;
-	Object::Type m_HitType;
+	ObjectType::Kind m_HitType;
 };

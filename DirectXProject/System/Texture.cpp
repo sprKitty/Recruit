@@ -20,8 +20,8 @@
 HRESULT LoadTextureFromFile(const char *pszFileName, ID3D11ShaderResourceView **ppTexture)
 {
 	HRESULT hr;
-	ID3D11Device *pDevice = GetDevice();
-	ID3D11DeviceContext *pContext = GetContext();
+	ID3D11Device *pDevice = DirectX11::GetInstance().GetDevice();
+	ID3D11DeviceContext *pContext = DirectX11::GetInstance().GetContext();
 	DirectX::TexMetadata mdata;
 	DirectX::ScratchImage image;
 	wchar_t wPath[MAX_PATH];
@@ -60,7 +60,7 @@ HRESULT CreateRenderTexture(UINT width, UINT height, DXGI_FORMAT format,
 	ID3D11ShaderResourceView** ppTexture, ID3D11RenderTargetView** ppRTV)
 {
 	HRESULT hr;
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 
 	//--- テクスチャ
 	// 設定
@@ -105,7 +105,7 @@ HRESULT CreateDepthStencil(UINT width, UINT height, DXGI_FORMAT format,
 	ID3D11DepthStencilView** ppDSV)
 {
 	HRESULT hr;
-	ID3D11Device* pDevice = GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 
 	//--- テクスチャ
 	// 設定

@@ -3,13 +3,18 @@
 #include <App/Component/Object.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Event/Event.h>
+#include <App/Component/Magic/MagicBullet.h>
+#include <App/FactoryMethod.h>
 #include <System/Clocker.h>
 #include <MyMath.h>
+
+
+float MasterWitch::WAIT_TIME = 1.0f;
 
 const char* g_pWitchAnimPath[] =
 {
 	"Assets/csv/witchwait.csv",
-	"Assets/csv/witchwait.csv",
+	"Assets/csv/witchattack.csv",
 };
 
 void MasterWitch::Init()
@@ -42,14 +47,17 @@ void MasterWitch::Init()
 		m_pMasterStateList[Witch_State::Master::WAIT]->SetTransitionFunc(pMW, &MasterWitch::MasterFromBoss);
 
 		m_pBossStateList[Witch_State::Boss::WAIT]->AddActionFunc(pMW, &MasterWitch::CalcTarget);
+		m_pBossStateList[Witch_State::Boss::WAIT]->AddActionFunc(pMW, &MasterWitch::Wait);
 		m_pBossStateList[Witch_State::Boss::WAIT]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 
+		m_pBossStateList[Witch_State::Boss::ATTACK1]->AddActionFunc(pMW, &MasterWitch::Attack1);
 		m_pBossStateList[Witch_State::Boss::ATTACK1]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 	}
 	else
 	{
 		DebugLog::GetInstance().FreeError("魔女のステートが生成できていません。");
 	}
+	m_fWaitTime = 0.0f;
 }
 
 void MasterWitch::Uninit()
@@ -138,7 +146,7 @@ const bool MasterWitch::CalcTarget()
 	case Witch_State::BOSS:
 	{
 		float fRad = MyMath::Radian(vPos.x, vPos.z, vTargetPos.x, vTargetPos.z);
-		m_Direction = CalcDirection8(DEG(fRad));
+		m_Direction = CalcDirection4(DEG(fRad));
 		return true;
 	}
 
@@ -147,6 +155,55 @@ const bool MasterWitch::CalcTarget()
 		return false;
 	}
 
+
+	return true;
+}
+
+const bool MasterWitch::Wait()
+{
+	if (m_fWaitTime >= WAIT_TIME)
+	{
+		m_fWaitTime = 0;
+		return true;
+	}
+	m_fWaitTime += Clocker::GetInstance().GetFrameTime();
+	return false;
+}
+
+const bool MasterWitch::Attack1()
+{
+	if (m_pTexAnimList[m_bossState]->IsSheetUpdate(VectorInt2(0, 2)))
+	{
+		std::weak_ptr<Transform> pTargetTrans = m_pTarget.lock()->GetComponent<Transform>();
+		Vector3 vTargetDir = pTargetTrans.lock()->localpos - m_pTransform.lock()->localpos;
+		vTargetDir.y = 0.0f;
+		const int nAttackNum = 3;
+		const Vector3 vAttackDirections[nAttackNum] =
+		{
+			Vector3(0.9f, 1.0f, 1.1f), Vector3(1.0f), Vector3(1.1f, 1.0f, 0.9f),
+		};
+		Vector3 vAttackDir;
+		std::weak_ptr<Object> pObj;
+		std::weak_ptr<MagicBullet> pMB;
+		for (int i = 0; i < nAttackNum; ++i)
+		{
+			vAttackDir = vTargetDir * vAttackDirections[i];
+			vAttackDir.Normalize();
+			pObj = FactoryMethod::GetInstance().CreateBossWitchMagic();
+			if (pObj.expired())continue;
+			pMB = pObj.lock()->GetComponent<MagicBullet>();
+			if (pMB.expired())continue;
+			pMB.lock()->SetStartPos(m_pTransform.lock()->localpos);
+			pMB.lock()->SetType(MagicType::FIRE);
+			pMB.lock()->SetDiretion(vAttackDir);
+			pObj.lock()->Update();
+		}
+	}
+
+	if (m_pTexAnimList[m_bossState]->IsFinish())
+	{
+		return true;
+	}
 
 	return false;
 }
@@ -175,7 +232,7 @@ const int MasterWitch::MasterFromBoss()
 
 const int MasterWitch::ChangeBossState()
 {
-	return Witch_State::Boss::WAIT;
+	return Witch_State::Boss::ATTACK1;
 }
 
 const int MasterWitch::ResetBossState()

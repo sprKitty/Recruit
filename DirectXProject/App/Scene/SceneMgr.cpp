@@ -13,7 +13,7 @@
 HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 {
 	// ƒVƒXƒeƒ€‚Ì‰Šú‰»
-	InitDX(hWnd, width, height, false);
+	DirectX11::GetInstance().Start(hWnd, width, height, false);
 	InitSound();
 	Geometory::GetInstance().Create();
 	InitInput();
@@ -42,7 +42,7 @@ void SceneMgr::Finalize()
 	ShaderBuffer::GetInstance().Finalize();
 	UninitInput();
 	UninitSound();
-	UninitDX();
+	DirectX11::GetInstance().Finalize();
 
 }
 
@@ -57,5 +57,8 @@ void SceneMgr::Update()
 
 void SceneMgr::Draw()
 {
+	DirectX11::GetInstance().BeginBackBufferDraw();
 	m_pSceneList[m_NowScene]->Draw();
+	DirectX11::GetInstance().EndBackBufferDraw();
+
 }

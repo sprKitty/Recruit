@@ -21,7 +21,7 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->Init();
-	pObj->SetType(Object::Type::NONE);
+	pObj->SetType(ObjectType::NONE);
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
 	if (!pMesh.expired())
@@ -47,12 +47,13 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB)
 {
 	Object::OWNER_OBJ pObj(new Object());
-	pObj->SetType(Object::Type::PLAYER);
+	pObj->SetType(ObjectType::PLAYER);
 	pObj->Init();
 
 	std::weak_ptr<Player> pPlayer = pObj->AddComponent<Player>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 	if (!pMesh.expired())
 	{
 		pMesh.lock()->Set("character");
@@ -62,6 +63,8 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 		pPlayer.lock()->SetBillBoardRenderer(pBBR);
 		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
 		pBBR.lock()->SetCamera(m_pCamera);
+		//pBBR.lock()->ZaxisUnlock();
+		//pBBR.lock()->YaxisLock();
 	}
 	if (!m_pMouse.expired())
 	{
@@ -72,7 +75,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 		pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsNotHitObject));
 		pGKB.lock()->SetKeyInfo(KeyBind::ATTACK, KeyType::TRIGGER, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableAttack), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsHitAnyObject));
 	}
-	std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 	if (!pET.expired())
 	{
 		pET.lock()->SetType(EventTrigger::Type::TALK_1);
@@ -84,7 +86,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 {
 	Object::OWNER_OBJ pObj(new Object());
-	pObj->SetType(Object::Type::PLAYER);
+	pObj->SetType(ObjectType::PLAYERATTACK);
 	pObj->Init();
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
@@ -106,7 +108,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	}
 	if (!pCollider.expired())
 	{
-		pCollider.lock()->EnableCollisionType(Collision_Type::OBB);
 		pCollider.lock()->EnableCollisionType(Collision_Type::BC);
 	}
 	m_pObjectList.push_back(pObj);
@@ -117,7 +118,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->Init();
-	pObj->SetType(Object::Type::BOSS_WITCH);
+	pObj->SetType(ObjectType::BOSSWITCH);
 	pObj->AddComponent<Event>();
 	std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
@@ -125,7 +126,9 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	if (!pCollider.expired())
 	{
-		pCollider.lock()->EnableCollisionType(Collision_Type::OBB);
+		pCollider.lock()->SetPosDeviation(Vector3(0, 0, 0.9f));
+		pCollider.lock()->SetScaleDeviation(0.9f);
+		pCollider.lock()->EnableCollisionType(Collision_Type::BC);
 		pCollider.lock()->EnableCollisionType(Collision_Type::MOUSE);
 	}
 	if (!pMesh.expired())
@@ -136,11 +139,44 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 		pMasterWitch.lock()->SetBillBoardRenderer(pBBR);
 		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
 		pBBR.lock()->SetCamera(m_pCamera);
+		//pBBR.lock()->ZaxisUnlock();
+		//pBBR.lock()->YaxisLock();
 	}
 	std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 	if (!pET.expired())
 	{
 		pET.lock()->SetType(EventTrigger::Type::TALK_1);
+	}
+	m_pObjectList.push_back(pObj);
+	return pObj;
+}
+
+Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagic()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	pObj->SetType(ObjectType::BOSSATTACK);
+	pObj->Init();
+
+	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
+	std::weak_ptr<MagicBullet> pMB = pObj->AddComponent<MagicBullet>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localscale = 0.5f;
+	}
+	if (!pMesh.expired())
+	{
+		pMesh.lock()->Set("cube");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
+	}
+	if (!pCollider.expired())
+	{
+		pCollider.lock()->EnableCollisionType(Collision_Type::BC);
 	}
 	m_pObjectList.push_back(pObj);
 	return pObj;

@@ -185,8 +185,12 @@
     <ClCompile Include="System\MessageWindow.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="App\Component\Magic\MagicBullet.cpp" />
-    <ClCompile Include="App\FactoryMethod.cpp" />
+    <ClCompile Include="App\FactoryMethod.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Magic\MagicBullet.cpp">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">

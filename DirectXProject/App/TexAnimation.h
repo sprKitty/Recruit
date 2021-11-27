@@ -16,10 +16,13 @@ public:
 	void Update(const int nType);
 	void Bind();
 
+	const bool IsSheetUpdate(const VectorInt2& vSheet);
+
 	inline const bool IsFinish()
 	{
 		return m_isFinish;
 	}
+
 
 private:
 	std::shared_ptr<Image> m_pImage;
@@ -30,6 +33,8 @@ private:
 	VectorInt2 m_vSheet;
 	VectorInt2 m_vStartSheet;
 	int m_nAnimType;
+	int m_nNowAnim;
 	bool m_isLoop;
 	bool m_isFinish;
+	bool m_isSheetUpdate;
 };

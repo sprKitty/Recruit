@@ -33,6 +33,8 @@ public:
 		m_magicType = type;
 	}
 
+protected:
+	virtual void CollideUpdate() {}
 
 protected:
 	MagicType::Kind m_magicType;

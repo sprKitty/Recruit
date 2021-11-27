@@ -20,6 +20,9 @@ public:
 		m_vMoveDirection = vDir;
 	}
 
+protected:
+	void CollideUpdate()override;
+
 private:
 	static float MOVE_SPEED;
 	static float MAX_SURVIVETIME;
