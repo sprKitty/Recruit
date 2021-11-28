@@ -11,6 +11,7 @@ protected:
 public:
 	Component() {}
 	virtual ~Component() {}
+	virtual void Reset() {}
 	virtual void Init() {}
 	virtual void Uninit() {}
 	virtual void Update() {}

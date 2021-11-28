@@ -87,7 +87,10 @@ Scene_Type::kind Game::Update()
 	EventMgr::GetInstance().CallFunc();
 	for (auto pObj : m_pObjList)
 	{
-		pObj->Update();
+		if (pObj->IsActive())
+		{
+			pObj->Update();
+		}
 	}
 
 	m_pCamera->Update();

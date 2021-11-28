@@ -156,6 +156,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagic()
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::BOSSATTACK);
 	pObj->Init();
+	pObj->DisableActive();
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<MagicBullet> pMB = pObj->AddComponent<MagicBullet>();

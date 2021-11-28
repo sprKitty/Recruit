@@ -23,65 +23,70 @@ void Collision::Update()
 {
 	for (ColliderPtrList::iterator itrX = m_pColliderList.begin(); itrX != m_pColliderList.end();)
 	{
-		for (int i = 0; i < Collision_Type::MAX; ++i)
+		if (itrX->lock()->m_pOwner.lock()->IsActive())
 		{
-			if (!itrX->lock()->IsCollisionType(static_cast<Collision_Type::Kind>(i)))continue;
-
-			if (i == Collision_Type::MOUSE)
+			for (int i = 0; i < Collision_Type::MAX; ++i)
 			{
-				MouseMesh(itrX);
-			}
+				if (!itrX->lock()->IsCollisionType(static_cast<Collision_Type::Kind>(i)))continue;
 
-			for (ColliderPtrList::iterator itrY = itrX; itrY != m_pColliderList.end();)
-			{
-				++itrY;
-				if (itrY == m_pColliderList.end())
+				if (i == Collision_Type::MOUSE)
 				{
-					break;
+					MouseMesh(itrX);
 				}
-				for (int j = 0; j < Collision_Type::MAX; ++j)
-				{
-					if (!itrY->lock()->IsCollisionType(static_cast<Collision_Type::Kind>(j)))continue;
 
-					switch (static_cast<Collision_Type::Kind>(i))
+				for (ColliderPtrList::iterator itrY = itrX; itrY != m_pColliderList.end();)
+				{
+					++itrY;
+					if (itrY == m_pColliderList.end())
 					{
-					case Collision_Type::AABB:
-						if (static_cast<Collision_Type::Kind>(j)
-							== Collision_Type::AABB)
+						break;
+					}
+					if (!itrY->lock()->m_pOwner.lock()->IsActive())continue;
+
+					for (int j = 0; j < Collision_Type::MAX; ++j)
+					{
+						if (!itrY->lock()->IsCollisionType(static_cast<Collision_Type::Kind>(j)))continue;
+
+						switch (static_cast<Collision_Type::Kind>(i))
 						{
-							AABB(itrX, itrY);
+						case Collision_Type::AABB:
+							if (static_cast<Collision_Type::Kind>(j)
+								== Collision_Type::AABB)
+							{
+								AABB(itrX, itrY);
+							}
+							break;
+						case Collision_Type::OBB:
+							if (static_cast<Collision_Type::Kind>(j)
+								== Collision_Type::OBB)
+							{
+								OBB(itrX, itrY);
+							}
+							break;
+						case Collision_Type::BC:
+							if (static_cast<Collision_Type::Kind>(j)
+								== Collision_Type::BC)
+							{
+								BC(itrX, itrY);
+							}
+							break;
+						case Collision_Type::RAY:
+							if (static_cast<Collision_Type::Kind>(j)
+								== Collision_Type::MESH)
+							{
+								RayMesh(itrX, itrY);
+							}
+							break;
+						case Collision_Type::MESH:
+							if (static_cast<Collision_Type::Kind>(j)
+								== Collision_Type::RAY)
+							{
+								RayMesh(itrY, itrX);
+							}
+							break;
+						default:
+							break;
 						}
-						break;
-					case Collision_Type::OBB:
-						if (static_cast<Collision_Type::Kind>(j)
-							== Collision_Type::OBB)
-						{
-							OBB(itrX, itrY);
-						}
-						break;
-					case Collision_Type::BC:
-						if (static_cast<Collision_Type::Kind>(j)
-							== Collision_Type::BC)
-						{
-							BC(itrX, itrY);
-						}
-						break;
-					case Collision_Type::RAY:
-						if (static_cast<Collision_Type::Kind>(j)
-							== Collision_Type::MESH)
-						{
-							RayMesh(itrX, itrY);
-						}
-						break;
-					case Collision_Type::MESH:
-						if (static_cast<Collision_Type::Kind>(j)
-							== Collision_Type::RAY)
-						{
-							RayMesh(itrY, itrX);
-						}
-						break;
-					default:
-						break;
 					}
 				}
 			}
@@ -100,6 +105,7 @@ void Collision::Draw()
 	for (const auto& itr : m_pColliderList)
 	{
 		if (itr.expired())continue;
+		if (!itr.lock()->m_pOwner.lock()->IsActive())continue;
 		std::weak_ptr<Transform> pTrans = itr.lock()->GetTransform();
 		if (pTrans.expired())continue;
 

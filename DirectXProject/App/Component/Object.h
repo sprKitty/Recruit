@@ -142,7 +142,7 @@ public:
 
 	inline void DisableActive()
 	{
-		m_isActive = true;
+		m_isActive = false;
 	}
 
 	inline const bool IsActive()

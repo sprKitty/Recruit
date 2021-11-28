@@ -2,6 +2,8 @@
 #include <System/RenderTarget.h>
 #include <Shader/ShaderBuffer.h>
 #include <App/Camera.h>
+#include <App/Component/Object.h>
+
 
 void RenderPipeline::Initialize()
 {
@@ -114,14 +116,20 @@ void RenderPipeline::Call(WriteType::kind typeW, DrawType::kind typeD)
 	{
 		for (const auto& itr : m_pDrawList)
 		{
-			itr.lock()->Draw(typeD);
+			if (itr.lock()->m_pOwner.lock()->IsActive())
+			{
+				itr.lock()->Draw(typeD);
+			}
 		}
 	}
 	else if(typeD == DrawType::MAX)
 	{
 		for (const auto& itr : m_pDrawList)
 		{
-			itr.lock()->Write(typeW);
+			if (itr.lock()->m_pOwner.lock()->IsActive())
+			{
+				itr.lock()->Write(typeW);
+			}
 		}
 	}
 }

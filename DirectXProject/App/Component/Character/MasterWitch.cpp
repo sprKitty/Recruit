@@ -31,6 +31,16 @@ void MasterWitch::Init()
 		pImage->LoadData(g_pWitchAnimPath[i]);
 		m_pTexAnimList.push_back(pImage);
 	}
+	std::weak_ptr<Object> pObj;
+	m_pAttackList.resize(15);
+	for (int i = 0; i < 15; i++)
+	{
+		pObj = FactoryMethod::GetInstance().CreateBossWitchMagic();
+		if (pObj.expired())continue;
+		m_pAttackList[i] = pObj.lock()->GetComponent<MagicBullet>();
+		if (m_pAttackList[i].expired())continue;
+		m_pAttackList[i].lock()->SetType(MagicType::FIRE);
+	}
 	std::weak_ptr<MasterWitch> pMW = std::dynamic_pointer_cast<MasterWitch>(weak_from_this().lock());
 	if (!pMW.expired())
 	{
@@ -51,6 +61,7 @@ void MasterWitch::Init()
 		m_pBossStateList[Witch_State::Boss::WAIT]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 
 		m_pBossStateList[Witch_State::Boss::ATTACK1]->AddActionFunc(pMW, &MasterWitch::Attack1);
+		m_pBossStateList[Witch_State::Boss::ATTACK1]->AddActionFunc(pMW, &MasterWitch::CalcTarget);
 		m_pBossStateList[Witch_State::Boss::ATTACK1]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 	}
 	else
@@ -175,28 +186,30 @@ const bool MasterWitch::Attack1()
 	if (m_pTexAnimList[m_bossState]->IsSheetUpdate(VectorInt2(0, 2)))
 	{
 		std::weak_ptr<Transform> pTargetTrans = m_pTarget.lock()->GetComponent<Transform>();
+		float fRad = MyMath::Radian(m_pTransform.lock()->localpos.x, m_pTransform.lock()->localpos.z, pTargetTrans.lock()->localpos.x, pTargetTrans.lock()->localpos.z);
 		Vector3 vTargetDir = pTargetTrans.lock()->localpos - m_pTransform.lock()->localpos;
 		vTargetDir.y = 0.0f;
-		const int nAttackNum = 3;
-		const Vector3 vAttackDirections[nAttackNum] =
+		const int nAttackNum = 5;
+		const float vAttackDeg[nAttackNum] =
 		{
-			Vector3(0.9f, 1.0f, 1.1f), Vector3(1.0f), Vector3(1.1f, 1.0f, 0.9f),
+			RAD(20.0), RAD(10.0f), 0.0f, RAD(-10.0f), RAD(-20.0f)
 		};
+		int num = 0;
 		Vector3 vAttackDir;
-		std::weak_ptr<Object> pObj;
-		std::weak_ptr<MagicBullet> pMB;
-		for (int i = 0; i < nAttackNum; ++i)
+		for (auto itr : m_pAttackList)
 		{
-			vAttackDir = vTargetDir * vAttackDirections[i];
-			vAttackDir.Normalize();
-			pObj = FactoryMethod::GetInstance().CreateBossWitchMagic();
-			if (pObj.expired())continue;
-			pMB = pObj.lock()->GetComponent<MagicBullet>();
-			if (pMB.expired())continue;
-			pMB.lock()->SetStartPos(m_pTransform.lock()->localpos);
-			pMB.lock()->SetType(MagicType::FIRE);
-			pMB.lock()->SetDiretion(vAttackDir);
-			pObj.lock()->Update();
+			if (num >= nAttackNum)break;
+			if (itr.expired())continue;
+			if (!itr.lock()->m_pOwner.lock()->IsActive())
+			{
+				vAttackDir = Vector3(cosf(fRad + vAttackDeg[num]), 0.0f, sinf(fRad + vAttackDeg[num]));
+				vAttackDir.Normalize();
+				itr.lock()->Reset();
+				itr.lock()->m_pOwner.lock()->EnableActive();
+				itr.lock()->SetStartPos(m_pTransform.lock()->localpos);
+				itr.lock()->SetDiretion(vAttackDir);
+				++num;
+			}
 		}
 	}
 

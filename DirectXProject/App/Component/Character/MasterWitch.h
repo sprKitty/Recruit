@@ -4,6 +4,7 @@
 
 
 class Object;
+class MagicBullet;
 
 namespace Witch_State
 {
@@ -64,6 +65,7 @@ private:
 	Witch_State::Master::Kind m_masterState;
 	Witch_State::Boss::Kind m_bossState;
 	Witch_State::Kind m_state;
+	std::vector<std::weak_ptr<MagicBullet> > m_pAttackList;
 	std::weak_ptr<Object> m_pTarget;
 	State<MasterWitch>::PTRLIST m_pMasterStateList;
 	State<MasterWitch>::PTRLIST m_pBossStateList;

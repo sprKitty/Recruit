@@ -6,11 +6,17 @@
 
 
 float MagicBullet::MOVE_SPEED = 10.0f;
-float MagicBullet::MAX_SURVIVETIME = 1.0f;
+float MagicBullet::MAX_SURVIVETIME = 2.0f;
 
 void MagicBullet::Init()
 {
 	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
+	m_fSurviveTime = 0;
+	m_vMoveDirection = 0;
+}
+
+void MagicBullet::Reset()
+{
 	m_fSurviveTime = 0;
 	m_vMoveDirection = 0;
 }
@@ -33,7 +39,7 @@ void MagicBullet::Update()
 	m_fSurviveTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
 	if (m_fSurviveTime >= MAX_SURVIVETIME)
 	{
-		m_pOwner.lock()->EnableDelete();
+		m_pOwner.lock()->DisableActive();
 	}
 
 	if (!m_pTransform.expired())
@@ -60,14 +66,14 @@ void MagicBullet::CollideUpdate()
 			case ObjectType::PLAYERATTACK:
 				if (hitInfo.pObj.lock()->GetType() == ObjectType::BOSSWITCH)
 				{
-					m_pOwner.lock()->EnableDelete();
+					m_pOwner.lock()->DisableActive();
 				}
 				break;
 
 			case ObjectType::BOSSATTACK:
 				if (hitInfo.pObj.lock()->GetType() == ObjectType::PLAYER)
 				{
-					m_pOwner.lock()->EnableDelete();
+					m_pOwner.lock()->DisableActive();
 				}
 				break;
 

@@ -95,7 +95,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (nowTime - countStartTime >= 1000.0f)
 			{
 				char fpsText[20];
-				//fpsCount = static_cast<int>(Clocker::GetInstance().GetGameTime());
 				sprintf(fpsText, "FPS:%d", fpsCount);
 				SetWindowText(hWnd, fpsText);
 				// ŽŸ‚Ì‚P•bŠÔ‚ÌŒv‘ª€”õ
@@ -103,7 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				fpsCount = 0;
 			}
 
-			if (nowTime - preExecTime >= 1000.0f / 60.0f)
+			if (nowTime - preExecTime >= 1000.0f / 120.0f)
 			{
 				Clocker::GetInstance().EndFrame(timeGetTime());
 				Clocker::GetInstance().CalcFrameTime();

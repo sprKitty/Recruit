@@ -10,6 +10,7 @@ public:
 	~MagicBullet()override {}
 
 	void Init()override;
+	void Reset()override;
 	void Uninit()override;
 	void Update()override;
 
