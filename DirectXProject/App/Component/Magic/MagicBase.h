@@ -34,7 +34,7 @@ public:
 	}
 
 protected:
-	virtual void CollideUpdate() {}
+	virtual const bool CollideUpdate() { return false; }
 
 protected:
 	MagicType::Kind m_magicType;

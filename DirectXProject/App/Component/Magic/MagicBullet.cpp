@@ -3,6 +3,7 @@
 #include <App/Component/Object.h>
 #include<App/Component/Collider.h>
 #include <System/Clocker.h>
+#include <System/DebugLog.h>
 
 
 float MagicBullet::MOVE_SPEED = 10.0f;
@@ -33,8 +34,9 @@ void MagicBullet::Update()
 	}
 	else
 	{
-		CollideUpdate();
+		bool flg = CollideUpdate();
 	}
+
 
 	m_fSurviveTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
 	if (m_fSurviveTime >= MAX_SURVIVETIME)
@@ -54,7 +56,7 @@ void MagicBullet::SetStartPos(const Vector3 & vPos)
 	m_pTransform.lock()->localpos = vPos;
 }
 
-void MagicBullet::CollideUpdate()
+const bool  MagicBullet::CollideUpdate()
 {
 	Collider::HitInfo hitInfo = m_pCollider.lock()->IsHitInfo(Collision_Type::BC);
 	if (hitInfo.isFlg)
@@ -67,6 +69,7 @@ void MagicBullet::CollideUpdate()
 				if (hitInfo.pObj.lock()->GetType() == ObjectType::BOSSWITCH)
 				{
 					m_pOwner.lock()->DisableActive();
+					return true;
 				}
 				break;
 
@@ -74,13 +77,15 @@ void MagicBullet::CollideUpdate()
 				if (hitInfo.pObj.lock()->GetType() == ObjectType::PLAYER)
 				{
 					m_pOwner.lock()->DisableActive();
+					return true;
 				}
 				break;
 
 			default:
-				break;
+				return false;
 			}
 
 		}
 	}
+	return false;
 }

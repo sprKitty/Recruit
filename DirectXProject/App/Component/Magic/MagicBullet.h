@@ -22,7 +22,7 @@ public:
 	}
 
 protected:
-	void CollideUpdate()override;
+	const bool CollideUpdate()override;
 
 private:
 	static float MOVE_SPEED;

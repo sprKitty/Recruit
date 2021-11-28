@@ -105,6 +105,28 @@ public:
 		}
 	}
 
+	void EndSortComponent(std::weak_ptr<Component> pCom)
+	{
+		std::vector<std::shared_ptr<Component> > list = std::move(ComponentList);
+		int num = -1;
+		for (int i = 0; i < list.size(); ++i)
+		{
+			if (list[i].get() == pCom.lock().get())
+			{
+				num = i;
+			}
+			else
+			{
+				ComponentList.push_back(std::move(list[i]));
+			}
+		}
+		if (num != -1)
+		{
+			ComponentList.push_back(std::move(list[num]));
+		}
+	}
+
+
 	inline const std::weak_ptr<Object>& GetParent()const
 	{
 		return m_pParent;

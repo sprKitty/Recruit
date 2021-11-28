@@ -1,4 +1,8 @@
 ﻿  MasterWitch.cpp
 c:\users\taker\documents\github\recruit\directxproject\app\component\character\masterwitch.cpp(180): warning C4244: '+=': 'const double' から 'float' への変換です。データが失われる可能性があります。
 c:\users\taker\documents\github\recruit\directxproject\app\component\character\masterwitch.cpp(196): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+  Collider.cpp
+  MagicBullet.cpp
+  FactoryMethod.cpp
+  コードを生成中...
   DirectXProject.vcxproj -> C:\Users\taker\Documents\GitHub\Recruit\x64\Debug\DirectXProject.exe

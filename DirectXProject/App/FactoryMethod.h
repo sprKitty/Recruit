@@ -52,14 +52,7 @@ public:
 		m_pMouse.reset();
 	}
 
-	void MoveObjectList(Object::OWNER_OBJECTLIST& pObjectList)
-	{
-		for (int i = 0; i < m_pObjectList.size(); ++i)
-		{
-			pObjectList.push_back(m_pObjectList[i]);
-		}
-		m_pObjectList.clear();
-	}
+	void MoveObjectList(Object::OWNER_OBJECTLIST& pObjectList);
 
 protected:
 	FactoryMethod() {}

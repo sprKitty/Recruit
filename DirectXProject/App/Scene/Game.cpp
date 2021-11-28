@@ -100,7 +100,6 @@ Scene_Type::kind Game::Update()
 
 void Game::Draw()
 {
-
 	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_NORMAL);
 	Collision::GetInstance().Draw();
 
@@ -108,5 +107,4 @@ void Game::Draw()
 	ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
 	ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
 	m_pMessageWindow->Draw();
-
 }
