@@ -55,15 +55,8 @@ public:
 		m_pCamera = pCamera;
 	}
 
-	inline void SetMainImage(const std::weak_ptr<TexAnimation> pImage)
-	{
-		m_pMainTexAnim = std::move(pImage);
-	}
-
-	void SetBumpImage(const std::weak_ptr<TexAnimation> pImage)
-	{
-		m_pBumpTexAnim = std::move(pImage);
-	}
+	inline void SetMainImage(const std::weak_ptr<TexAnimation> pImage) { m_pMainTexAnim = std::move(pImage); }
+	inline void SetBumpImage(const std::weak_ptr<TexAnimation> pImage) { m_pBumpTexAnim = std::move(pImage); }
 
 	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
 	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }

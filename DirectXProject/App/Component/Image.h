@@ -6,23 +6,14 @@
 class Image
 {
 public:
-	Image()
-		:m_vTiling(1)
-		, m_vOffset(0)
-		, m_vMultiplyColor(1)
-		, m_pTex(nullptr)
-		, m_isWRAP(true)
-		, m_type(ShaderResource::TEX_TYPE::MAIN)
-	{
-	}
-	~Image(){}
+	Image() { Init(); }
+	~Image() { Uninit(); }
 
 	void Init();
 	void Uninit();
 	void Bind();
 	
-	void SetPath(const char* pPath) { LoadTextureFromFile(pPath, &m_pTex); }
-	inline void SetTexture(ID3D11ShaderResourceView* pTex) { m_pTex = pTex; }
+	void SetTexture(const std::string str);
 	/*
 	*	ShaderResource::
 	*		TEX_MAIN = 0,

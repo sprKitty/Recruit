@@ -51,11 +51,6 @@ const double& Clocker::GetGameTime()
 	return m_dGameTime;
 }
 
-const double & Clocker::GetFrameTime()
-{
-	return m_dFrameTime;
-}
-
 void Clocker::AddTime()
 {
 	m_dGameTime += m_dFrameTime;

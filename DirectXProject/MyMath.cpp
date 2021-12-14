@@ -5,9 +5,9 @@ DirectX::XMMATRIX MyMath::ConvertMatrix(Vector3 scale, Vector3 rot, Vector3 pos)
 {
 	return DirectX::XMMATRIX(
 		DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)*
-		DirectX::XMMatrixRotationX(RAD(rot.x))*
-		DirectX::XMMatrixRotationY(RAD(rot.y))*
-		DirectX::XMMatrixRotationZ(RAD(rot.z))*
+		DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(rot.x))*
+		DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(rot.y))*
+		DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rot.z))*
 		DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z)
 	);
 }
@@ -71,4 +71,9 @@ void MyMath::RotRadiusCalcPoint(float radius, float angle, float & calc0, float 
 {
 	calc0 = -radius * cosf(angle);
 	calc1 = radius * sinf(angle);
+}
+
+const float MyMath::Lerp(const float fTime, const float fStart, const float fEnd)
+{
+	return (fEnd - fStart) * fTime;
 }

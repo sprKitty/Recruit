@@ -87,6 +87,14 @@ public:
 		return *this;
 	}
 
+	Vector2& Lerp(const Vector2& vStart, const Vector2& vEnd, float fTime)
+	{
+		Vector2 a = (vEnd - vStart) * fTime;
+		x = a.x;
+		y = a.y;
+		return *this;
+	}
+
 	const float Length()
 	{
 		return sqrtf(x * x + y * y);
@@ -320,6 +328,15 @@ public:
 		return *this;
 	}
 
+	Vector3& Lerp(const Vector3& vStart, const Vector3& vEnd, float fTime)
+	{
+		Vector3 a = (vEnd - vStart) * fTime;
+		x = a.x;
+		y = a.y;
+		z = a.z;
+		return *this;
+	}
+
 	const float Length()
 	{
 		return sqrtf(x * x + y * y + z * z);
@@ -466,6 +483,16 @@ public:
 		y /= v.y;
 		z /= v.z;
 		w /= v.w;
+		return *this;
+	}
+
+	Vector4& Lerp(const Vector4& vStart, const Vector4& vEnd, float fTime)
+	{
+		Vector4 a = (vEnd - vStart) * fTime;
+		x = a.x;
+		y = a.y;
+		z = a.z;
+		w = a.w;
 		return *this;
 	}
 

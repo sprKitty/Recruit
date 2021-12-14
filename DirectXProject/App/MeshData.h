@@ -22,8 +22,8 @@ public:
 	void Initialize()override;
 	void Finalize()override;
 
-	void Load(const char* pName);
-	const Info& Get(const std::string& str);
+	void Load(std::string str);
+	const Info* Get(std::string str);
 
 protected:
 	MeshData() {}

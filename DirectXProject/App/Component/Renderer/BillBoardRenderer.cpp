@@ -45,19 +45,35 @@ void BillBoardRenderer::Update()
 void BillBoardRenderer::Write(const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
+
+	if (!m_pMainTexAnim.expired())
+	{
+		m_pMainTexAnim.lock()->Bind();
+	}
+
+	if (!m_pTransform.expired())
+	{
+		ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+	}
+
+	if (!m_pMesh.expired())
+	{
+		m_pMesh.lock()->Bind();
+	}
 }
 
 void BillBoardRenderer::Draw(const DrawType::kind type)
 {
 	if (!m_isDrawType[type])
 	{
-		DebugLog::GetInstance().FreeError("ビルボードに使用使うカメラが設定されていません");
 		return;
 	}
+
 	if (!m_pMainTexAnim.expired())
 	{
 		m_pMainTexAnim.lock()->Bind();
 	}
+	
 	if (!m_pBumpTexAnim.expired())
 	{
 		m_pBumpTexAnim.lock()->Bind();

@@ -40,12 +40,12 @@ MeshData::Info Geometory::CreateCharacterPolygon()
 	const float d = 0.5f;
 	MyMath::Vertex vtxCharacterPolygon[] =
 	{
-		{ Vector3(-d, d * 2.0f, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
-		{ Vector3(d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
-		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
-		{ Vector3(d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
-		{ Vector3(d,        0, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
-		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d, d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,-d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, -d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d, -d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
 	};
 
 	for (int i = 0; i < _countof(vtxCharacterPolygon); i += 3)

@@ -3,10 +3,10 @@
 #include <App/Component/Renderer/Renderer.h>
 #include <Defines.h>
 
-class RenderTarget;
+
+class MultiPass;
 class Camera;
 class Light;
-
 
 class RenderPipeline : public Singleton<RenderPipeline>
 {
@@ -59,6 +59,8 @@ public:
 		m_pRentLight = pLight;
 	}
 
+	ID3D11ShaderResourceView* GetRenderTex(const WriteType::kind type);
+
 protected:
 	RenderPipeline() {}
 	~RenderPipeline() override{}
@@ -69,7 +71,7 @@ private:
 
 private:
 	RendererPtrList m_pDrawList;
-	std::vector<std::shared_ptr<RenderTarget> > m_pRenderTargetList;
+	std::vector<std::shared_ptr<MultiPass> > m_pMultiPassList;
 
 	std::weak_ptr<Camera> m_pRentCamera;
 	std::weak_ptr<Light> m_pRentLight;

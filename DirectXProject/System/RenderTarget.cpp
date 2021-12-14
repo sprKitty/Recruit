@@ -2,34 +2,23 @@
 #include <System/DirectX.h>
 
 RenderTarget::RenderTarget()
-	: m_ppTex(nullptr)
-	, m_ppRTV(nullptr)
+	: m_pTex(nullptr)
+	, m_pRTV(nullptr)
 {
 }
 
 
 RenderTarget::~RenderTarget()
 {
-	for (int i = 0; i < m_nNum; ++i)
-	{
-		SAFE_RELEASE(m_ppTex[i]);
-		SAFE_RELEASE(m_ppRTV[i]);
-	}
-	if (m_ppTex)
-		delete[] m_ppTex;
-	if (m_ppRTV)
-		delete[] m_ppRTV;
+	SAFE_RELEASE(m_pTex);
+	SAFE_RELEASE(m_pRTV);
 }
 
-
-void RenderTarget::Create(int nNum, int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT rtvFormat)
+void RenderTarget::Create(int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT rtvFormat)
 {
-	m_nNum = nNum;
-	m_ppRTV = new ID3D11RenderTargetView*[m_nNum];
-	m_ppTex = new ID3D11ShaderResourceView*[m_nNum];
 	HRESULT hr;
 	D3D11_TEXTURE2D_DESC texDesc;
-	ID3D11Texture2D** ppTex = new ID3D11Texture2D*[m_nNum];
+	ID3D11Texture2D* pTex;
 	memset(&texDesc, 0, sizeof(texDesc));
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.Format = texFormat;
@@ -50,27 +39,10 @@ void RenderTarget::Create(int nNum, int width, int height, DXGI_FORMAT texFormat
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	memset(&srvDesc, 0, sizeof(srvDesc));
 	srvDesc.Format = rtvDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 	srvDesc.Texture2D.MipLevels = 1;
-	for (int i = 0; i < m_nNum; ++i)
-	{
-		hr = DirectX11::GetInstance().GetDevice()->CreateTexture2D(&texDesc, nullptr, &ppTex[i]);
-		hr = DirectX11::GetInstance().GetDevice()->CreateRenderTargetView(ppTex[i], &rtvDesc, &m_ppRTV[i]);
-		hr = DirectX11::GetInstance().GetDevice()->CreateShaderResourceView(ppTex[i], &srvDesc, &m_ppTex[i]);
-		SAFE_RELEASE(ppTex[i]);
-	}
-	delete[] ppTex;
+	hr = DirectX11::GetInstance().GetDevice()->CreateTexture2D(&texDesc, nullptr, &pTex);
+	hr = DirectX11::GetInstance().GetDevice()->CreateRenderTargetView(pTex, &rtvDesc, &m_pRTV);
+	hr = DirectX11::GetInstance().GetDevice()->CreateShaderResourceView(pTex, &srvDesc, &m_pTex);
+	SAFE_RELEASE(pTex);
 }
-
-
-void RenderTarget::Draw(Vector4 rgba, ID3D11DepthStencilView * pDepthStencil)
-{
-	float color[4] = { rgba.x,rgba.y ,rgba.z ,rgba.w };
-	DirectX11::GetInstance().GetContext()->OMSetRenderTargets(m_nNum, m_ppRTV, pDepthStencil);
-	for (int i = 0; i < m_nNum; ++i)
-	{
-		DirectX11::GetInstance().GetContext()->ClearRenderTargetView(m_ppRTV[i], color);
-	}
-	DirectX11::GetInstance().GetContext()->ClearDepthStencilView(pDepthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-}
-

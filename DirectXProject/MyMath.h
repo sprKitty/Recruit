@@ -3,9 +3,7 @@
 #include <Vector.h>
 #include <math.h>
 
-#define RAD(rot)rot* DirectX::XM_PI/180.0f
-#define DEG(deg)deg*180.0f/DirectX::XM_PI
-static const float RADMAX = 6.283185482f;
+static constexpr float RADMAX = 6.283185482f;
 
 namespace MyMath
 {
@@ -53,4 +51,12 @@ namespace MyMath
 	* @param float calc1 ƒ‰ƒWƒAƒ“ŠpŒvŽZŒ‹‰Ê
 	*************************************************/
 	void RotRadiusCalcPoint(float radius, float angle, float& calc0, float& calc1);
+
+	const float Lerp(const float fTime, const float fStart, const float fEnd);
+
+	inline const float EaseOutCubic(const float fTime) { return  1.0f - static_cast<float>(pow(1.0f - fTime, 3)); }
+	
+	inline const float EaseOutExpo(const float fTime) { return  1.0f - static_cast<float>(pow(2, -10 * fTime)); }
+
+	inline const float EaseInOutCubic(const float fTime) { return fTime < 0.5f ? 4.0f * fTime * fTime * fTime : 1.0f - static_cast<float>(pow(-2 * fTime + 2, 3)) / 2.0f; }
 }

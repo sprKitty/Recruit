@@ -28,10 +28,7 @@ public:
 	virtual void Uninit()override {}
 	virtual void Update()override {}
 
-	inline void SetType(const MagicType::Kind type)
-	{
-		m_magicType = type;
-	}
+	inline void SetType(const MagicType::Kind type) { m_magicType = type; }
 
 protected:
 	virtual const bool CollideUpdate() { return false; }

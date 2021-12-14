@@ -20,16 +20,6 @@ void Mouse::SetExecuteFunc(const std::shared_ptr<DelegateBase<void, const Vector
 	m_pFunctionList.push_back(pFunc);
 }
 
-const bool Mouse::IsHitAnyObject()
-{
-	return m_HitType != ObjectType::LEVEL;
-}
-
-const bool Mouse::IsNotHitObject()
-{
-	return m_HitType == ObjectType::LEVEL;
-}
-
 Vector3 Mouse::CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj)
 {
 	DirectX::XMFLOAT3 out;
@@ -56,7 +46,7 @@ void Mouse::CalcScreentoXZ()
 {
 	if (m_pCamera.expired())return;
 	DirectX::XMMATRIX mView = m_pCamera.lock()->GetView();
-	DirectX::XMMATRIX mProj = m_pCamera.lock()->GetProj();
+	DirectX::XMMATRIX mProj = m_pCamera.lock()->GetProjection();
 	Vector3 vNear, vFar, vRay;
 	vNear = CalcScreenToWorld(0.0f, mView, mProj);
 	vFar = CalcScreenToWorld(1.0f, mView, mProj);

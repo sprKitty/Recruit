@@ -1,23 +1,12 @@
 #include <App/Component/Renderer/Renderer3D.h>
 #include <App/Component/Object.h>
-#include <App/RenderPipeline.h>
+#include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
+#include <App/Component/Image.h>
+#include <App/RenderPipeline.h>
 #include <System/Input.h>
 #include <System/Geometory.h>
 
-
-Renderer3D::Renderer3D()
-	: m_pMMDModel(nullptr)
-	, m_pOBJModel(nullptr)
-	, m_isBillboard(false)
-	, m_isParentScale(true)
-{
-}
-
-
-Renderer3D::~Renderer3D()
-{
-}
 
 void Renderer3D::Init()
 {
@@ -38,66 +27,31 @@ void Renderer3D::Init()
 
 void Renderer3D::Uninit()
 {
-	if (m_pOBJModel)
-	{
-		delete m_pOBJModel;
-		m_pOBJModel = nullptr;
-	}
-	if (m_pMMDModel)
-	{
-		delete m_pMMDModel;
-		m_pMMDModel = nullptr;
-	}
 	RenderPipeline::GetInstance().ReleaseRenderer(weak_from_this());
 }
 
-
 void Renderer3D::Update()
 {
-	//DirectX::XMMATRIX mtx, mtxParent;
-	//mtx = m_pTransform.lock()->GetWorldMatrix();
-	//if (!m_pOwner.lock()->GetParent().expired())
-	//{
-	//	//if (m_isParentScale)
-	//		//mtxParent = m_pOwner.lock()->GetParent().lock()->GetWorldMatrix();
-	//	//else
-	//		//mtxParent = m_pOwner.lock()->GetParent().lock()->GetWorld();
-	//	if (m_pOwner.lock()->GetParent().lock()->GetParent().expired())
-	//	{
-	//		//if (m_isParentScale)
-	//			//mtxParent *= m_pOwner.lock()->GetParent().lock()->GetParent().lock()->GetWorldMatrix();
-	//		//else
-	//			//mtxParent *= m_pOwner.lock()->GetParent()->GetParent()->GetWorld();
-	//	}
-	//	mtx = t.GetMatrix();
-	//	mtx *= mtxParent;
-	//	m_pOwner.lock()->SetWorldMatrix(mtx);
-	//}
-	//else
-	//	m_pOwner.lock()->SetWorldMatrix(mtx);
+	if (m_pMesh.expired())
+	{
+		m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
+	}
 }
-
 
 void Renderer3D::Write(const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
 
-	ShaderBuffer::GetInstance().SetColor(DirectX::XMFLOAT4(1, 1, 1, 1));
-	
+	if (!PTRNULLCHECK(m_pMainImage))
+	{
+		m_pMainImage->Bind();
+	}
+
 	ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
 
-
-	if (m_pMMDModel)
+	if (!m_pMesh.expired())
 	{
-		m_pMMDModel->Draw();
-	}
-	else if (m_pOBJModel)
-	{
-		m_pOBJModel->Draw();
-	}
-	else
-	{
-		Geometory::GetInstance().DrawCube();
+		m_pMesh.lock()->Bind();
 	}
 }
 
@@ -105,36 +59,33 @@ void Renderer3D::Draw(const DrawType::kind type)
 {
 	if (!m_isDrawType[type])return;
 
-	ShaderBuffer::GetInstance().SetColor(DirectX::XMFLOAT4(1, 1, 1, 1));
+	if (!PTRNULLCHECK(m_pMainImage))
+	{
+		m_pMainImage->Bind();
+	}
+
+	if (!PTRNULLCHECK(m_pBumpImage))
+	{
+		m_pBumpImage->Bind();
+	}
 
 	ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
 
-	if (m_pMMDModel)
+	if (!m_pMesh.expired())
 	{
-		m_pMMDModel->Draw();
-	}
-	else if (m_pOBJModel)
-	{
-		m_pOBJModel->Draw();
-	}
-	else
-	{
-		Geometory::GetInstance().DrawCube();
+		m_pMesh.lock()->Bind();
 	}
 }
 
-
-void Renderer3D::SetModel(const char * fileName)
+void Renderer3D::SetMainImage(const std::string str)
 {
-	if (strstr(fileName, ".pmx")/* && !m_pFBDirectX::XModel*/ && !m_pOBJModel)
-	{
-		m_pMMDModel = new MMDModel();
-		m_pMMDModel->Create(fileName);
-		return;
-	}
-	if (strstr(fileName, ".obj")/* && !m_pFBDirectX::XModel*/ && !m_pMMDModel)
-	{
-		m_pOBJModel = new OBJModel();
-		m_pOBJModel->Create(fileName);
-	}
+	m_pMainImage.reset(new Image());
+	m_pMainImage->SetTexture(str.c_str());
+}
+
+void Renderer3D::SetBumpImage(const std::string str)
+{
+	m_pBumpImage.reset(new Image());
+	m_pBumpImage->SetTexture(str.c_str());
+	m_pBumpImage->SetTexType(ShaderResource::TEX_TYPE::BUMP);
 }

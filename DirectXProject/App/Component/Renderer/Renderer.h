@@ -16,9 +16,11 @@ namespace DrawType
 {
 	enum kind
 	{
-		WORLD_OF_NORMAL,	// シャドウマッピング
+		WORLD_OF_NORMAL,	// 
+		WORLD_OF_EFFECT,	// 
+		WORLD_OF_TRIPLANAR,	// 
 		WORLD_OF_SHADOW,	// シャドウマッピング
-		WORLD_OF_TOON,		// トゥーンマッピング
+		WORLD_OF_CHARACTER,		// キャラクター用
 		UI,
 		MAX,
 	};

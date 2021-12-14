@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include <System/ClassDesign/Singleton.h>
 #include <memory>
+#include <Vector.h>
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -53,8 +54,8 @@ public:
 	void Finalize()override;
 
 	const HRESULT Start(HWND hWnd, UINT width, UINT height, bool fullscreen);
-	void BeginBackBufferDraw();
-	void EndBackBufferDraw();
+	void BeginDraw(D3D11_VIEWPORT* vp = nullptr, ID3D11RenderTargetView* pRTV = nullptr, ID3D11DepthStencilView* pDSV = nullptr, Vector4* pColor = nullptr);
+	void EndDraw();
 
 	void SetBlendMode(const BlendMode::Kind kind);
 	void SetCulling(CullingMode::Kind kind);

@@ -24,39 +24,19 @@ public:
 	* @	param[pFunc] DelegateBase template const Vector3&
 	*/
 	void SetExecuteFunc(const std::shared_ptr<DelegateBase<void, const Vector3&> > pFunc);
-
 	void CalcScreentoXZ();
-
-	const bool IsHitAnyObject();
-
-	const bool IsNotHitObject();
-
-	void SetHitType(const ObjectType::Kind type)
-	{
-		m_HitType = type;
-	}
-
-	inline const Vector3& GetWorldPos() 
-	{
-		return m_vWorldpos;
-	}
-
-	inline const std::weak_ptr<Camera>& GetCamera()
-	{
-		return m_pCamera;
-	}
-
+	
+	inline const bool IsHitAnyObject() { return m_HitType != ObjectType::LEVEL && m_HitType != ObjectType::OUTSIDE; }
+	inline const bool IsNotHitObject() { return m_HitType == ObjectType::LEVEL; }
+	inline void SetHitType(const ObjectType::Kind type) { m_HitType = type; }
+	inline const Vector3& GetWorldPos() { return m_vWorldpos; }
+	inline const std::weak_ptr<Camera>& GetCamera() { return m_pCamera; }
 	inline void SetScreenPos(int x, int y)
 	{
 		m_vScreenPos.x = static_cast<float>(x) + DEVISIONX * x;
 		m_vScreenPos.y = static_cast<float>(y) + DEVISIONY * y;
 	}
-
-	inline void SetCamera(const std::weak_ptr<Camera> pCamera)
-	{
-		m_pCamera = pCamera;
-	}
-
+	inline void SetCamera(const std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
 private:
 	Vector3 CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj);

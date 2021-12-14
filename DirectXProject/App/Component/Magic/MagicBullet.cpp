@@ -6,7 +6,7 @@
 #include <System/DebugLog.h>
 
 
-float MagicBullet::MOVE_SPEED = 10.0f;
+float MagicBullet::MOVE_SPEED = 5.0f;
 float MagicBullet::MAX_SURVIVETIME = 2.0f;
 
 void MagicBullet::Init()
@@ -38,7 +38,7 @@ void MagicBullet::Update()
 	}
 
 
-	m_fSurviveTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
+	m_fSurviveTime += Clocker::GetInstance().GetFrameTime();
 	if (m_fSurviveTime >= MAX_SURVIVETIME)
 	{
 		m_pOwner.lock()->DisableActive();
@@ -46,7 +46,7 @@ void MagicBullet::Update()
 
 	if (!m_pTransform.expired())
 	{
-		m_pTransform.lock()->localpos += m_vMoveDirection * MOVE_SPEED * static_cast<float>(Clocker::GetInstance().GetFrameTime());
+		m_pTransform.lock()->localpos += m_vMoveDirection * MOVE_SPEED * Clocker::GetInstance().GetFrameTime();
 	}
 }
 
@@ -58,23 +58,36 @@ void MagicBullet::SetStartPos(const Vector3 & vPos)
 
 const bool  MagicBullet::CollideUpdate()
 {
-	Collider::HitInfo hitInfo = m_pCollider.lock()->IsHitInfo(Collision_Type::BC);
-	if (hitInfo.isFlg)
+	Collider::HitInfo hitInfoAABB = m_pCollider.lock()->IsHitInfo(CollisionType::AABB);
+	if (hitInfoAABB.isFlg)
 	{
-		if (!hitInfo.pObj.expired())
+		if (!hitInfoAABB.pObj.expired())
+		{
+			if (hitInfoAABB.pObj.lock()->GetType() == ObjectType::OUTSIDE)
+			{
+				m_pOwner.lock()->DisableActive();
+				return true;
+			}
+		}
+	}
+
+	Collider::HitInfo hitInfoBC = m_pCollider.lock()->IsHitInfo(CollisionType::BC);
+	if (hitInfoBC.isFlg)
+	{
+		if (!hitInfoBC.pObj.expired())
 		{
 			switch (m_pOwner.lock()->GetType())
 			{
 			case ObjectType::PLAYERATTACK:
-				if (hitInfo.pObj.lock()->GetType() == ObjectType::BOSSWITCH)
+				if (hitInfoBC.pObj.lock()->GetType() == ObjectType::BOSSWITCH)
 				{
 					m_pOwner.lock()->DisableActive();
 					return true;
 				}
 				break;
 
-			case ObjectType::BOSSATTACK:
-				if (hitInfo.pObj.lock()->GetType() == ObjectType::PLAYER)
+			case ObjectType::BOSSATTACK1:
+				if (hitInfoBC.pObj.lock()->GetType() == ObjectType::PLAYER)
 				{
 					m_pOwner.lock()->DisableActive();
 					return true;

@@ -20,6 +20,7 @@ const char* g_pPlayerAnimPath[Player_State::MAX] =
 void Player::Init()
 {
 	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
+	m_pTransform.lock()->localpos = { 1,0.5f,1 };
 	m_vDestination = 0;
 	m_vMove = 0;
 	m_isMove = false;
@@ -101,11 +102,10 @@ const bool Player::DestinationCollision()
 const bool Player::AttackAction()
 {
 	Vector3 vPos = m_pTransform.lock()->localpos;
-	vPos.y += 0.5f;
 	if (m_isAttack)
 	{
 		float fRad = MyMath::Radian(vPos.x, vPos.z, m_vMousePos.x, m_vMousePos.z);
-		m_Direction = CalcDirection4(DEG(fRad));
+		m_Direction = CalcDirection4(DirectX::XMConvertToDegrees(fRad));
 		Object::WORKER_OBJ pMagicObject = FactoryMethod::GetInstance().CreatePlayerMagic();
 
 		if (!pMagicObject.expired())
@@ -176,7 +176,7 @@ const int Player::AttackStateChange()
 	Vector3 vMove = m_vMove;
 	vMove.Abs();
 	float fRad = MyMath::Radian(vPos.x, vPos.z, vPos.x + m_vMove.x, vPos.z + m_vMove.z);
-	m_Direction = CalcDirection8(DEG(fRad));
+	m_Direction = CalcDirection8(DirectX::XMConvertToDegrees(fRad));
 	if (vMove.x < 0.001f
 		&& vMove.z < 0.001f)
 	{
@@ -188,8 +188,8 @@ const int Player::AttackStateChange()
 
 const bool Player::Move()
 {
-	m_pTransform.lock()->localpos.x += m_vMove.x * static_cast<float>(Clocker::GetInstance().GetFrameTime());
-	m_pTransform.lock()->localpos.z += m_vMove.z * static_cast<float>(Clocker::GetInstance().GetFrameTime());
+	m_pTransform.lock()->localpos.x += m_vMove.x * Clocker::GetInstance().GetFrameTime();
+	m_pTransform.lock()->localpos.z += m_vMove.z * Clocker::GetInstance().GetFrameTime();
 
 	return true;
 }
@@ -211,7 +211,7 @@ const bool Player::CalcDestination()
 		m_vMove.Normalize();
 		m_vMove *= OneSecMoveSpeed;
 		float fRad = MyMath::Radian(vPos.x, vPos.z, vPos.x + m_vMove.x, vPos.z + m_vMove.z);
-		m_Direction = CalcDirection8(DEG(fRad));
+		m_Direction = CalcDirection8(DirectX::XMConvertToDegrees(fRad));
 		m_isChangeDestination = false;
 	}
 	return true;

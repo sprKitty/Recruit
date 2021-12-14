@@ -5,60 +5,77 @@ struct VS_IN
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
     float3 binormal : BINORMAL0;
+    //uint inst : SV_InstanceID;
 };
 struct VS_OUT
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float3 tangent : TEXCOORD2;
-    float3 binormal : TEXCOORD3;
-    float4 parallelLightPos : POSITION0;
-    float4 wPos : POSITION3;
-    float4 camPos : POSITION4;
+    float4 wPos : TEXCOORD2;
+    float4 lightPos : TEXCOORD3;
+    float4 camPos : TEXCOORD4;
 };
 
-cbuffer World : register(b0)
+struct VP
 {
-	float4x4 world;
+    float4x4 view;
+    float4x4 proj;
 };
 
-cbuffer ViewProj : register(b1)
+struct LightInfo
 {
-	float4x4 camView;
-	float4x4 camProj;
-    float4x4 parallelLightView;
-    float4x4 parallellightProj;
+    float4 pos;
+    float4 dir;
+    float4 decay;
+    float4 color;
 };
 
+cbuffer ConstantBuffer0 : register(b0)
+{
+    float4x4 g_world;
+};
+
+cbuffer ConstantBuffer1 : register(b1)
+{
+    VP g_cameraVP;
+};
+
+cbuffer ConstantBuffer2 : register(b2)
+{
+    VP g_lightVP;
+};
+
+cbuffer ConstantBuffer3 : register(b3)
+{
+    LightInfo g_lightInfo;
+};
+
+cbuffer ConstantBuffer4 : register(b4)
+{
+    float4x4 g_Worlds[100];
+};
 
 VS_OUT main(VS_IN vin)
 {
 	VS_OUT vout;
 
     vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, world);
-    vout.pos = mul(vout.pos, parallelLightView);
-    vout.pos = mul(vout.pos, parallellightProj);
-    vout.parallelLightPos = vout.pos;
+    vout.pos = mul(vout.pos, g_world);
+    vout.pos = mul(vout.pos, g_lightVP.view);
+    vout.lightPos = vout.pos;
+    vout.pos = mul(vout.pos, g_lightVP.proj);
     
     vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, world);
+    vout.pos = mul(vout.pos, g_world);
     vout.wPos = vout.pos;
-    vout.pos = mul(vout.pos, camView);
-    vout.pos = mul(vout.pos, camProj);
+    vout.pos = mul(vout.pos, g_cameraVP.view);
     vout.camPos = vout.pos;
+    vout.pos = mul(vout.pos, g_cameraVP.proj);
     
 	vout.uv = vin.uv;
     
-    vout.normal = mul(vin.normal, (float3x3) world);
-    vout.normal = normalize(vout.normal);
-    
-    vout.tangent = mul(vin.tangent, (float3x3) world);
-    vout.tangent = normalize(vout.tangent);
-    
-    vout.binormal = mul(vin.binormal, (float3x3) world);
-    vout.binormal = normalize(vout.binormal);
+    vout.normal = normalize(mul(vin.normal, (float3x3) g_world));
     
 	return vout;
 }

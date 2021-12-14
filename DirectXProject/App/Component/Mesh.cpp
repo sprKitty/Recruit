@@ -38,7 +38,7 @@ void Mesh::Bind()
 
 void Mesh::Set(const std::string str)
 {
-	MeshData::Info info = MeshData::GetInstance().Get(str);
+	MeshData::Info info = *MeshData::GetInstance().Get(str);
 	if (info.pDrawBuffer.use_count() > 0)
 	{
 		m_pDrawBuffer = info.pDrawBuffer;

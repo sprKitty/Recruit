@@ -10,48 +10,49 @@ class VertexShader;
 class PixelShader;
 class ConstantBuffer;
 
-enum class VS_TYPE
+
+namespace VS_TYPE
 {
-	NORMAL,
-	ANIMATION,
-	LIGHTDEPTH,
-	CAMERADEPTH,
-	WATER,
-	OUTLINE,
-	DUMMY,
+	enum Kind
+	{
+		NORMAL,
+		TRIPLANAR,
+		LIGHTDEPTH,
 
-	MAX
-};
+		MAX
+	};
+}
 
-enum class PS_TYPE
+namespace PS_TYPE
 {
-	NORMAL,
-	BUFFER,
-	COLOR,
-	SCOPE,
-	BLUR,
-	TOON,
-	TOONSHADOW,
-	WORLD,
-	LIGHTDEPTH,
-	CAMERADEPTH,
-	FADE,
-	WATER,
+	enum Kind
+	{
+		NORMAL,
+		EFFECT,
+		TRIPLANAR,
+		CHARACTER,
+		COLOR,
+		LIGHTDEPTH,
 
-	MAX
-};
+		MAX
+	};
+}
 
-enum class CB_TYPE
+namespace CB_TYPE
 {
-	WORLD = 0,
-	V_REGIST1,
-	V_REGIST2,
-	P_REGIST0,
-	P_REGIST1,
-	P_REGIST2,
+	enum Kind
+	{
+		WORLD = 0,
+		CAMEAR_VP,
+		LIGHT_VP,
+		INSTANCING,
+		CAMERA_INFO,
+		LIGHT_INFO,
+		TEX_SETTING,
 
-	MAX
-};
+		MAX
+	};
+}
 
 namespace ShaderResource
 {
@@ -70,19 +71,33 @@ namespace ShaderResource
 		SCREEN,
 		DEPTH_OF_SAHDOW,
 		DEPTH_OF_FIELD,
-		TRILANAR_X,
-		TRILANAR_Y,
-		TRILANAR_Z,
-		BUMP_X,
-		BUMP_Y,
-		BUMP_Z,
+		BUMP,
 		CLIP,
 		BLUR,
 		GRAYSCALE,
-		TOONMAP,
-		WORLD,
 	};
 
+	struct ViewProjection
+	{
+		DirectX::XMFLOAT4X4 view;
+		DirectX::XMFLOAT4X4 proj;
+	};
+
+	struct CameraVP
+	{
+		ViewProjection info;
+	};
+
+	struct LightVP
+	{
+		ViewProjection info;
+	};
+
+	struct Instancing
+	{
+		static const int nSize = 100;
+		DirectX::XMFLOAT4X4 world[nSize];
+	};
 
 	struct CameraInfo
 	{
@@ -92,32 +107,17 @@ namespace ShaderResource
 	struct LightInfo
 	{
 		DirectX::XMFLOAT4 pos;
-		DirectX::XMFLOAT3 direction;
-		float fSoft;
-		DirectX::XMFLOAT4 decay;
+		DirectX::XMFLOAT4 direction;
 		DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT4 decay;
 	};
 
-	struct VSRegist1
-	{
-		DirectX::XMFLOAT4X4 camView;
-		DirectX::XMFLOAT4X4 camProj;
-		DirectX::XMFLOAT4X4 parallelLightView;
-		DirectX::XMFLOAT4X4 parallelLightProj;
-	};
-
-	struct VSRegist2
+	struct Bone
 	{
 		DirectX::XMFLOAT4X4 bone[250];
 	};
 
-	struct PSRegist0
-	{
-		CameraInfo camInfo; // カメラの詳細
-		LightInfo parallelLI; // 並行光源の詳細
-	};
-
-	struct PSRegist1
+	struct MappingData
 	{
 		DirectX::XMFLOAT4 color;
 		int nBlur;
@@ -127,7 +127,7 @@ namespace ShaderResource
 	};
 
 	// テクスチャの設定
-	struct PSRegist2
+	struct TexSetting
 	{
 		DirectX::XMFLOAT2 tiling;
 		DirectX::XMFLOAT2 offset;
@@ -149,9 +149,9 @@ public:
 	void Initialize()override;
 	void Finalize()override;
 	void InitParam();
-	void Write(CB_TYPE cb);
-	void BindVS(VS_TYPE vs);
-	void BindPS(PS_TYPE ps);
+	void Write(const CB_TYPE::Kind cb);
+	void BindVS(const VS_TYPE::Kind vs);
+	void BindPS(const PS_TYPE::Kind ps);
 
 	/*
 	*	ShaderResource:
@@ -170,45 +170,39 @@ public:
 	*		TEX_BLUR,
 	*		TEX_GRAYSCALE,
 	*/
-	void SetTexture(ID3D11ShaderResourceView* pTex = nullptr, ShaderResource::TEX_TYPE type = ShaderResource::TEX_TYPE::MAIN);
+	void SetTexture(ID3D11ShaderResourceView* pTex = nullptr, const ShaderResource::TEX_TYPE type = ShaderResource::TEX_TYPE::MAIN);
 	
-	void SetTexTilingOffset(Vector2& scale, Vector2& offset);
-	void SetMultiplyColor(Vector4& color);
-	void SetGrayScaleAlpha(float fAlpha);
-	void SetTime(float& time);
+	void SetTexTilingOffset(const Vector2& scale, const Vector2& offset);
+	void SetMultiplyColor(const Vector4& color);
+	void SetGrayScaleAlpha(const float fAlpha);
+	void SetTime(const float time);
 	void SetTexSamplerWRAP();
 	void SetTexSamplerCRAMP();
 
 	void SetWorld(const DirectX::XMMATRIX& mWorld);
 
+	void SetInstancingWorld(const UINT nSize);
+
 	void SetCameraVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
 	
-	void SetParallelLightVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
+	void SetLightVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
 	
-	void SetAnimeBone(const DirectX::XMFLOAT4X4* pBone);
-	
-	void SetColor(const DirectX::XMFLOAT4& color);
-	
-	void SetParallelLightInfo(const ShaderResource::LightInfo& light);
+	void SetLightInfo(const ShaderResource::LightInfo& light);
 	
 	void SetCameraInfo(const ShaderResource::CameraInfo& camera);
 	
-	void SetBlur(bool flg);
-
 protected:
 	ShaderBuffer();
 	~ShaderBuffer();
 
 private:
-	void SetToonMap(ID3D11ShaderResourceView* pMap);
-
 	DirectX::XMFLOAT4X4 m_world;
-	ShaderResource::VSRegist1 m_vs1;
-	ShaderResource::VSRegist2 m_vs2;
-	ShaderResource::PSRegist0 m_ps0;
-	ShaderResource::PSRegist1 m_ps1;
-	ShaderResource::PSRegist2 m_ps2;
-	ID3D11ShaderResourceView* m_pMap;
+	ShaderResource::CameraVP m_cameraVP;
+	ShaderResource::Instancing m_Instancing;
+	ShaderResource::LightVP m_lightVP;
+	ShaderResource::CameraInfo m_cameraInfo;
+	ShaderResource::LightInfo m_lightInfo;
+	ShaderResource::TexSetting m_texSetting;
 	int m_nSpotNext;
 
 	std::vector<std::unique_ptr<VertexShader> > m_pVSList;

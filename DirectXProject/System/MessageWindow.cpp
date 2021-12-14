@@ -3,6 +3,7 @@
 #include <App/Component/Renderer/Renderer2D.h>
 #include <System/LoadFiles.h>
 
+
 float MessageWindow::m_fShowSpeed = 0.2f;
 std::map<std::string, Vector2> MessageWindow::m_OffsetMap;
 
@@ -15,14 +16,14 @@ void MessageWindow::Initialize()
 	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.35f, 10);
 	rect.scale = Vector2(static_cast<float>(SCREEN_WIDTH) * 0.7f, static_cast<float>(SCREEN_HEIGHT) * 0.25f);
 	m_pWindow.lock()->SetRectTransform(rect);
-	m_pWindow.lock()->m_Image.SetPath("Assets/textframe.png");
+	m_pWindow.lock()->m_Image.SetTexture("textframe.png");
 
 	m_pHiragana = m_pObject->AddComponent<Renderer2D>();
 	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.4f, 9);
 	rect.scale = Vector2(static_cast<float>(SCREEN_WIDTH) * 0.7f, static_cast<float>(SCREEN_HEIGHT) * 0.15f);
 	m_pHiragana.lock()->SetRectTransform(rect);
 	m_pHiragana.lock()->m_Image.m_vTiling = 0.1f;
-	m_pHiragana.lock()->m_Image.SetPath("Assets/hiragana.png");
+	m_pHiragana.lock()->m_Image.SetTexture("hiragana.png");
 	
 	LoadFiles lf;
 	STRINGMAP sm = lf.CSV("Assets/csv/message.csv");

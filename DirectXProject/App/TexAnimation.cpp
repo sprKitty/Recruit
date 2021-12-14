@@ -26,9 +26,7 @@ void TexAnimation::LoadData(const char * pPath)
 	{
 		if (itr.first == "1ファイル名")
 		{
-			std::string path("Assets/characterchip/");
-			path += itr.second[0];
-			m_pImage->SetPath(path.c_str());
+			m_pImage->SetTexture(itr.second[0].c_str());
 		}
 		else if (itr.first == "2アニメーションスピード")
 		{
@@ -137,7 +135,7 @@ void TexAnimation::Update(const int nType)
 	{
 		if (m_fTime < m_fAnimSpeed)
 		{
-			m_fTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
+			m_fTime += Clocker::GetInstance().GetFrameTime();
 		}
 		else
 		{
@@ -166,7 +164,7 @@ void TexAnimation::Update(const int nType)
 	{
 		if (m_fTime < m_fAnimSpeed)
 		{
-			m_fTime += static_cast<float>(Clocker::GetInstance().GetFrameTime());
+			m_fTime += Clocker::GetInstance().GetFrameTime();
 		}
 		else
 		{

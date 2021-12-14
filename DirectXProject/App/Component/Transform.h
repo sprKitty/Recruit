@@ -13,10 +13,7 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	inline const DirectX::XMMATRIX& GetWorldMatrix()
-	{
-		return m_mWorldMatrix;
-	}
+	const DirectX::XMMATRIX GetWorldMatrix(const Vector3& vScale = 1, const Vector3& vAngle = 0, const Vector3& vPos = 0);
 
 	inline void SetMatrix(const DirectX::XMMATRIX& mtx)
 	{
@@ -35,6 +32,5 @@ public:
 
 private:
 	DirectX::XMMATRIX m_mMatrix;
-	DirectX::XMMATRIX m_mWorldMatrix;
 
 };

@@ -1,9 +1,12 @@
 #include "Image.h"
 #include <System/Clocker.h>
+#include <App/TextureData.h>
+
 
 void Image::Init()
 {
 	m_vTiling = 1;
+	m_vOffset = 0;
 	m_vMultiplyColor = 1;
 	m_pTex = nullptr;
 	m_isWRAP = true;
@@ -12,7 +15,6 @@ void Image::Init()
 
 void Image::Uninit()
 {
-	SAFE_RELEASE(m_pTex);
 }
 
 void Image::Bind()
@@ -30,4 +32,9 @@ void Image::Bind()
 		ShaderBuffer::GetInstance().SetTexSamplerCRAMP();
 
 	ShaderBuffer::GetInstance().SetMultiplyColor(m_vMultiplyColor);
+}
+
+void Image::SetTexture(const std::string str)
+{
+	m_pTex = TextureData::GetInstance().Get(str);
 }

@@ -18,24 +18,31 @@ void MeshData::Finalize()
 {
 }
 
-void MeshData::Load(const char * pName)
+void MeshData::Load(std::string str)
 {
-	if (strstr(pName, ".obj"))
+	if (strstr(str.c_str(), ".obj"))
 	{
 		const std::string staticPath = "Assets/OBJ/";
-		std::string path = staticPath + pName;
-		m_ModelMap[pName] = OBJModel::Load(path.c_str());
+		std::string path = staticPath + str;
+		size_t size = str.find(".");
+		str.resize(size);
+		m_ModelMap[str] = OBJModel::Load(path.c_str());
+		return;
 	}
 }
 
-const MeshData::Info& MeshData::Get(const std::string & str)
+const MeshData::Info* MeshData::Get(std::string str)
 {
-	for (const auto& itr : m_ModelMap)
+	const int dot = str.find(".");
+	if (dot != -1) //.obj‚È‚Ç‚ÌŠg’£Žq‚ª‚Â‚¢‚Ä‚¢‚½‚Æ‚«íœ
 	{
-		if (str == itr.first)
-		{
-			return itr.second;
-		}
+		str.resize(dot);
 	}
-	return Info();
+
+	const auto itr = m_ModelMap.find(str);
+	if (itr != m_ModelMap.end())
+	{
+		return &itr->second;
+	}
+	return nullptr;
 }

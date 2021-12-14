@@ -1,24 +1,26 @@
 #include "RenderPipeline.h"
-#include <System/RenderTarget.h>
+#include <App/MultiPass.h>
 #include <Shader/ShaderBuffer.h>
 #include <App/Camera.h>
 #include <App/Component/Object.h>
+#include <App/Light.h>
 
 
 void RenderPipeline::Initialize()
 {
 	for (int i = 0; i < WriteType::MAX; ++i)
 	{
-		std::shared_ptr<RenderTarget> pRT(new RenderTarget());
-		m_pRenderTargetList.push_back(std::move(pRT));
+		std::shared_ptr<MultiPass> pMP(new MultiPass());
+		m_pMultiPassList.push_back(std::move(pMP));
 	}
-	m_pRenderTargetList[WriteType::DEPTH_OF_SHADOW]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
-	m_pRenderTargetList[WriteType::DEPTH_OF_FIELD]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
+	float fSize = 256 * 2 * 2 * 2 * 2;
+	m_pMultiPassList[WriteType::DEPTH_OF_SHADOW]->Create(0, Vector2(fSize, fSize), 1);
+	//m_pMultiPassList[WriteType::DEPTH_OF_FIELD]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void RenderPipeline::Finalize()
 {
-	m_pRenderTargetList.clear();
+	m_pMultiPassList.clear();
 }
 
 void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pComponent)
@@ -52,17 +54,15 @@ void RenderPipeline::Write(const WriteType::kind & typeW)
 	}
 
 	
-	m_pRenderTargetList[typeW]->Draw(Vector4(1), DirectX11::GetInstance().GetDepthStencil().lock()->Get());
 	switch (typeW)
 	{
 	case WriteType::DEPTH_OF_FIELD:
-		m_pRentCamera.lock()->Bind3D(false);
-		ShaderBuffer::GetInstance().BindVS(VS_TYPE::CAMERADEPTH);
-		ShaderBuffer::GetInstance().BindPS(PS_TYPE::CAMERADEPTH);
+		//ShaderBuffer::GetInstance().BindVS(VS_TYPE::CAMERADEPTH);
+		//ShaderBuffer::GetInstance().BindPS(PS_TYPE::CAMERADEPTH);
 		break;
 
 	case WriteType::DEPTH_OF_SHADOW:
-		m_pRentCamera.lock()->Bind3D(false);
+		m_pRentLight.lock()->SetVPSize(m_pMultiPassList[typeW]->GetVPSize());
 		ShaderBuffer::GetInstance().BindVS(VS_TYPE::LIGHTDEPTH);
 		ShaderBuffer::GetInstance().BindPS(PS_TYPE::LIGHTDEPTH);
 		break;
@@ -70,6 +70,9 @@ void RenderPipeline::Write(const WriteType::kind & typeW)
 	default:
 		break;
 	}
+	m_pRentCamera.lock()->Bind3D();
+	m_pRentLight.lock()->Bind3D();
+	m_pMultiPassList[typeW]->Bind();
 	Call(typeW, DrawType::MAX);
 }
 
@@ -78,19 +81,32 @@ void RenderPipeline::Draw(const DrawType::kind & typeD)
 	switch (typeD)
 	{
 	case DrawType::WORLD_OF_NORMAL:
-		m_pRentCamera.lock()->Bind3D(false);
+		m_pRentCamera.lock()->Bind3D();
 		ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
 		ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
+		break;
 
+	case DrawType::WORLD_OF_EFFECT:
+		m_pRentCamera.lock()->Bind3D();
+		ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
+		ShaderBuffer::GetInstance().BindPS(PS_TYPE::EFFECT);
+		break;
+
+	case DrawType::WORLD_OF_TRIPLANAR:
+		m_pRentCamera.lock()->Bind3D();
+		ShaderBuffer::GetInstance().BindVS(VS_TYPE::TRIPLANAR);
+		ShaderBuffer::GetInstance().BindPS(PS_TYPE::TRIPLANAR);
 		break;
 
 	case DrawType::WORLD_OF_SHADOW:
-		m_pRentCamera.lock()->Bind3D(false);
+		m_pRentCamera.lock()->Bind3D();
 
 		break;
 
-	case DrawType::WORLD_OF_TOON:
-		m_pRentCamera.lock()->Bind3D(false);
+	case DrawType::WORLD_OF_CHARACTER:
+		m_pRentCamera.lock()->Bind3D();
+		ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
+		ShaderBuffer::GetInstance().BindPS(PS_TYPE::CHARACTER);
 		break;
 
 	case DrawType::UI:
@@ -108,6 +124,11 @@ void RenderPipeline::AddRenderer(const std::weak_ptr<Component>& pComponent)
 {
 	std::weak_ptr<Renderer> pRenderer = std::dynamic_pointer_cast<Renderer>(pComponent.lock());
 	m_pDrawList.push_back(pRenderer);
+}
+
+ID3D11ShaderResourceView * RenderPipeline::GetRenderTex(const WriteType::kind type)
+{
+	return m_pMultiPassList[type]->GetRenderTex();
 }
 
 void RenderPipeline::Call(WriteType::kind typeW, DrawType::kind typeD)

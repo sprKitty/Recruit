@@ -6,7 +6,7 @@ void Transform::Init()
 	localpos = 0;
 	localrot = 0;
 	localscale = 1;
-	m_mMatrix = m_mWorldMatrix = DirectX::XMMatrixIdentity();
+	m_mMatrix = DirectX::XMMatrixIdentity();
 }
 
 void Transform::Uninit()
@@ -15,6 +15,10 @@ void Transform::Uninit()
 
 void Transform::Update()
 {
-	DirectX::XMMATRIX localMatrix = MyMath::ConvertMatrix(localscale, localrot, localpos);
-	m_mWorldMatrix = m_mMatrix * localMatrix;
+}
+
+const DirectX::XMMATRIX Transform::GetWorldMatrix(const Vector3& vScale, const Vector3& vAngle, const Vector3& vPos)
+{
+	DirectX::XMMATRIX localMatrix = MyMath::ConvertMatrix(localscale * vScale, localrot + vAngle, localpos + vPos);
+	return m_mMatrix * localMatrix;
 }

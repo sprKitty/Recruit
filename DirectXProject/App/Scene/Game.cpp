@@ -6,6 +6,7 @@
 #include <App/Camera.h>
 #include <App/Light.h>
 #include <App/GameKeyBind.h>
+#include <App/Component/Transform.h>
 #include <App/Component/Event/Event.h>
 #include <App/Component/Character/MasterWitch.h>
 #include <App/Component/Event/EventTrigger.h>
@@ -20,7 +21,11 @@
 void Game::Init()
 {
 	m_pCamera.reset(new Camera());
-	m_pCamera->Init(false);
+	m_pCamera->Init();
+	//m_pCamera->EnableLate();
+
+	m_pLight.reset(new Light());
+	m_pLight->Init();
 
 	m_pMessageWindow.reset(new MessageWindow());
 	m_pMessageWindow->Initialize();
@@ -31,10 +36,6 @@ void Game::Init()
 	m_pKeyBind.reset(new GameKeyBind());
 	m_pKeyBind->Initialize();
 
-
-	Level level;
-	level.Create(weak_from_this());
-
 	FactoryMethod::GetInstance().SetCamera(m_pCamera);
 	FactoryMethod::GetInstance().SetMouse(m_pMouse);
 	Collision::GetInstance().SetMouse(m_pMouse);
@@ -43,7 +44,11 @@ void Game::Init()
 	Object::WORKER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
 
 	Object::WORKER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
-	
+	if (!pPlayer.expired())
+	{
+		m_pCamera->SetTarget(pPlayer.lock()->GetComponent<Transform>());
+	}
+
 	Object::WORKER_OBJ pBoss1 = FactoryMethod::GetInstance().CreateBoss1Object();
 
 	Object::WORKER_OBJ pMasterWitch = FactoryMethod::GetInstance().CreateBossWitchObject();
@@ -65,7 +70,11 @@ void Game::Init()
 		EventMgr::GetInstance().SetEventInfo(pTalkEvent, pObjects, EventTrigger::Type::TALK_1);
 	}
 
+	Level level;
+	level.Create(weak_from_this());
+
 	RenderPipeline::GetInstance().SetCamera(m_pCamera);
+	RenderPipeline::GetInstance().SetLight(m_pLight);
 }
 
 void Game::Uninit()
@@ -94,17 +103,31 @@ Scene_Type::kind Game::Update()
 	}
 
 	m_pCamera->Update();
-
+	m_pLight->Update();
 	return scene;
 }
 
 void Game::Draw()
 {
+	RenderPipeline::GetInstance().Write(WriteType::DEPTH_OF_SHADOW);
+	
+	DirectX11::GetInstance().BeginDraw();
 	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_NORMAL);
+	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_EFFECT);
+	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_TRIPLANAR);
+	RenderPipeline::GetInstance().Draw(DrawType::WORLD_OF_CHARACTER);
 	Collision::GetInstance().Draw();
 
 	m_pCamera->Bind2D();
 	ShaderBuffer::GetInstance().BindVS(VS_TYPE::NORMAL);
-	ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
+	ShaderBuffer::GetInstance().BindPS(PS_TYPE::CHARACTER);
 	m_pMessageWindow->Draw();
+
+	
+	ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
+	ShaderBuffer::GetInstance().SetTexture(RenderPipeline::GetInstance().GetRenderTex(WriteType::DEPTH_OF_SHADOW));
+	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(200, 200, 0), Vector3(0, 0, 0), Vector3(100, 100, 0));
+	ShaderBuffer::GetInstance().SetWorld(mtx);
+	Geometory::GetInstance().DrawPolygon();
+	DirectX11::GetInstance().EndDraw();
 }

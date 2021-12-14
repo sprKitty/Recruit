@@ -20,5 +20,3 @@ constexpr float DEVISIONY = 22.5f / HALFSCREEN_HEIGHT;
 
 #define PTRNULLCHECK(ptr) ((ptr.use_count() == 0))
 
-// é¿çsÉGÉâÅ[
-#define FnAssert(fn, str) do { _ASSERT_EXPR(SUCCEEDED(fn), _CRT_WIDE(str)); } while(0)

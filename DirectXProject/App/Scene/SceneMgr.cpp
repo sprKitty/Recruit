@@ -2,6 +2,7 @@
 #include <App/RenderPipeline.h>
 #include <App/Scene/Game.h>
 #include <App/MeshData.h>
+#include <App/TextureData.h>
 #include <App/Collision.h>
 #include <System/MessageWindow.h>
 #include <System/Geometory.h>
@@ -22,6 +23,15 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	MessageWindow::CreateOffsetMap();
 	MeshData::GetInstance().Initialize();
 	MeshData::GetInstance().Load("field2.obj");
+	MeshData::GetInstance().Load("sphere.obj");
+	TextureData::GetInstance().Initialize();
+	TextureData::GetInstance().Load("samp.png", "characterchip/");
+	TextureData::GetInstance().Load("sampattack.png", "characterchip/");
+	TextureData::GetInstance().Load("witch.png", "characterchip/");
+	TextureData::GetInstance().Load("hiragana.png");
+	TextureData::GetInstance().Load("textframe.png");
+	TextureData::GetInstance().Load("terrain.png");
+	TextureData::GetInstance().Load("terrainBump.png");
 	Collision::GetInstance().Initialize();
 	srand(timeGetTime());
 
@@ -37,6 +47,7 @@ void SceneMgr::Finalize()
 {
 	m_pSceneList[m_NowScene]->Uninit();
 	Collision::GetInstance().Finalize();
+	TextureData::GetInstance().Finalize();
 	MeshData::GetInstance().Finalize();
 	RenderPipeline::GetInstance().Finalize();
 	ShaderBuffer::GetInstance().Finalize();
@@ -57,8 +68,5 @@ void SceneMgr::Update()
 
 void SceneMgr::Draw()
 {
-	DirectX11::GetInstance().BeginBackBufferDraw();
 	m_pSceneList[m_NowScene]->Draw();
-	DirectX11::GetInstance().EndBackBufferDraw();
-
 }

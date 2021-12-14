@@ -11,9 +11,6 @@
 #include <Defines.h>
 #include <iostream>
 
-
-class Component;
-
 namespace ObjectType
 {
 	enum Kind
@@ -22,12 +19,19 @@ namespace ObjectType
 		PLAYER,
 		PLAYERATTACK,
 		BOSSWITCH,
-		BOSSATTACK,
+		BOSSATTACK1,
+		BOSSATTACK2,
+		BOSSATTACK3,
+		BOSSATTACK4,
+		BOSSATTACK5,
 		LEVEL,
+		OUTSIDE,
 
 		MAX
 	};
 }
+
+class Component;
 
 class Object : public std::enable_shared_from_this<Object>
 {

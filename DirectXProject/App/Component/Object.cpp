@@ -5,6 +5,7 @@
 
 Object::Object()
 {
+	Init();
 }
 
 Object::~Object()
@@ -19,7 +20,7 @@ Object::~Object()
 
 void Object::Init()
 {
-	shared_from_this()->AddComponent<Transform>();
+	AddComponent<Transform>();
 	auto buff = ComponentList;
 	m_isDelete = false;
 	m_isActive = true;

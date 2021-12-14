@@ -1,4 +1,6 @@
 #include "DrawBuffer.h"
+#include <Shader/ShaderBuffer.h>
+
 
 DrawBuffer::DrawBuffer()
 	: m_pVertexBuffer(NULL)
@@ -120,6 +122,7 @@ void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive)
 	else
 	{
 		// 頂点バッファのみで描画
+		//ShaderBuffer::GetInstance().SetInstancingWorld(m_vtxCount);
 		pContext->Draw(m_vtxCount, 0);
 	}
 

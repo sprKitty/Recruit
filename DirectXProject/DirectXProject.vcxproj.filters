@@ -191,6 +191,21 @@
     <ClCompile Include="App\Component\Magic\MagicBullet.cpp">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClCompile>
+    <ClCompile Include="App\Component\Magic\MagicRazer.cpp">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClCompile>
+    <ClCompile Include="App\TextureData.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\MultiPass.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Terrain.cpp">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Magic\MagicBall.cpp">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -364,51 +379,27 @@
     <ClInclude Include="App\Component\Magic\MagicBullet.h">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClInclude>
+    <ClInclude Include="App\MultiPass.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Magic\MagicRazer.h">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Terrain.h">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="App\TextureData.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\Magic\MagicBall.h">
+      <Filter>C++ファイル\App\Component\Magic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\PSBlur.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSGrass.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSLambert.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSPixelColor.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSScope.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSToon.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSToonShadow.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSWorld.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\VSDummy.hlsl">
-      <Filter>リソース ファイル\VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\VSOutLine.hlsl">
-      <Filter>リソース ファイル\VertexShader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\VSNormal.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PSNormal.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSBackBuffer.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="System\PSFade.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSWater.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\VSLightDepth.hlsl">
@@ -417,17 +408,20 @@
     <FxCompile Include="Shader\PSLightDepth.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VSCameraDepth.hlsl">
-      <Filter>リソース ファイル\VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSCameraDepth.hlsl">
+    <FxCompile Include="Shader\PSPixelColor.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VSWater.hlsl">
+    <FxCompile Include="Shader\PSCharacter.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSTriPlanar.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSTriPlanar.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VSAnimation.hlsl">
-      <Filter>リソース ファイル\VertexShader</Filter>
+    <FxCompile Include="Shader\PSEffect.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

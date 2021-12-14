@@ -1,6 +1,9 @@
 #pragma once
 #include <MyMath.h>
+#include <memory>
 
+
+class Transform;
 
 class Camera
 {
@@ -8,37 +11,48 @@ public:
 	Camera();
 	~Camera();
 
-	void Init(bool isMain);
+	void Init();
 	void Uninit();
 	void Update();
-	void RotateUpdate();
 
-	inline DirectX::XMFLOAT4 GetPos() { return m_vPos; }
-	inline DirectX::XMFLOAT4 GetLook() { return m_vLook; }
-	inline DirectX::XMMATRIX GetView(Vector3* pUp = nullptr);
-	inline DirectX::XMMATRIX GetProj();
-	inline DirectX::XMMATRIX GetZoomProj();
-	const Vector3 GetNormal();
-	inline void SetZoom(int zoom) { m_nZoom = zoom; }
-	inline void SetSensivility(float sensi) { m_fSensivility = sensi; }
-	void Bind3D(bool zoom);
-	void ReverseBind3D();
-	void Blur(bool flg);
+	void Bind3D();
 	void Bind2D();
-	void UpVector(DirectX::XMFLOAT4 &up, DirectX::XMFLOAT4 &right);
-	float GetViewAngle();
-	float GetAspect();
-	static Camera* m_pMain;
+
+	inline const DirectX::XMMATRIX& GetView() { return m_mView; }
+	inline const DirectX::XMMATRIX& GetProjection() { return m_mProjection; }
+	inline const Vector3& GetPos() { return m_vPos; }
+	inline const Vector3& GetLook() { return m_vLook; }
+	inline const Vector3& GetUp() { return m_vUp; }
+	inline const Vector3& GetRight() { return m_vSide; }
+	inline const Vector3& GetFront() { return m_vFront; }
+	inline const float GetFov() { return m_fFov; }
+	inline const float GetAspect() { return m_vScreenSize.x / m_vScreenSize.y; }
+
+	void SetTarget(const std::weak_ptr<Transform>& pTrans);
+	inline void ReleaseTarget() { m_pTargetTrans.reset(); }
+
+	inline void EnableLate() { m_isLate = true; }
+	inline void DisableLate() { m_isLate = false; }
+
 private:
-	DirectX::XMFLOAT4 m_vPos;
-	DirectX::XMFLOAT4 m_vLook;
-	DirectX::XMFLOAT4 m_vUp;
-	DirectX::XMFLOAT4 m_vLimitLook[2];
+	void CalcView();
+	void CalcProjection();
+
+private:
+	std::weak_ptr<Transform> m_pTargetTrans;
+	DirectX::XMMATRIX m_mView;
+	DirectX::XMMATRIX m_mProjection;
+	Vector3 m_vPos;
+	Vector3 m_vLatePos;
+	Vector3 m_vLook;
+	Vector3 m_vLateLook;
+	Vector3 m_vUp;
+	Vector3 m_vSide;
+	Vector3 m_vFront;
+	Vector3 m_vOffset;
+	Vector2 m_vScreenSize;
 	float m_fNearClip;
 	float m_fFarClip;
-	float m_fSensivility;
-	float m_fRotate;
-	int m_nZoom;
-	DirectX::XMFLOAT2 m_vAngle;
-	bool m_isF1;
+	float m_fFov;
+	bool m_isLate;
 };
