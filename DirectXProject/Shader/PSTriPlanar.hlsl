@@ -89,5 +89,27 @@ float4 main(PS_IN pin) : SV_Target
     
     color.rgb *= xN * blending.x + yN * blending.y + zN * blending.z;
     
+    float3 L = -normalize(g_lightInfo.dir.xyz);
+    float3 N = normalize(pin.normal.xyz);
+    float I = dot(L, N);
+    I += 1.0f;
+    I *= 0.5f;
+    color.rgb *= (I * g_lightInfo.color.rgb);
+    
+    float2 mapUV;
+    float inLVP;
+    float depth = 0;
+    inLVP = pin.lightPos.z / pin.lightPos.w;
+    mapUV.x = (1.0f + pin.lightPos.x / pin.lightPos.w) * 0.5f;
+    mapUV.y = (1.0f - pin.lightPos.y / pin.lightPos.w) * 0.5f;
+    float3 mapColor = TEX_DOS.Sample(BORDER, mapUV).rgb;
+    depth = mapColor.r;
+    depth += mapColor.g / 256.0f; 
+    depth += mapColor.b / 256.0f / 256.0f;
+    if (inLVP - 0.00015f > depth)
+    {
+        color.rgb *= 0.4f;
+    }
+    
     return color;
 }

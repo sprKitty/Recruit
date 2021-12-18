@@ -18,6 +18,7 @@ namespace VS_TYPE
 		NORMAL,
 		TRIPLANAR,
 		LIGHTDEPTH,
+		DOF,
 
 		MAX
 	};
@@ -33,6 +34,7 @@ namespace PS_TYPE
 		CHARACTER,
 		COLOR,
 		LIGHTDEPTH,
+		DOF,
 
 		MAX
 	};
@@ -42,10 +44,9 @@ namespace CB_TYPE
 {
 	enum Kind
 	{
-		WORLD = 0,
+		INSTANCING_WORLD = 0,
 		CAMEAR_VP,
 		LIGHT_VP,
-		INSTANCING,
 		CAMERA_INFO,
 		LIGHT_INFO,
 		TEX_SETTING,
@@ -93,12 +94,6 @@ namespace ShaderResource
 		ViewProjection info;
 	};
 
-	struct Instancing
-	{
-		static const int nSize = 100;
-		DirectX::XMFLOAT4X4 world[nSize];
-	};
-
 	struct CameraInfo
 	{
 		DirectX::XMFLOAT4 pos;
@@ -108,8 +103,8 @@ namespace ShaderResource
 	{
 		DirectX::XMFLOAT4 pos;
 		DirectX::XMFLOAT4 direction;
-		DirectX::XMFLOAT4 color;
 		DirectX::XMFLOAT4 decay;
+		DirectX::XMFLOAT4 color;
 	};
 
 	struct Bone
@@ -181,7 +176,7 @@ public:
 
 	void SetWorld(const DirectX::XMMATRIX& mWorld);
 
-	void SetInstancingWorld(const UINT nSize);
+	void SetInstancingWorld(const Vector3& vScl, const Vector3& vRot, const std::vector<Vector3>& posList);
 
 	void SetCameraVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
 	
@@ -196,9 +191,10 @@ protected:
 	~ShaderBuffer();
 
 private:
-	DirectX::XMFLOAT4X4 m_world;
+	static const int INSTANCING_MAX = 1024;
+
+	DirectX::XMFLOAT4X4 m_instancingWorld[INSTANCING_MAX];
 	ShaderResource::CameraVP m_cameraVP;
-	ShaderResource::Instancing m_Instancing;
 	ShaderResource::LightVP m_lightVP;
 	ShaderResource::CameraInfo m_cameraInfo;
 	ShaderResource::LightInfo m_lightInfo;

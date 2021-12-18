@@ -5,6 +5,11 @@ struct PS_IN
     float4 depth : TEXCOORD1;
 };
 
+struct PS_OUT
+{
+    float4 target0 : SV_Target0;
+};
+
 struct LightInfo
 {
     float4 pos;
@@ -60,8 +65,9 @@ SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
 
-float4 main(PS_IN pin):SV_Target0
+PS_OUT main(PS_IN pin)
 {
+    PS_OUT pout;
     int nCramp = 1 - g_texSetting.nWrap;
     float fAlpha = TEX_MAIN.Sample(WRAP, pin.uv * g_texSetting.tile + g_texSetting.offset).a * g_texSetting.nWrap;
     fAlpha += TEX_MAIN.Sample(CRAMP, pin.uv * g_texSetting.tile + g_texSetting.offset).a * nCramp;
@@ -72,5 +78,6 @@ float4 main(PS_IN pin):SV_Target0
     unpacked_depth.g = modf(depth * 256.0f, unpacked_depth.r);
     unpacked_depth.b *= modf(unpacked_depth.g * 256.0f, unpacked_depth.g);
 
-    return unpacked_depth / 256.0f; // ïWèÄâª
+    pout.target0 = unpacked_depth / 256.0f;
+    return pout;
 }

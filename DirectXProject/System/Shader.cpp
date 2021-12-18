@@ -206,7 +206,7 @@ HRESULT ConstantBuffer::Create(UINT size)
 	bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;	
 	
 	//--- 頂点バッファの作成
-	ID3D11Device* pDevice = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetDevice();
+	ID3D11Device* pDevice = DirectX11::GetInstance().GetDevice();
 	hr = pDevice->CreateBuffer(&bufDesc, nullptr, &m_pBuffer);
 	
 	return hr;
@@ -215,7 +215,7 @@ HRESULT ConstantBuffer::Create(UINT size)
 void ConstantBuffer::Write(void * pData)
 {
 	// 定数バッファへの書き込み
-	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->UpdateSubresource(m_pBuffer, 0, nullptr, pData, 0, 0);
 }
 
@@ -226,19 +226,19 @@ void ConstantBuffer::BindVS(UINT slot)
 	どの位置に格納するか一つ目の引数(StartSlot)に指定する
 	hlslのコードではregister(bX)でバッファの格納位置を決めておく
 	*/
-	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->VSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 
 void ConstantBuffer::BindPS(UINT slot)
 {
-	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->PSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 
 void ConstantBuffer::BindGS(UINT slot)
 {
-	ID3D11DeviceContext* pContext = DirectX11::DirectX11::GetInstance().GetInstance().DirectX11::GetInstance().GetContext();
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->GSSetConstantBuffers(slot, 1, &m_pBuffer);
 }
 

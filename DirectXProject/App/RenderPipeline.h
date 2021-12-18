@@ -8,6 +8,17 @@ class MultiPass;
 class Camera;
 class Light;
 
+namespace RenderingSetting
+{
+	enum RenderTarget_Type
+	{
+		RGBA32_,
+		R32,
+
+	};
+
+};
+
 class RenderPipeline : public Singleton<RenderPipeline>
 {
 public:
@@ -59,7 +70,7 @@ public:
 		m_pRentLight = pLight;
 	}
 
-	ID3D11ShaderResourceView* GetRenderTex(const WriteType::kind type);
+	ID3D11ShaderResourceView* GetRenderTex(const WriteType::kind type, const int num = 0);
 
 protected:
 	RenderPipeline() {}

@@ -14,52 +14,52 @@ void DebugLog::Initialize()
 	SMALL_RECT rect = { 0,0,50,25 };
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleWindowInfo(handle, true, &rect);
-#endif // _DEBUG
 
 	std::string fileName = "Assets/log/errorlog.txt";
 	m_Write_File.open(fileName, std::ios::out);
+#endif // _DEBUG
 }
 
 void DebugLog::Finalize()
 {
+#ifdef _DEBUG
 	m_Write_File.close();
 
-#ifdef _DEBUG
 	FreeConsole();
 #endif // _DEBUG
 }
 
 void DebugLog::LoadFileError(const char * pName)
 {
+#ifdef _DEBUG
 	std::string str(Clocker::GetInstance().GetDateTimeStr());
 	str += " ";
 	str += pName;
 	str += "が読み込めませんでした。";
 	m_Write_File << str << std::endl;
-#ifdef _DEBUG
 	std::cout << str << std::endl;
 #endif // _DEBUG
 }
 
 void DebugLog::OutofRange(const std::string string)
 {
+#ifdef _DEBUG
 	std::string str(Clocker::GetInstance().GetDateTimeStr());
 	str += " ";
 	str += string;
 	str += "で配列外参照が起こりました。";
 	m_Write_File << str << std::endl;
-#ifdef _DEBUG
 	std::cout << str << std::endl;
 #endif // _DEBUG
 }
 
 void DebugLog::FreeError(const std::string string)
 {
+#ifdef _DEBUG
 	std::string str(Clocker::GetInstance().GetDateTimeStr());
 	str += " ";
 	str += string;
 	m_Write_File << str << std::endl;
-#ifdef _DEBUG
 	std::cout << str << std::endl;
 #endif // _DEBUG
 }

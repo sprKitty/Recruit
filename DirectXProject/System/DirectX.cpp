@@ -96,7 +96,7 @@ const HRESULT  DirectX11::Start(HWND hWnd, UINT width, UINT height, bool fullscr
 	SAFE_RELEASE(pBackBuffer);
 	if (FAILED(hr)) { return hr; }
 
-	m_pDepthStencil.reset(new MyDepthStencil());
+	m_pDepthStencil.reset(new DepthStencil());
 	m_pDepthStencil->Create(width, height, DrawPass::BACKBUFFER);
 
 	//--- アルファブレンド
@@ -229,7 +229,7 @@ const HRESULT  DirectX11::Start(HWND hWnd, UINT width, UINT height, bool fullscr
 	return S_OK;
 }
 
-void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView* pRTV, ID3D11DepthStencilView* pDSV, Vector4* pColor)
+void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3D11DepthStencilView* pDSV, Vector4* pColor, const int num)
 {
 	float color[4] = { 0.8f, 0.8f, 0.9f,1.0f };
 	if (pColor)
@@ -251,14 +251,17 @@ void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView* pRTV, ID3D
 
 	if (pRTV)
 	{
-		m_pContext->ClearRenderTargetView(pRTV, color);
+		for (int i = 0; i < num; ++i)
+		{
+			m_pContext->ClearRenderTargetView(pRTV[i], color);
+		}
 		if (pDSV)
 		{
-			m_pContext->OMSetRenderTargets(1, &pRTV, pDSV);
+			m_pContext->OMSetRenderTargets(num, pRTV, pDSV);
 		}
 		else
 		{
-			m_pContext->OMSetRenderTargets(1, &pRTV, m_pDepthStencil->Get());
+			m_pContext->OMSetRenderTargets(num, pRTV, m_pDepthStencil->Get());
 		}
 	}
 	else
@@ -299,7 +302,7 @@ void DirectX11::SetCulling(CullingMode::Kind kind)
 	m_pContext->RSSetState(m_pRasterizer[kind]);
 }
 
-const HRESULT MyDepthStencil::Create(const UINT width, const UINT height, const DrawPass::Kind kind)
+const HRESULT DepthStencil::Create(const UINT width, const UINT height, const DrawPass::Kind kind)
 {
 	HRESULT hr;
 	ID3D11Texture2D* pTexDepth = nullptr;

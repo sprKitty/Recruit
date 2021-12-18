@@ -5,6 +5,7 @@ struct VS_IN
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
     float3 binormal : BINORMAL0;
+    uint inst : SV_InstanceID;
 };
 struct VS_OUT
 {
@@ -21,7 +22,7 @@ struct VP
 
 cbuffer ConstantBuffer0 : register(b0)
 {
-    float4x4 g_world;
+    float4x4 g_Worlds[1024];
 };
 
 cbuffer ConstantBuffer1 : register(b1)
@@ -39,7 +40,7 @@ VS_OUT main(VS_IN vin)
     VS_OUT vout;
 
     vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_world);
+    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
     vout.pos = mul(vout.pos, g_lightVP.view);
     vout.pos = mul(vout.pos, g_lightVP.proj);
     vout.depth = vout.pos;

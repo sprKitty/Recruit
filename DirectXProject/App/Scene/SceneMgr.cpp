@@ -24,6 +24,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	MeshData::GetInstance().Initialize();
 	MeshData::GetInstance().Load("field2.obj");
 	MeshData::GetInstance().Load("sphere.obj");
+	MeshData::GetInstance().Load("tree2.obj");
 	TextureData::GetInstance().Initialize();
 	TextureData::GetInstance().Load("samp.png", "characterchip/");
 	TextureData::GetInstance().Load("sampattack.png", "characterchip/");
@@ -32,6 +33,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	TextureData::GetInstance().Load("textframe.png");
 	TextureData::GetInstance().Load("terrain.png");
 	TextureData::GetInstance().Load("terrainBump.png");
+	TextureData::GetInstance().Load("tree.png");
 	Collision::GetInstance().Initialize();
 	srand(timeGetTime());
 

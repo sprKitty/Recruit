@@ -98,7 +98,7 @@ HRESULT DrawBuffer::CreateIndex(const long * pIdx, UINT count)
 	return hr;
 }
 
-void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive)
+void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive, const int nDrawNum)
 {
 	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	UINT stride = m_vtxSize;
@@ -115,15 +115,17 @@ void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive)
 		{
 		case 4: format = DXGI_FORMAT_R32_UINT; break;
 		case 2: format = DXGI_FORMAT_R16_UINT; break;
+		default: return;
 		}
 		pContext->IASetIndexBuffer(m_pIndexBuffer, format, 0);
-		pContext->DrawIndexed(m_idxCount, 0, 0);
+		pContext->DrawIndexedInstanced(m_idxCount, static_cast<UINT>(nDrawNum), 0, 0, 0);
 	}
 	else
 	{
 		// 頂点バッファのみで描画
 		//ShaderBuffer::GetInstance().SetInstancingWorld(m_vtxCount);
-		pContext->Draw(m_vtxCount, 0);
+		//pContext->Draw(m_vtxCount, 0);
+		pContext->DrawInstanced(m_vtxCount, static_cast<UINT>(nDrawNum), 0, 0);
 	}
 
 }

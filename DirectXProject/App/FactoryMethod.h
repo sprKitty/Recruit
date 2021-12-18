@@ -22,6 +22,8 @@ public:
 
 	Object::WORKER_OBJ CreateObject();
 	
+	Object::WORKER_OBJ CreateTree();
+
 	Object::WORKER_OBJ CreateOutsideArea();
 
 	Object::WORKER_OBJ CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB);

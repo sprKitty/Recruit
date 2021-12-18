@@ -5,6 +5,7 @@ struct VS_IN
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
     float3 binormal : BINORMAL0;
+    uint inst : SV_InstanceID;
 };
 
 struct VS_OUT
@@ -34,7 +35,7 @@ struct LightInfo
 
 cbuffer ConstantBuffer0 : register(b0)
 {
-	float4x4 g_world;
+    float4x4 g_Worlds[1024];
 };
 
 cbuffer ConstantBuffer1 : register(b1)
@@ -57,24 +58,24 @@ VS_OUT main(VS_IN vin)
 	VS_OUT vout;
 
     vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_world);
+    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
     vout.pos = mul(vout.pos, g_lightVP.view);
-    vout.lightPos = vout.pos;
     vout.pos = mul(vout.pos, g_lightVP.proj);
+    vout.lightPos = vout.pos;
     
     vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_world);
+    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
     vout.wPos = vout.pos;
     vout.pos = mul(vout.pos, g_cameraVP.view);
-    vout.camPos = vout.pos;
     vout.pos = mul(vout.pos, g_cameraVP.proj);
+    vout.camPos = vout.pos;
     
 	vout.uv = vin.uv;
     
-    float3 N = normalize(mul(vin.normal, (float3x3) g_world));
+    float3 N = normalize(mul(vin.normal, (float3x3) g_Worlds[vin.inst]));
     vout.normal = N;
-    float3 T = normalize(mul(vin.tangent, (float3x3) g_world));
-    float3 B = normalize(mul(vin.binormal, (float3x3) g_world));
+    float3 T = normalize(mul(vin.tangent, (float3x3) g_Worlds[vin.inst]));
+    float3 B = normalize(mul(vin.binormal, (float3x3) g_Worlds[vin.inst]));
  
     float3x3 invTexToWorld = float3x3(
     T.x, B.x, N.x,

@@ -1,5 +1,6 @@
 #pragma once
 #include <MyMath.h>
+#include <System/ClassDesign/Property.h>
 #include <memory>
 
 
@@ -28,7 +29,7 @@ public:
 	inline const float GetFov() { return m_fFov; }
 	inline const float GetAspect() { return m_vScreenSize.x / m_vScreenSize.y; }
 
-	void SetTarget(const std::weak_ptr<Transform>& pTrans);
+	inline void SetTarget(const std::weak_ptr<Transform>& pTrans) { m_pTargetTrans = pTrans; }
 	inline void ReleaseTarget() { m_pTargetTrans.reset(); }
 
 	inline void EnableLate() { m_isLate = true; }

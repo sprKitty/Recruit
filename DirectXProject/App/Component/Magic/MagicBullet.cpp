@@ -1,13 +1,13 @@
 #include "MagicBullet.h"
 #include <App/Component/Transform.h>
 #include <App/Component/Object.h>
-#include<App/Component/Collider.h>
+#include <App/Component/Collider.h>
 #include <System/Clocker.h>
 #include <System/DebugLog.h>
 
 
 float MagicBullet::MOVE_SPEED = 5.0f;
-float MagicBullet::MAX_SURVIVETIME = 2.0f;
+float MagicBullet::MAX_SURVIVETIME = 5.0f;
 
 void MagicBullet::Init()
 {

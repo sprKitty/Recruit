@@ -25,6 +25,7 @@ void BillBoardRenderer::Init()
 	{
 		itr = false;
 	}
+	m_isWriteType[WriteType::DEPTH_OF_FIELD] = true;
 	RenderPipeline::GetInstance().AddRenderer(weak_from_this());
 }
 

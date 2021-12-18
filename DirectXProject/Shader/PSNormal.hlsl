@@ -67,5 +67,6 @@ SamplerState MIRROR : register(s4);
 float4 main(PS_IN pin) : SV_Target
 {
     float4 color = TEX_MAIN.Sample(WRAP, pin.uv);
+    
     return color;
 }

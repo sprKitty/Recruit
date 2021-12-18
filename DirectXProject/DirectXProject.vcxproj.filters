@@ -206,6 +206,7 @@
     <ClCompile Include="App\Component\Magic\MagicBall.cpp">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClCompile>
+    <ClCompile Include="App\Component\Instancing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -394,6 +395,12 @@
     <ClInclude Include="App\Component\Magic\MagicBall.h">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClInclude>
+    <ClInclude Include="App\Component\Instancing.h">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ClassDesign\Property.h">
+      <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VSNormal.hlsl">
@@ -422,6 +429,12 @@
     </FxCompile>
     <FxCompile Include="Shader\PSEffect.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSDOF.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSDOF.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

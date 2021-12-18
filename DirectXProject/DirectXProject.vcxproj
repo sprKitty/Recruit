@@ -172,6 +172,7 @@
     <ClCompile Include="App\Component\Event\Event.cpp" />
     <ClCompile Include="App\Component\Event\EventTrigger.cpp" />
     <ClCompile Include="App\Component\Image.cpp" />
+    <ClCompile Include="App\Component\Instancing.cpp" />
     <ClCompile Include="App\Component\Magic\MagicBall.cpp" />
     <ClCompile Include="App\Component\Magic\MagicBullet.cpp" />
     <ClCompile Include="App\Component\Magic\MagicRazer.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="App\Component\Event\Event.h" />
     <ClInclude Include="App\Component\Event\EventTrigger.h" />
     <ClInclude Include="App\Component\Image.h" />
+    <ClInclude Include="App\Component\Instancing.h" />
     <ClInclude Include="App\Component\Magic\MagicBase.h" />
     <ClInclude Include="App\Component\Magic\MagicBall.h" />
     <ClInclude Include="App\Component\Magic\MagicBullet.h" />
@@ -261,6 +263,7 @@
     <ClInclude Include="Shader\ShaderBuffer.h" />
     <ClInclude Include="System\ClassDesign\Delegate.h" />
     <ClInclude Include="System\ClassDesign\Manager.h" />
+    <ClInclude Include="System\ClassDesign\Property.h" />
     <ClInclude Include="System\ClassDesign\Singleton.h" />
     <ClInclude Include="System\ClassDesign\StateBase.h" />
     <ClInclude Include="System\Clocker.h" />
@@ -282,6 +285,16 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\PSCharacter.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\PSDOF.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -317,6 +330,16 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\VSDOF.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\VSTriPlanar.hlsl">

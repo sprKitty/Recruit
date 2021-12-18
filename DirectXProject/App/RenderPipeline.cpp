@@ -1,9 +1,9 @@
 #include "RenderPipeline.h"
-#include <App/MultiPass.h>
-#include <Shader/ShaderBuffer.h>
-#include <App/Camera.h>
 #include <App/Component/Object.h>
+#include <App/MultiPass.h>
+#include <App/Camera.h>
 #include <App/Light.h>
+#include <Shader/ShaderBuffer.h>
 
 
 void RenderPipeline::Initialize()
@@ -13,9 +13,9 @@ void RenderPipeline::Initialize()
 		std::shared_ptr<MultiPass> pMP(new MultiPass());
 		m_pMultiPassList.push_back(std::move(pMP));
 	}
-	float fSize = 256 * 2 * 2 * 2 * 2;
-	m_pMultiPassList[WriteType::DEPTH_OF_SHADOW]->Create(0, Vector2(fSize, fSize), 1);
-	//m_pMultiPassList[WriteType::DEPTH_OF_FIELD]->Create(1, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
+	const float fSize = 256 * 2 * 2 * 2;
+	m_pMultiPassList[WriteType::DEPTH_OF_FIELD]->Create(0, Vector2(SCREEN_WIDTH, SCREEN_HEIGHT), 1, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	m_pMultiPassList[WriteType::DEPTH_OF_SHADOW]->Create(0, Vector2(fSize, fSize), 1, DXGI_FORMAT_R32G32B32A32_FLOAT);
 }
 
 void RenderPipeline::Finalize()
@@ -57,12 +57,12 @@ void RenderPipeline::Write(const WriteType::kind & typeW)
 	switch (typeW)
 	{
 	case WriteType::DEPTH_OF_FIELD:
-		//ShaderBuffer::GetInstance().BindVS(VS_TYPE::CAMERADEPTH);
-		//ShaderBuffer::GetInstance().BindPS(PS_TYPE::CAMERADEPTH);
+		ShaderBuffer::GetInstance().BindVS(VS_TYPE::DOF);
+		ShaderBuffer::GetInstance().BindPS(PS_TYPE::DOF);
 		break;
 
 	case WriteType::DEPTH_OF_SHADOW:
-		m_pRentLight.lock()->SetVPSize(m_pMultiPassList[typeW]->GetVPSize());
+		m_pRentLight.lock()->vpSize.set(m_pMultiPassList[typeW]->GetVPSize());
 		ShaderBuffer::GetInstance().BindVS(VS_TYPE::LIGHTDEPTH);
 		ShaderBuffer::GetInstance().BindPS(PS_TYPE::LIGHTDEPTH);
 		break;
@@ -93,7 +93,9 @@ void RenderPipeline::Draw(const DrawType::kind & typeD)
 		break;
 
 	case DrawType::WORLD_OF_TRIPLANAR:
+		m_pRentLight.lock()->Bind3D();
 		m_pRentCamera.lock()->Bind3D();
+		ShaderBuffer::GetInstance().SetTexture(GetRenderTex(WriteType::DEPTH_OF_SHADOW), ShaderResource::TEX_TYPE::DEPTH_OF_SAHDOW);
 		ShaderBuffer::GetInstance().BindVS(VS_TYPE::TRIPLANAR);
 		ShaderBuffer::GetInstance().BindPS(PS_TYPE::TRIPLANAR);
 		break;
@@ -126,7 +128,7 @@ void RenderPipeline::AddRenderer(const std::weak_ptr<Component>& pComponent)
 	m_pDrawList.push_back(pRenderer);
 }
 
-ID3D11ShaderResourceView * RenderPipeline::GetRenderTex(const WriteType::kind type)
+ID3D11ShaderResourceView * RenderPipeline::GetRenderTex(const WriteType::kind type, const int num)
 {
 	return m_pMultiPassList[type]->GetRenderTex();
 }

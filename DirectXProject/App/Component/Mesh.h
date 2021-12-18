@@ -1,20 +1,8 @@
 #pragma once
 #include <App/Component/Component.h>
+#include <System/DrawBuffer.h>
 #include <MyMath.h>
 
-
-class DrawBuffer;
-
-namespace PrimitiveType
-{
-	enum Kind
-	{
-		TRIANGLELIST,
-		TRIANGLESTRIP,
-
-		MAX,
-	};
-}
 
 class Mesh : public Component
 {
@@ -40,10 +28,7 @@ public:
 
 	void Set(const std::string str);
 
-	inline const SurfaceList& GetSurfaceList()
-	{
-		return m_surfaceList;
-	}
+	inline const SurfaceList& GetSurfaceList() { return m_surfaceList; }
 
 private:
 	std::weak_ptr<DrawBuffer> m_pDrawBuffer;

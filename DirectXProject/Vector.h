@@ -385,6 +385,95 @@ public:
 };
 
 
+class VectorInt3
+{
+public:
+	VectorInt3() = default;
+	VectorInt3(int x, int y, int z) :x(x), y(y), z(z) {}
+	VectorInt3(int v) :x(v), y(v), z(v) {}
+	~VectorInt3() {}
+
+	const VectorInt3 &operator =(const VectorInt3 &v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		return *this;
+	}
+
+	const VectorInt3 operator +(const VectorInt3 &v) const
+	{
+		VectorInt3 a;
+		a.x = x + v.x;
+		a.y = y + v.y;
+		a.z = z + v.z;
+		return a;
+	}
+
+	const VectorInt3 operator -(const VectorInt3 &v) const
+	{
+		VectorInt3 a;
+		a.x = x - v.x;
+		a.y = y - v.y;
+		a.z = z - v.z;
+		return a;
+	}
+
+	const VectorInt3 operator *(const VectorInt3 &v) const
+	{
+		VectorInt3 a;
+		a.x = x * v.x;
+		a.y = y * v.y;
+		a.z = z * v.z;
+		return a;
+	}
+
+	const VectorInt3 operator /(const VectorInt3 &v) const
+	{
+		VectorInt3 a;
+		a.x = x / v.x;
+		a.y = y / v.y;
+		a.z = z / v.z;
+		return a;
+	}
+
+	VectorInt3 &operator+=(const VectorInt3 &v)
+	{
+		x += v.x;
+		y += v.y;
+		z += v.z;
+		return *this;
+	}
+
+	VectorInt3 &operator-=(const VectorInt3 &v)
+	{
+		x -= v.x;
+		y -= v.y;
+		z -= v.z;
+		return *this;
+	}
+
+	VectorInt3 &operator*=(const VectorInt3 &v)
+	{
+		x *= v.x;
+		y *= v.y;
+		z *= v.z;
+		return *this;
+	}
+
+	VectorInt3 &operator/=(const VectorInt3 &v)
+	{
+		x /= v.x;
+		y /= v.y;
+		z /= v.z;
+		return *this;
+	}
+
+	int x, y, z;
+};
+
+
+
 //===================================
 // classÅFVector4
 //-----------------------------------

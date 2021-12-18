@@ -8,12 +8,11 @@ public:
 	RenderTarget();
 	~RenderTarget();
 
-	void Create(int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT rtvFormat);
-	ID3D11RenderTargetView* Get() { return m_pRTV; }
-	ID3D11ShaderResourceView* GetTexture() { return m_pTex; }
-
+	void Create(const UINT width, const UINT height, const DXGI_FORMAT texFormat, const DXGI_FORMAT rtvFormat, const DrawPass::Kind kind);
+	ID3D11ShaderResourceView* GetSRV();
+	inline ID3D11RenderTargetView* GetRTV() { return m_pRTV; }
 private:
 	ID3D11RenderTargetView* m_pRTV;
-	ID3D11ShaderResourceView* m_pTex;
+	ID3D11ShaderResourceView* m_pSRV;
 	int m_nNum;
 };

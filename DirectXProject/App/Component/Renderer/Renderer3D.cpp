@@ -3,6 +3,7 @@
 #include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
 #include <App/Component/Image.h>
+#include <App/Component/Instancing.h>
 #include <App/RenderPipeline.h>
 #include <System/Input.h>
 #include <System/Geometory.h>
@@ -23,6 +24,8 @@ void Renderer3D::Init()
 	{
 		itr = false;
 	}
+	m_isWriteType[WriteType::DEPTH_OF_FIELD] = true;
+
 }
 
 void Renderer3D::Uninit()
@@ -32,9 +35,17 @@ void Renderer3D::Uninit()
 
 void Renderer3D::Update()
 {
-	if (m_pMesh.expired())
+	if (m_pInstancing.expired())
 	{
-		m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
+		m_pInstancing = m_pOwner.lock()->GetComponent<Instancing>();
+		if (m_pMesh.expired())
+		{
+			m_pMesh = m_pOwner.lock()->GetComponent<Mesh>();
+		}
+	}
+	else
+	{
+		m_pMesh.reset();
 	}
 }
 
@@ -47,11 +58,17 @@ void Renderer3D::Write(const WriteType::kind type)
 		m_pMainImage->Bind();
 	}
 
-	ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
-
-	if (!m_pMesh.expired())
+	if (m_pInstancing.expired())
 	{
-		m_pMesh.lock()->Bind();
+		if (!m_pMesh.expired())
+		{
+			ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+			m_pMesh.lock()->Bind();
+		}
+	}
+	else
+	{
+		m_pInstancing.lock()->Bind();
 	}
 }
 
@@ -69,11 +86,17 @@ void Renderer3D::Draw(const DrawType::kind type)
 		m_pBumpImage->Bind();
 	}
 
-	ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
-
-	if (!m_pMesh.expired())
+	if (m_pInstancing.expired())
 	{
-		m_pMesh.lock()->Bind();
+		if (!m_pMesh.expired())
+		{
+			ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+			m_pMesh.lock()->Bind();
+		}
+	}
+	else
+	{
+		m_pInstancing.lock()->Bind();
 	}
 }
 

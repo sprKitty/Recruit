@@ -3,6 +3,18 @@
 
 #include "DirectX.h"
 
+
+namespace PrimitiveType
+{
+	enum Kind
+	{
+		TRIANGLELIST,
+		TRIANGLESTRIP,
+
+		MAX,
+	};
+}
+
 class DrawBuffer
 {
 public:
@@ -12,7 +24,7 @@ public:
 	HRESULT CreateVertexBuffer(const void* pVtx, UINT size, UINT count, bool isWrite = false);
 	HRESULT CreateIndexBuffer(const void* pIdx, UINT size, UINT count);
 	HRESULT CreateIndex(const long *pIdx, UINT count);
-	void Draw(D3D11_PRIMITIVE_TOPOLOGY primitive);
+	void Draw(D3D11_PRIMITIVE_TOPOLOGY primitive, const int nDrawNum = 1);
 	void Draw1(D3D11_PRIMITIVE_TOPOLOGY primitive, int start = 0, int count = 0);
 	HRESULT Write(void* pVtx);
 

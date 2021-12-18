@@ -26,6 +26,10 @@ void Game::Init()
 
 	m_pLight.reset(new Light());
 	m_pLight->Init();
+	m_pLight->parallelScale.set(20);
+	m_pLight->fov.set(60.0f);
+	m_pLight->color.set(Vector4(255.0f / 255.0f, 161.0f / 255.0f, 3.0f / 255.0f, 1.0f));
+	m_pLight->Parallelprojection();
 
 	m_pMessageWindow.reset(new MessageWindow());
 	m_pMessageWindow->Initialize();
@@ -109,6 +113,7 @@ Scene_Type::kind Game::Update()
 
 void Game::Draw()
 {
+	RenderPipeline::GetInstance().Write(WriteType::DEPTH_OF_FIELD);
 	RenderPipeline::GetInstance().Write(WriteType::DEPTH_OF_SHADOW);
 	
 	DirectX11::GetInstance().BeginDraw();
@@ -125,7 +130,7 @@ void Game::Draw()
 
 	
 	ShaderBuffer::GetInstance().BindPS(PS_TYPE::NORMAL);
-	ShaderBuffer::GetInstance().SetTexture(RenderPipeline::GetInstance().GetRenderTex(WriteType::DEPTH_OF_SHADOW));
+	ShaderBuffer::GetInstance().SetTexture(RenderPipeline::GetInstance().GetRenderTex(WriteType::DEPTH_OF_FIELD, 0));
 	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(200, 200, 0), Vector3(0, 0, 0), Vector3(100, 100, 0));
 	ShaderBuffer::GetInstance().SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();

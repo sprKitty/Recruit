@@ -1,6 +1,10 @@
 #pragma once
 #include <MyMath.h>
+#include <memory>
+#include <System/ClassDesign/Property.h>
 
+
+class Transform;
 
 class Light
 {
@@ -16,70 +20,44 @@ public:
 
 	inline const DirectX::XMMATRIX& GetView() { return m_mView; }
 	inline const DirectX::XMMATRIX& GetProjection() { return m_mProjection; }
-	inline const DirectX::XMFLOAT4& GetPos() { return m_pos; }
-	inline const DirectX::XMFLOAT4& GetLook() { return m_look; }
-	inline const DirectX::XMFLOAT4& GetUp() { return m_up; }
-	inline const DirectX::XMFLOAT4& GetRight() { return m_right; }
-	inline const DirectX::XMFLOAT4& GetDirection() { return m_direction; }
-	inline const float GetFov() { return m_fFov; }
+	inline const Vector3& GetUp() { return m_vUp; }
+	inline const Vector3& GetSide() { return m_vSide; }
+	inline const Vector3& GetFront() { return m_vFront; }
 	inline const float GetAspect() { return m_vScreenSize.x / m_vScreenSize.y; }
 
-	void SetVPSize(const Vector2& vSize) { m_vScreenSize = vSize; }
 
+	inline void Perspectiveprojection() { m_isPerspective = true; }
+	inline void Parallelprojection() { m_isPerspective = false; }
+
+	Property<Vector4> color;
+	Property<Vector3> position;
+	Property<Vector3> look;
+	Property<Vector2> vpSize;
+	Property<Vector2> parallelScale;
+	Property<float> nearclip;
+	Property<float> farclip;
+	Property<float> fov;
+
+
+private:
 	void CalcView();
 	void CalcProjection();
 
 private:
-	DirectX::XMMATRIX m_mView;
-	DirectX::XMMATRIX m_mProjection;
-	DirectX::XMFLOAT4 m_pos;
-	DirectX::XMFLOAT4 m_look;
-	DirectX::XMFLOAT4 m_up;
-	DirectX::XMFLOAT4 m_right;
-	DirectX::XMFLOAT4 m_direction;
-	Vector2 m_vScreenSize;
-	float m_fNearClip;
-	float m_fFarClip;
-	float m_fFov;
+	std::weak_ptr<Transform> m_pTargetTrans;	// 
+	DirectX::XMMATRIX m_mView;					// 
+	DirectX::XMMATRIX m_mProjection;			// 
+	Vector4 m_vColor;							// 色
+	Vector3 m_vPos;								// 座標
+	Vector3 m_vLook;							// 注視点
+	Vector3 m_vUp;								// 上ベクトル
+	Vector3 m_vSide;							// 横ベクトル
+	Vector3 m_vFront;							// 正面ベクトル
+	Vector3 m_vOffset;							// なにこれ
+	Vector2 m_vScreenSize;						// スクリーンサイズ
+	Vector2 m_vParallelScale;					// 平行投影拡縮
+	float m_fNearClip;							// ニアクリップ
+	float m_fFarClip;							// ファクリップ
+	float m_fFov;								// 視野角
+	bool m_isPerspective;							// 投影方法
 };
-
-//class Light
-//{
-//public:
-//	Light();
-//	~Light();
-//
-//	void Init(Vector3* pPos,Vector3* pDirection, Vector2* pNearFar, Vector2 debug, float uvoffset,float fov = 45.0f, float multi = 1.0f);
-//	void Uninit();
-//	void Update();
-//
-//	void SetDirection(Vector4 dir) { m_vDirection = dir; }
-//	void SetDecay(Vector4 decay) { m_vDecay = decay; }
-//	void SetDistance(float dis) { m_fDistance = dis; }
-//	void SetSpot(bool flg) { m_isSpot = flg; }
-//	void On(bool flg) { m_isOn = flg; }
-//	void Bind();
-//	void UpdateValue(int num);
-//	Vector3 GetPos() { return Vector3(m_vPos.x, m_vPos.y, m_vPos.z); }
-//	DirectX::XMMATRIX GetView();
-//	DirectX::XMMATRIX GetProj();
-//private:
-//	Vector4 m_vPos;
-//	Vector4 m_vLook;
-//	Vector4 m_vUp;
-//	Vector4 m_vColor;
-//	Vector4 m_vDirection;
-//	Vector4 m_vDecay;
-//	Vector4 m_vDebugValue;
-//	Vector2 m_rotation;
-//
-//	float m_fDistance;
-//	float m_rot;
-//	float m_fUVOffset;
-//	bool m_isSpot;
-//	bool m_isOn;
-//	float m_fFOV;
-//	float m_fMultipray;
-//	float m_fNearClip;
-//	float m_fFarClip;
-//};

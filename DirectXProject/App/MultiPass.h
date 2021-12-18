@@ -5,7 +5,7 @@
 
 
 class RenderTarget;
-class MyDepthStencil;
+class DepthStencil;
 
 class MultiPass
 {
@@ -13,17 +13,21 @@ public:
 	MultiPass() {}
 	~MultiPass() {}
 
-	void Create(const Vector2& vLeft, const Vector2& vRight,const Vector4& vClear);
+	void Create(const Vector2& vLeft, const Vector2& vRight, const Vector4& vClear, const DXGI_FORMAT format);
 
 	void Bind();
 
-	ID3D11ShaderResourceView* GetRenderTex() { return m_pRenderTarget->GetTexture(); }
+	ID3D11ShaderResourceView* GetRenderTex() { return m_pRenderTarget->GetSRV(); }
 
-	const Vector2 GetVPSize() { return Vector2(m_vp.Width, m_vp.Height); }
+	inline const std::weak_ptr<RenderTarget> GetRenderTarget() { return m_pRenderTarget; }
+
+	inline const std::weak_ptr<DepthStencil> GetDepthStencil() { return m_pDepthDtencil; }
+
+	inline const Vector2 GetVPSize() { return Vector2(m_vp.Width, m_vp.Height); }
 
 private:
 	D3D11_VIEWPORT m_vp;
 	std::shared_ptr<RenderTarget> m_pRenderTarget;
-	std::shared_ptr<MyDepthStencil> m_pDepthDtencil;
+	std::shared_ptr<DepthStencil> m_pDepthDtencil;
 	Vector4 m_vClearColor;
 };

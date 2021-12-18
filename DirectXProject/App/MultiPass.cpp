@@ -1,7 +1,7 @@
 #include "MultiPass.h"
 
 
-void MultiPass::Create(const Vector2& vLeft, const Vector2& vRight, const Vector4& vClear)
+void MultiPass::Create(const Vector2& vLeft, const Vector2& vRight, const Vector4& vClear, const DXGI_FORMAT format)
 {
 	m_vp.TopLeftX = vLeft.x;
 	m_vp.TopLeftY = vLeft.y;
@@ -12,12 +12,16 @@ void MultiPass::Create(const Vector2& vLeft, const Vector2& vRight, const Vector
 	m_vClearColor = vClear;
 
 	m_pRenderTarget.reset(new RenderTarget());
-	m_pDepthDtencil.reset(new MyDepthStencil());
-	m_pRenderTarget->Create(static_cast<UINT>(vRight.x), static_cast<UINT>(vRight.y), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
+	m_pDepthDtencil.reset(new DepthStencil());
+	m_pRenderTarget->Create(static_cast<UINT>(vRight.x), static_cast<UINT>(vRight.y), format, format, DrawPass::MULTIPATH);
 	m_pDepthDtencil->Create(static_cast<UINT>(vRight.x), static_cast<UINT>(vRight.y), DrawPass::MULTIPATH);
 }
 
 void MultiPass::Bind()
 {
-	DirectX11::GetInstance().BeginDraw(&m_vp, m_pRenderTarget->Get(), m_pDepthDtencil->Get(), &m_vClearColor);
+	ID3D11RenderTargetView* aaa[]=
+	{
+		m_pRenderTarget->GetRTV(),
+	};
+	DirectX11::GetInstance().BeginDraw(&m_vp, aaa, m_pDepthDtencil->Get(), &m_vClearColor);
 }

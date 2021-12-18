@@ -11,6 +11,7 @@
 #include <App/Component/Magic/MagicBullet.h>
 #include <App/Component/Magic/MagicBall.h>
 #include <App/Component/Magic/MagicRazer.h>
+#include <App/Component/Instancing.h>
 #include <App/Camera.h>
 #include <App/Light.h>
 #include <App/Event/Talk.h>
@@ -48,6 +49,33 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 	return pObj;
 }
 
+Object::WORKER_OBJ FactoryMethod::CreateTree()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	pObj->SetType(ObjectType::OUTSIDE);
+	m_pObjectList.push_back(pObj);
+
+	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localrot.y = 20;
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->SetMainImage("tree");
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
+	}
+	if (!pMesh.expired())
+	{
+		pMesh.lock()->Set("tree2");
+	}
+
+	return pObj;
+}
+
 Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 {
 	Object::OWNER_OBJ pObj(new Object());
@@ -55,6 +83,8 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	m_pObjectList.push_back(pObj);
 
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+	std::weak_ptr<Instancing> pInst = pObj->AddComponent<Instancing>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
 	if (!pCollider.expired())
 	{
@@ -65,6 +95,17 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	if (!pMesh.expired())
 	{
 		pMesh.lock()->Set("cube");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->SetMainImage("terrain");
+		pRenderer3D.lock()->SetBumpImage("terrainBump");
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
+	}
+	if (!pInst.expired())
+	{
+		pInst.lock()->Set("tree2");
 	}
 	return pObj;
 }
@@ -138,6 +179,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	}
 	if (!pRenderer3D.expired())
 	{
+		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
@@ -211,6 +253,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	}
 	if (!pRenderer3D.expired())
 	{
+		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
@@ -244,6 +287,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	}
 	if (!pRenderer3D.expired())
 	{
+		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}

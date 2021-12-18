@@ -42,7 +42,7 @@ namespace DrawPass
 	};
 }
 
-class MyDepthStencil;
+class DepthStencil;
 
 class DirectX11 : public Singleton<DirectX11>
 {
@@ -54,7 +54,7 @@ public:
 	void Finalize()override;
 
 	const HRESULT Start(HWND hWnd, UINT width, UINT height, bool fullscreen);
-	void BeginDraw(D3D11_VIEWPORT* vp = nullptr, ID3D11RenderTargetView* pRTV = nullptr, ID3D11DepthStencilView* pDSV = nullptr, Vector4* pColor = nullptr);
+	void BeginDraw(D3D11_VIEWPORT* vp = nullptr, ID3D11RenderTargetView** pRTV = nullptr, ID3D11DepthStencilView* pDSV = nullptr, Vector4* pColor = nullptr, const int num = 1);
 	void EndDraw();
 
 	void SetBlendMode(const BlendMode::Kind kind);
@@ -70,7 +70,7 @@ public:
 		return m_pContext;
 	}
 
-	const std::weak_ptr<MyDepthStencil> GetDepthStencil()
+	const std::weak_ptr<DepthStencil> GetDepthStencil()
 	{
 		return m_pDepthStencil;
 	}
@@ -86,18 +86,18 @@ private:
 	ID3D11DeviceContext* m_pContext;
 	IDXGISwapChain* m_pSwapChain; 
 	ID3D11RenderTargetView* m_pBBRT;
-	std::shared_ptr<MyDepthStencil> m_pDepthStencil;
+	std::shared_ptr<DepthStencil> m_pDepthStencil;
 	ID3D11BlendState* m_pBlendState[BlendMode::BLEND_MAX];
 	ID3D11RasterizerState* m_pRasterizer[CullingMode::CULL_MAX];
 	D3D11_VIEWPORT m_vp;
 };
 
 
-class MyDepthStencil
+class DepthStencil
 {
 public:
-	MyDepthStencil() {}
-	~MyDepthStencil()
+	DepthStencil() {}
+	~DepthStencil()
 	{
 		SAFE_RELEASE(m_pDepthStencil);
 	}

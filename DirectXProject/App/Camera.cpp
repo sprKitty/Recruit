@@ -7,8 +7,8 @@
 #include <System/DirectX.h>
 #include <math.h>
 
-const Vector3 CameraInitPos(0, 28, -21);
-const Vector3 CameraInitLook(0, 0, 0);
+const Vector3 CameraInitPos(0, 20, -25);
+const Vector3 CameraInitLook(0, 0, 2);
 
 const float FOV = 30.0f;
 
@@ -33,7 +33,7 @@ void Camera::Init()
 	m_vSide = { 1.0f,0.0f,0.0f };
 	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_fNearClip = 1.0f;
-	m_fFarClip = 100.0f;
+	m_fFarClip = 80.0f;
 	m_fFov = FOV;
 	m_isLate = false;
 	CalcView();
@@ -54,7 +54,7 @@ void Camera::Update()
 	if (!m_pTargetTrans.expired())
 	{
 		Vector3 vDistance = m_vPos - m_vLook;
-		m_vLook = m_pTargetTrans.lock()->localpos;
+		m_vLook = m_pTargetTrans.lock()->localpos + CameraInitLook;
 		m_vPos = m_vLook + vDistance;
 		if (m_isLate)
 		{
@@ -121,11 +121,6 @@ void Camera::Update()
 
 	CalcView();
 	CalcProjection();
-}
-
-void Camera::SetTarget(const std::weak_ptr<Transform>& pTrans)
-{
-	m_pTargetTrans = pTrans;
 }
 
 void Camera::CalcView()

@@ -64,56 +64,56 @@ void Collision::Update()
 			{
 				MouseMesh(itrA);
 			}
-		//	for (ColliderPtrList::iterator itrB = itrA; itrB != m_pColliderList.end();)
-		//	{
-		//		++itrB;
-		//		if (itrB == m_pColliderList.end())
-		//		{
-		//			break;
-		//		}
-		//		if (itrB->lock()->m_pOwner.lock()->IsActive())
-		//		{
-		//			CollisionType::Kind typeA = itrA->lock()->GetCollisionType(itrB->lock()->m_pOwner.lock()->GetType());
-		//			CollisionType::Kind typeB = itrB->lock()->GetCollisionType(itrA->lock()->m_pOwner.lock()->GetType());
-		//			switch (typeA)
-		//			{
-		//			case CollisionType::AABB:
-		//				if (typeB == CollisionType::AABB)
-		//				{
-		//					AABB(itrA, itrB);
-		//				}
-		//				break;
-		//			case CollisionType::OBB:
-		//				if (typeB == CollisionType::OBB)
-		//				{
-		//					OBB(itrA, itrB);
-		//				}
-		//				break;
-		//			case CollisionType::BC:
-		//				if (typeB == CollisionType::BC)
-		//				{
-		//					BC(itrA, itrB);
-		//				}
-		//				break;
-		//			case CollisionType::RAY:
-		//				if (typeB == CollisionType::MESH)
-		//				{
-		//					RayMesh(itrA, itrB);
-		//				}
-		//				break;
-		//			case CollisionType::MESH:
-		//				if (typeB == CollisionType::RAY)
-		//				{
-		//					RayMesh(itrB, itrA);
-		//				}
-		//				break;
-		//			case CollisionType::NONE:
-		//			case CollisionType::MAX:
-		//			default:
-		//				continue;
-		//			}
-		//		}
-		//	}
+			//for (ColliderPtrList::iterator itrB = itrA; itrB != m_pColliderList.end();)
+			//{
+			//	++itrB;
+			//	if (itrB == m_pColliderList.end())
+			//	{
+			//		break;
+			//	}
+			//	if (itrB->lock()->m_pOwner.lock()->IsActive())
+			//	{
+			//		CollisionType::Kind typeA = itrA->lock()->GetCollisionType(itrB->lock()->m_pOwner.lock()->GetType());
+			//		CollisionType::Kind typeB = itrB->lock()->GetCollisionType(itrA->lock()->m_pOwner.lock()->GetType());
+			//		switch (typeA)
+			//		{
+			//		case CollisionType::AABB:
+			//			if (typeB == CollisionType::AABB)
+			//			{
+			//				AABB(itrA, itrB);
+			//			}
+			//			break;
+			//		case CollisionType::OBB:
+			//			if (typeB == CollisionType::OBB)
+			//			{
+			//				OBB(itrA, itrB);
+			//			}
+			//			break;
+			//		case CollisionType::BC:
+			//			if (typeB == CollisionType::BC)
+			//			{
+			//				BC(itrA, itrB);
+			//			}
+			//			break;
+			//		case CollisionType::RAY:
+			//			if (typeB == CollisionType::MESH)
+			//			{
+			//				RayMesh(itrA, itrB);
+			//			}
+			//			break;
+			//		case CollisionType::MESH:
+			//			if (typeB == CollisionType::RAY)
+			//			{
+			//				RayMesh(itrB, itrA);
+			//			}
+			//			break;
+			//		case CollisionType::NONE:
+			//		case CollisionType::MAX:
+			//		default:
+			//			continue;
+			//		}
+			//	}
+			//}
 		}
 		++itrA;
 		if (itrA == m_pColliderList.end())
@@ -646,10 +646,10 @@ void Collision::SetQuadTree()
 		DirectX::XMStoreFloat4x4(&w, pTrans.lock()->GetWorldMatrix(m_pColliderList[i].lock()->GetScaleDeviation(), m_pColliderList[i].lock()->GetAngleDeviation(), m_pColliderList[i].lock()->GetPosDeviation()));
 		Vector2 vPos[CHIELD_NUM] =
 		{
-			{ w._41 - w._11 * 1.1f,w._43 + w._33 * 1.1f },
-			{ w._41 + w._11 * 1.1f,w._43 + w._33 * 1.1f },
-			{ w._41 - w._11 * 1.1f,w._43 - w._33 * 1.1f },
-			{ w._41 + w._11 * 1.1f,w._43 - w._33 * 1.1f },
+			{ w._41 - w._11,w._43 + w._33 },
+			{ w._41 + w._11,w._43 + w._33 },
+			{ w._41 - w._11,w._43 - w._33 },
+			{ w._41 + w._11,w._43 - w._33 },
 		};
 		NODE* pNode;
 

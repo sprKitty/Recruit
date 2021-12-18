@@ -8,6 +8,7 @@
 class Transform;
 class Mesh;
 class Image;
+class Instancing;
 
 class Renderer3D : public Renderer
 {
@@ -36,6 +37,7 @@ private:
 	std::vector<bool> m_isDrawType;
 	std::weak_ptr<Transform> m_pTransform;
 	std::weak_ptr<Mesh> m_pMesh;
+	std::weak_ptr<Instancing> m_pInstancing;
 	std::shared_ptr<Image> m_pMainImage;
 	std::shared_ptr<Image> m_pBumpImage;
 };
