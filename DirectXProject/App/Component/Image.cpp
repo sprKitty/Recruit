@@ -17,21 +17,21 @@ void Image::Uninit()
 {
 }
 
-void Image::Bind()
+void Image::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 {
-	ShaderBuffer::GetInstance().SetTexTilingOffset(m_vTiling, m_vOffset);
+	pBuf.lock()->SetTexTilingOffset(m_vTiling, m_vOffset);
 
 	if (m_pTex)
-		ShaderBuffer::GetInstance().SetTexture(m_pTex, m_type);
+		pBuf.lock()->SetTexture(m_pTex, m_type);
 	else
-		ShaderBuffer::GetInstance().SetTexture(nullptr, m_type);
+		pBuf.lock()->SetTexture(nullptr, m_type);
 
 	if (m_isWRAP)
-		ShaderBuffer::GetInstance().SetTexSamplerWRAP();
+		pBuf.lock()->SetTexSamplerWRAP();
 	else
-		ShaderBuffer::GetInstance().SetTexSamplerCRAMP();
+		pBuf.lock()->SetTexSamplerCRAMP();
 
-	ShaderBuffer::GetInstance().SetMultiplyColor(m_vMultiplyColor);
+	pBuf.lock()->SetMultiplyColor(m_vMultiplyColor);
 }
 
 void Image::SetTexture(const std::string str)

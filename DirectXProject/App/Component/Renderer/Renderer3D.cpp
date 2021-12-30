@@ -49,54 +49,80 @@ void Renderer3D::Update()
 	}
 }
 
-void Renderer3D::Write(const WriteType::kind type)
+void Renderer3D::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
 
 	if (!PTRNULLCHECK(m_pMainImage))
 	{
-		m_pMainImage->Bind();
+		m_pMainImage->Bind(pBuf);
 	}
 
 	if (m_pInstancing.expired())
 	{
 		if (!m_pMesh.expired())
 		{
-			ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+			pBuf.lock()->SetWorld(m_pTransform.lock()->GetWorldMatrix());
 			m_pMesh.lock()->Bind();
 		}
 	}
 	else
 	{
-		m_pInstancing.lock()->Bind();
+		m_pInstancing.lock()->Bind(pBuf);
 	}
 }
 
-void Renderer3D::Draw(const DrawType::kind type)
+void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
 {
 	if (!m_isDrawType[type])return;
 
+	switch (type)
+	{
+	case DrawType::WORLD_OF_NORMAL:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::NORMAL);
+		break;
+	case DrawType::WORLD_OF_TRIPLANAR:
+		pBuf.lock()->BindVS(VS_TYPE::TRIPLANAR);
+		pBuf.lock()->BindPS(PS_TYPE::TRIPLANAR);
+		break;
+	case DrawType::WORLD_OF_CHARACTER:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
+		break;
+	case DrawType::WORLD_OF_EFFECT:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::EFFECT);
+		break;
+	case DrawType::WORLD_OF_WATER:
+		pBuf.lock()->BindVS(VS_TYPE::WATERREFLECTION);
+		pBuf.lock()->BindPS(PS_TYPE::WATERREFLECTION);
+		break;
+	default:
+		break;
+	}
+
 	if (!PTRNULLCHECK(m_pMainImage))
 	{
-		m_pMainImage->Bind();
+		m_pMainImage->Bind(pBuf);
 	}
 
 	if (!PTRNULLCHECK(m_pBumpImage))
 	{
-		m_pBumpImage->Bind();
+		m_pBumpImage->Bind(pBuf);
 	}
 
 	if (m_pInstancing.expired())
 	{
 		if (!m_pMesh.expired())
 		{
-			ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+			pBuf.lock()->SetWorld(m_pTransform.lock()->GetWorldMatrix());
 			m_pMesh.lock()->Bind();
 		}
 	}
 	else
 	{
-		m_pInstancing.lock()->Bind();
+		m_pInstancing.lock()->Bind(pBuf);
 	}
 }
 

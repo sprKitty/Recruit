@@ -4,6 +4,7 @@
 #include <Vector.h>
 
 class Image;
+class ShaderBuffer;
 
 class TexAnimation
 {
@@ -14,7 +15,7 @@ public:
 	void LoadData(const char* pPath);
 	void Reset(const int nType);
 	void Update(const int nType);
-	void Bind();
+	void Bind(const std::weak_ptr<ShaderBuffer>& pBuf);
 
 	const bool IsSheetUpdate(const VectorInt2& vSheet);
 

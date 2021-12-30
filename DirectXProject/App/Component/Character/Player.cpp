@@ -68,6 +68,8 @@ void Player::Update()
 {
 	Player_State::Kind oldState = m_state;
 
+	SetNeedComponent();
+
 	if (m_pStateList[m_state]->Action())
 	{
 		m_state = static_cast<Player_State::Kind>(m_pStateList[m_state]->Next());

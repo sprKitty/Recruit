@@ -102,7 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				fpsCount = 0;
 			}
 
-			if (nowTime - preExecTime >= 1000 / 60)
+			if (nowTime - preExecTime >= 1000.0f / 60.0f)
 			{
 				Clocker::GetInstance().EndFrame(timeGetTime());
 				Clocker::GetInstance().CalcFrameTime();

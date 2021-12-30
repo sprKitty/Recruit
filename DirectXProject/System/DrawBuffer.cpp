@@ -123,8 +123,6 @@ void DrawBuffer::Draw(D3D11_PRIMITIVE_TOPOLOGY primitive, const int nDrawNum)
 	else
 	{
 		// 頂点バッファのみで描画
-		//ShaderBuffer::GetInstance().SetInstancingWorld(m_vtxCount);
-		//pContext->Draw(m_vtxCount, 0);
 		pContext->DrawInstanced(m_vtxCount, static_cast<UINT>(nDrawNum), 0, 0);
 	}
 

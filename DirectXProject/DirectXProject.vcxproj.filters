@@ -48,6 +48,9 @@
     <Filter Include="C++ファイル\App\Component\Magic">
       <UniqueIdentifier>{c2b9bbda-0f9b-49e0-b0d3-4200df4a12a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C++ファイル\App\ViewPoint">
+      <UniqueIdentifier>{8061375e-bd2c-4f30-8339-189470432990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader\ShaderBuffer.cpp">
@@ -65,13 +68,7 @@
     <ClCompile Include="App\Scene\SceneMgr.cpp">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="App\Camera.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\EventMgr.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Light.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
     <ClCompile Include="App\MMDModel.cpp">
@@ -197,16 +194,24 @@
     <ClCompile Include="App\TextureData.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
-    <ClCompile Include="App\MultiPass.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\Component\Terrain.cpp">
       <Filter>C++ファイル\App\Component</Filter>
     </ClCompile>
     <ClCompile Include="App\Component\Magic\MagicBall.cpp">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClCompile>
-    <ClCompile Include="App\Component\Instancing.cpp" />
+    <ClCompile Include="App\Camera.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Light.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\Instancing.cpp">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -227,9 +232,6 @@
     <ClInclude Include="System\Shader.h">
       <Filter>C++ファイル\System</Filter>
     </ClInclude>
-    <ClInclude Include="App\Camera.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\ShaderBuffer.h">
       <Filter>リソース ファイル</Filter>
     </ClInclude>
@@ -243,9 +245,6 @@
       <Filter>C++ファイル\App</Filter>
     </ClInclude>
     <ClInclude Include="App\MMDModel.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Light.h">
       <Filter>C++ファイル\App</Filter>
     </ClInclude>
     <ClInclude Include="App\Scene\Game.h">
@@ -380,9 +379,6 @@
     <ClInclude Include="App\Component\Magic\MagicBullet.h">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClInclude>
-    <ClInclude Include="App\MultiPass.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
     <ClInclude Include="App\Component\Magic\MagicRazer.h">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClInclude>
@@ -400,6 +396,15 @@
     </ClInclude>
     <ClInclude Include="System\ClassDesign\Property.h">
       <Filter>C++ファイル\System\ClassDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Camera.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Light.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,7 +438,28 @@
     <FxCompile Include="Shader\PSDOF.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VSDOF.hlsl">
+    <FxCompile Include="Shader\VSGaussianBlur.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSGaussianBlur.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSMixTexture.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="PSCameraDepth.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSCameraDepth.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSKawaseBloom.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSWaterReflection.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSWaterReflection.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
   </ItemGroup>

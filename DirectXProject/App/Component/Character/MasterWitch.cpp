@@ -1,11 +1,11 @@
 #include "MasterWitch.h"
 #include <App/Component/Transform.h>
-#include <App/Component/Object.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Event/Event.h>
 #include <App/Component/Magic/MagicBall.h>
 #include <App/Component/Magic/MagicBullet.h>
 #include <App/Component/Magic/MagicRazer.h>
+#include <App/Component/Collider.h>
 #include <App/FactoryMethod.h>
 #include <System/Clocker.h>
 #include <MyMath.h>
@@ -51,6 +51,7 @@ void MasterWitch::Init()
 		m_pAttackList1[i] = pObj.lock()->GetComponent<MagicBullet>();
 		if (m_pAttackList1[i].expired())continue;
 		m_pAttackList1[i].lock()->SetType(MagicType::FIRE);
+		m_pAttackObject.emplace_back(pObj);
 	}
 
 	m_rotatebullet.nRate = 10;
@@ -65,6 +66,7 @@ void MasterWitch::Init()
 		m_pAttackList2[i] = pObj.lock()->GetComponent<MagicBullet>();
 		if (m_pAttackList2[i].expired())continue;
 		m_pAttackList2[i].lock()->SetType(MagicType::FIRE);
+		m_pAttackObject.emplace_back(pObj);
 	}
 	
 	m_pAttackList3.resize(4);
@@ -77,6 +79,7 @@ void MasterWitch::Init()
 		m_pAttackList3[i].lock()->SetShotNum(10);
 		m_pAttackList3[i].lock()->SetShotData(0.6f, 0.1f);
 		m_pAttackList3[i].lock()->SetType(MagicType::FIRE);
+		m_pAttackObject.emplace_back(pObj);
 	}
 
 	m_razer.num = 8;
@@ -90,6 +93,7 @@ void MasterWitch::Init()
 		if (m_pRotateRazerList[i].expired())continue;
 		m_pRotateRazerList[i].lock()->SetType(MagicType::FIRE);
 		m_pRotateRazerList[i].lock()->SetLength(10.0f);
+		m_pAttackObject.emplace_back(pObj);
 	}
 
 	std::weak_ptr<MasterWitch> pMW = std::dynamic_pointer_cast<MasterWitch>(weak_from_this().lock());
@@ -137,6 +141,12 @@ void MasterWitch::Init()
 
 void MasterWitch::Uninit()
 {
+	for (const auto& itr : m_pAttackObject)
+	{
+		if (itr.expired())continue;
+		itr.lock()->EnableDelete();
+	}
+
 	m_pMasterStateList.clear();
 	m_pBossStateList.clear();
 	m_pTexAnimList.clear();
@@ -144,6 +154,14 @@ void MasterWitch::Uninit()
 
 void MasterWitch::Update()
 {
+	SetNeedComponent();
+
+	if (HitUpdate())
+	{
+		m_pOwner.lock()->EnableDelete();
+		return;
+	}
+
 	switch (m_state)
 	{
 	case Witch_State::MASTER:
@@ -186,6 +204,24 @@ void MasterWitch::Update()
 	default:
 		break;
 	}
+}
+
+const bool MasterWitch::HitUpdate()
+{
+	Collider::HitInfo hitInfoBC = m_pCollider.lock()->IsHitInfo(CollisionType::BC);
+
+	if (hitInfoBC.isFlg)
+	{
+		if (!hitInfoBC.pObj.expired())
+		{
+			if (hitInfoBC.pObj.lock()->GetType() == ObjectType::PLAYERATTACK)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 const bool MasterWitch::CalcTarget()

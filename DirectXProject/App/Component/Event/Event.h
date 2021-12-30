@@ -23,6 +23,10 @@ public:
 
 	inline const bool IsFinishAll()const
 	{
+		if (m_isFinishAll)
+		{
+			int udh = 0;
+		}
 		return m_isFinishAll;
 	}
 

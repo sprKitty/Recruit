@@ -139,8 +139,6 @@ public:
 
 
 
-
-
 class VectorInt2
 {
 public:
@@ -607,4 +605,104 @@ public:
 	}
 
 	float x, y, z, w;
+};
+
+
+
+
+
+class VectorInt4
+{
+public:
+	VectorInt4() = default;
+	VectorInt4(int x, int y, int z, int w) :x(x), y(y), z(z), w(w) {}
+	VectorInt4(int v) :x(v), y(v), z(v), w(v) {}
+	~VectorInt4() {}
+
+	const VectorInt4 &operator =(const VectorInt4 &v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+		return *this;
+	}
+
+	const VectorInt4 operator +(const VectorInt4 &v) const
+	{
+		VectorInt4 a;
+		a.x = x + v.x;
+		a.y = y + v.y;
+		a.z = z + v.z;
+		a.w = w + v.w;
+		return a;
+	}
+
+	const VectorInt4 operator -(const VectorInt4 &v) const
+	{
+		VectorInt4 a;
+		a.x = x - v.x;
+		a.y = y - v.y;
+		a.z = z - v.z;
+		a.w = w - v.w;
+		return a;
+	}
+
+	const VectorInt4 operator *(const VectorInt4 &v) const
+	{
+		VectorInt4 a;
+		a.x = x * v.x;
+		a.y = y * v.y;
+		a.z = z * v.z;
+		a.w = w * v.w;
+		return a;
+	}
+
+	const VectorInt4 operator /(const VectorInt4 &v) const
+	{
+		VectorInt4 a;
+		a.x = x / v.x;
+		a.y = y / v.y;
+		a.z = z / v.z;
+		a.w = w / v.w;
+		return a;
+	}
+
+	VectorInt4 &operator+=(const VectorInt4 &v)
+	{
+		x += v.x;
+		y += v.y;
+		z += v.z;
+		w += v.w;
+		return *this;
+	}
+
+	VectorInt4 &operator-=(const VectorInt4 &v)
+	{
+		x -= v.x;
+		y -= v.y;
+		z -= v.z;
+		w -= v.w;
+		return *this;
+	}
+
+	VectorInt4 &operator*=(const VectorInt4 &v)
+	{
+		x *= v.x;
+		y *= v.y;
+		z *= v.z;
+		w *= v.w;
+		return *this;
+	}
+
+	VectorInt4 &operator/=(const VectorInt4 &v)
+	{
+		x /= v.x;
+		y /= v.y;
+		z /= v.z;
+		w /= v.w;
+		return *this;
+	}
+
+	int x, y, z, w;
 };

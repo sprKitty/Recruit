@@ -5,6 +5,7 @@
 
 
 class Transform;
+class ShaderBuffer;
 
 class Instancing : public Component
 {
@@ -15,7 +16,7 @@ public:
 	void Uninit()override;
 	void Update()override;
 	
-	void Bind(const Vector3* vPos = nullptr);
+	void Bind(const std::weak_ptr<ShaderBuffer>& pBuf, const Vector3* vPos = nullptr);
 	void Set(const std::string str);
 
 	void SetRandomXYZ(const Vector3& minLeft, const Vector3& maxRight, const VectorInt3& vNum, const Vector3& vMarginError);

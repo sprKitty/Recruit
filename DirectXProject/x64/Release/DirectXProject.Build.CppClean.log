@@ -1,101 +1,261 @@
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\vc141.pdb
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\texture.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\shader.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\input.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\geometory.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\fbxparser.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\drawbuffer.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\directx.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\startup.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\model.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\main.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\camera.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\directxproject\x64\release\shaderbuffer.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\vc141.pdb
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\texture.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\shader.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\input.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\geometory.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\fbxparser.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\drawbuffer.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directx.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\startup.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\shaderbuffer.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\model.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\main.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\camera.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\stage1.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\menu.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\game.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\objmodel.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\mmdmodel.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\light.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\vision.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\renderer2d.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\renderer.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\player.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\object.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\land.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\gun.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\collider.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\bullet.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\bear.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\audiosource.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\audiolistener.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\boxel.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\visioncollision.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\rendertargetmgr.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\rendertarget.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\objparser.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\mmdparser.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\collision.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\audiomgr.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\shopmgr.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\mymath.obj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\title.obj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\directxproject.ipdb
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\directxproject.iobj
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\directxproject.ipdb
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\directxproject.iobj
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\blurps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\depthps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\depthvs.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\dummyvs.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\grassps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\lambertps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\outlinevs.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\phongps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\pixelcolorps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\scopeps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\toonps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\worldps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\vertexshader.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\pixelshader.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\blurps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\depthps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\depthvs.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\dummyvs.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\grassps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\lambertps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\outlinevs.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\phongps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\pixelcolorps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\pixelshader.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\scopeps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\toonps.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\vertexshader.cso
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\worldps.cso
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\directxproject.exe
-c:\users\taker\downloads\directxproject\directxproject\directxproject\x64\release\directxproject.pdb
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\directxproject.exe
-c:\users\taker\desktop\directxproject\directxproject\directxproject\x64\release\directxproject.pdb
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\cl.command.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\cl.read.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\cl.write.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\directxproject.write.1u.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\fxc.command.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\fxc.read.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\fxc.write.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\link.command.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\link.read.1.tlog
-c:\users\taker\desktop\directxproject\directxproject\directxproject\directxproject\x64\release\directxproject.tlog\link.write.1.tlog
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\vc141.pdb
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxloadmesh.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxloadmaterial.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxloader.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxloadbone.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxloadanimation.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\stage1.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\game.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\objmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\number.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\model.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\mmdmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\itemporch.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\item.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\object.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\camera.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\texture.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\sound.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\shader.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\rendertargetmgr.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\rendertarget.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\objparser.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\mmdparser.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\input.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\geometory.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxparser.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fade.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\drawbuffer.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\directx.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\startup.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\shopmgr.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\shaderbuffer.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\mymath.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\main.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\light.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\fbxmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\title.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\renderpipeline.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\parallellightmgr.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\water.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\timer.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\renderer2d.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\renderer.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\player.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\land.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\image.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\collider.obj
+c:\users\taker\desktop\mygame\directxproject 授業\directxproject\x64\release\collision.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\vc141.pdb
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\game.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\renderpipeline.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\parallellightmgr.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\objmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\mmdmodel.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\main.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\light.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\itemporch.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\item.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\water.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\timer.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\renderer2d.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\renderer.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\player.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\object.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\land.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\image.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\collider.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\camera.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\sound.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\shader.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\rendertarget.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\objparser.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\mmdparser.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\input.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\geometory.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\drawbuffer.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\directx.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\collision.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\startup.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\shopmgr.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\shaderbuffer.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\mymath.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxloadmesh.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxloadmaterial.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxloader.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxloadbone.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\fbxloadanimation.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\title.obj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\directxproject\x64\release\texture.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\vc141.pdb
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\eventmgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\transform.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\terrain.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\renderer3d.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\renderer2d.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\billboardrenderer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\object.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\mesh.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\magicrazer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\magicbullet.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\magicball.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\image.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\eventtrigger.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\event.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\collider.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\player.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\masterwitch.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\character.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\collision.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\camera.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directx.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\debuglog.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\clocker.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\startup.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\shaderbuffer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\mymath.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\texturedata.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\texanimation.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\scenemgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\game.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\renderpipeline.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\objmodel.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\multipass.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\mmdmodel.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\meshdata.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\light.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\level.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\gamekeybind.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\factorymethod.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\talk.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\texture.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\messagewindow.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\sound.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\shader.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\rendertarget.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\objparser.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\mouse.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\mmdparser.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\loadfiles.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\input.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\geometory.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\drawbuffer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\instancing.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\property.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\viewpoint.obj
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\directxproject.ipdb
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\directxproject.iobj
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\directxproject.ipdb
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\directxproject.iobj
+c:\users\taker\desktop\mygame\recruit\x64\release\directxproject.ipdb
+c:\users\taker\desktop\mygame\recruit\x64\release\directxproject.iobj
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psbackbuffer.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psblur.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pscameradepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pslightdepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vsanimation.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vscameradepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vslightdepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vsdummy.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psgrass.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pslambert.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vsoutline.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pswater.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pspixelcolor.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psnormal.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psscope.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pstoon.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\pstoonshadow.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vsnormal.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psworld.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\vswater.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\psfade.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psbackbuffer.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psblur.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pslightdepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vsanimation.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vscameradepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vslightdepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vsdummy.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psgrass.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pslambert.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vsoutline.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pspixelcolor.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psnormal.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psscope.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pstoon.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vsnormal.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psworld.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\vswater.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\psfade.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pstoonshadow.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pscameradepth.cso
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\pswater.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\vstriplanar.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\vslightdepth.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\vsnormal.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\vscameradepth.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\vsgaussianblur.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pscameradepth.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pscharacter.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\psdof.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pseffect.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\psgaussianblur.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pskawasebloom.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pslightdepth.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\psmixtexture.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pspixelcolor.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\pstriplanar.cso
+c:\users\taker\desktop\mygame\recruit\x64\release\psnormal.cso
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\directxproject.exe
+c:\users\taker\desktop\mygame\directxproject 授業\x64\release\directxproject.pdb
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\directxproject.exe
+c:\users\taker\desktop\mygame\directxproject 授業 - コピー\x64\release\directxproject.pdb
+c:\users\taker\desktop\mygame\recruit\x64\release\directxproject.exe
+c:\users\taker\desktop\mygame\recruit\x64\release\directxproject.pdb
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\audiolistener.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\audiomgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\audiosource.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\bear.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\boxel.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\bullet.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fade.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxloadanimation.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxloadbone.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxloader.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxloadmaterial.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxloadmesh.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxmodel.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\fbxparser.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\gamesetting.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\gun.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\item.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\itemporch.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\land.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\main.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\menu.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\model.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\number.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\option.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\parallellightmgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\renderer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\rendertargetmgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\settingbar.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\shopmgr.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\stage1.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\timer.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\title.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\vision.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\visioncollision.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\water.obj
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\cl.command.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\cl.read.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\cl.write.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\directxproject.write.1u.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\fxc.command.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\fxc.read.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\fxc.write.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\link.command.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\link.read.1.tlog
+c:\users\taker\desktop\mygame\recruit\directxproject\x64\release\directxproject.tlog\link.write.1.tlog

@@ -3,6 +3,9 @@
 #include <System/DirectX.h>
 #include <App/Scene/SceneBase.h>
 
+
+class ShaderBuffer;
+
 class SceneMgr : public Singleton<SceneMgr>
 {
 public:
@@ -21,6 +24,7 @@ protected:
 
 private:
 	std::vector<std::shared_ptr<SceneBase> > m_pSceneList;
+	std::shared_ptr<ShaderBuffer> m_pShaderBuffer;
 	Scene_Type::kind m_NowScene;
 	Scene_Type::kind m_OldScene;
 };

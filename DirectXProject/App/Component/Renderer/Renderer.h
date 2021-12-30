@@ -19,12 +19,14 @@ namespace DrawType
 		WORLD_OF_NORMAL,	// 
 		WORLD_OF_EFFECT,	// 
 		WORLD_OF_TRIPLANAR,	// 
-		WORLD_OF_SHADOW,	// シャドウマッピング
-		WORLD_OF_CHARACTER,		// キャラクター用
+		WORLD_OF_CHARACTER,	// キャラクター用
+		WORLD_OF_WATER,	// 
 		UI,
 		MAX,
 	};
 }
+
+class ShaderBuffer;
 
 class Renderer : public Component
 {
@@ -36,7 +38,7 @@ public:
 	virtual void Uninit()override {}
 	virtual void Update()override {}
 
-	virtual void Write(const WriteType::kind type) {}
-	virtual void Draw(const DrawType::kind type) {}
+	virtual void Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type) {}
+	virtual void Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type) {}
 
 };

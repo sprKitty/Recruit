@@ -1,7 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
 #include <System/DirectX.h>
-#include <System/ClassDesign/Singleton.h>
 #include <Vector.h>
 #include <vector>
 #include <memory>
@@ -18,7 +17,9 @@ namespace VS_TYPE
 		NORMAL,
 		TRIPLANAR,
 		LIGHTDEPTH,
-		DOF,
+		CAMERADEPTH,
+		GAUSSIANBLUR,
+		WATERREFLECTION,
 
 		MAX
 	};
@@ -34,8 +35,12 @@ namespace PS_TYPE
 		CHARACTER,
 		COLOR,
 		LIGHTDEPTH,
+		CAMERADEPTH,
+		GAUSSIANBLUR,
+		KAWASEBLOOM,
+		MIX,
 		DOF,
-
+		WATERREFLECTION,
 		MAX
 	};
 }
@@ -50,13 +55,15 @@ namespace CB_TYPE
 		CAMERA_INFO,
 		LIGHT_INFO,
 		TEX_SETTING,
-
+		POSTEFFECT,
 		MAX
 	};
 }
 
 namespace ShaderResource
 {
+	static constexpr int VPBUFFER_SIZE = 2;
+
 	// テクスチャのサンプラー設定
 	enum class SAMLER_TYPE
 	{
@@ -69,13 +76,20 @@ namespace ShaderResource
 	enum class TEX_TYPE
 	{
 		MAIN = 0,
-		SCREEN,
+		WATER,
+		WATER_HEIGHT,
+		WATER_BUMP,
 		DEPTH_OF_SAHDOW,
 		DEPTH_OF_FIELD,
 		BUMP,
-		CLIP,
-		BLUR,
 		GRAYSCALE,
+		BLURX,
+		BLURY,
+		KAWASEX_1,
+		KAWASEY_1,
+		KAWASEX_2,
+		KAWASEY_2,
+		EFFECT,
 	};
 
 	struct ViewProjection
@@ -86,17 +100,18 @@ namespace ShaderResource
 
 	struct CameraVP
 	{
-		ViewProjection info;
+		ViewProjection info[VPBUFFER_SIZE];
 	};
 
 	struct LightVP
 	{
-		ViewProjection info;
+		ViewProjection info[VPBUFFER_SIZE];
 	};
 
 	struct CameraInfo
 	{
 		DirectX::XMFLOAT4 pos;
+		DirectX::XMFLOAT4 vp;
 	};
 
 	struct LightInfo
@@ -130,19 +145,24 @@ namespace ShaderResource
 		int nWrap;
 		float fAlpha;
 		float fTime;
-		float fDummy;
+		float fGameStartCnt;
 	};
+
+	struct PostEffect
+	{
+		Vector4 blur[8];
+	};
+
 };
 
-class ShaderBuffer : public Singleton<ShaderBuffer>
+class ShaderBuffer
 {
 public:
-	friend class Singleton<ShaderBuffer>;
+	ShaderBuffer();
+	~ShaderBuffer();
 
-public:
-
-	void Initialize()override;
-	void Finalize()override;
+	void Initialize();
+	void Finalize();
 	void InitParam();
 	void Write(const CB_TYPE::Kind cb);
 	void BindVS(const VS_TYPE::Kind vs);
@@ -171,6 +191,7 @@ public:
 	void SetMultiplyColor(const Vector4& color);
 	void SetGrayScaleAlpha(const float fAlpha);
 	void SetTime(const float time);
+	void SetGameStartCnt(const float time);
 	void SetTexSamplerWRAP();
 	void SetTexSamplerCRAMP();
 
@@ -178,17 +199,16 @@ public:
 
 	void SetInstancingWorld(const Vector3& vScl, const Vector3& vRot, const std::vector<Vector3>& posList);
 
-	void SetCameraVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
+	void SetCameraVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj, const int num);
 	
-	void SetLightVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj);
+	void SetLightVP(const DirectX::XMMATRIX& mView, const DirectX::XMMATRIX& mProj, const int num);
 	
 	void SetLightInfo(const ShaderResource::LightInfo& light);
 	
 	void SetCameraInfo(const ShaderResource::CameraInfo& camera);
 	
-protected:
-	ShaderBuffer();
-	~ShaderBuffer();
+	void SetPostEffectInfo(const ShaderResource::PostEffect& post);
+
 
 private:
 	static const int INSTANCING_MAX = 1024;
@@ -199,6 +219,7 @@ private:
 	ShaderResource::CameraInfo m_cameraInfo;
 	ShaderResource::LightInfo m_lightInfo;
 	ShaderResource::TexSetting m_texSetting;
+	ShaderResource::PostEffect m_postEffect;
 	int m_nSpotNext;
 
 	std::vector<std::unique_ptr<VertexShader> > m_pVSList;

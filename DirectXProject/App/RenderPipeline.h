@@ -1,29 +1,22 @@
 #pragma once
 #include <System/ClassDesign/Singleton.h>
 #include <App/Component/Renderer/Renderer.h>
+#include <App/Camera.h>
+#include <App/Light.h>
 #include <Defines.h>
 
 
 class MultiPass;
-class Camera;
-class Light;
-
-namespace RenderingSetting
-{
-	enum RenderTarget_Type
-	{
-		RGBA32_,
-		R32,
-
-	};
-
-};
+class ShaderBuffer;
 
 class RenderPipeline : public Singleton<RenderPipeline>
 {
 public:
 	friend class Singleton<RenderPipeline>;
+	
+	static const int KAWASE_BlOOM_NUM = 5;
 
+	using KAWASE_BlOOM_VP = std::weak_ptr<ViewPoint>[KAWASE_BlOOM_NUM];
 private:
 	using RendererPtrList = std::vector<std::weak_ptr<Renderer> >;
 
@@ -38,20 +31,25 @@ public:
 	*************************************************/	
 	void ReleaseRenderer(const std::weak_ptr<Component>& pComponent);
 	
+	void DrawShadowMap(const std::weak_ptr<Light> pLight);
 
-	/*************************************************
-	* @brief レンダーターゲットのどこに書くか
-	* @param[WriteType] typeW 書き込みタイプ
-	*************************************************/
-	void Write(const WriteType::kind& typeW);
+	void DrawCameraDepth(const std::weak_ptr<Camera> pCamera);
 
-
-	/*************************************************
-	* @brief どういった感じでに描くか
-	* @param[DrawType] typeD 描き方タイプ
-	*************************************************/
-	void Draw(const DrawType::kind& typeD);
+	void PlayGaussianBlurX(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVP, const float fDeviation = 2.0f, const int number = 0);
 	
+	void PlayGaussianBlurY(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVP, const float fDeviation = 2.0f, const int number = 0);
+
+	void PlayKawaseBloom(const std::weak_ptr<Camera> pCamera, KAWASE_BlOOM_VP pVPList);
+
+	void PlayMixTexture(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVPMix1, const std::weak_ptr<ViewPoint> pVPMix2);
+
+	void DrawDOFTexture(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVPDMain, const std::weak_ptr<ViewPoint> pVPDepth, const std::weak_ptr<ViewPoint> pVPBlur);
+
+	void DrawWaterReflection(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP);
+
+	void Draw(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP, const std::weak_ptr<ViewPoint> pWaterRefVP);
+	
+	void DrawEffect(const std::weak_ptr<Camera> pCamera);
 
 	/*************************************************
 	* @brief レンダーパイプラインにオブジェクトを追加
@@ -59,32 +57,17 @@ public:
 	*************************************************/
 	void AddRenderer(const std::weak_ptr<Component>& pComponent);
 
-
-	inline void SetCamera(const std::weak_ptr<Camera> pCam)
-	{
-		m_pRentCamera = pCam;
-	}
-
-	inline void SetLight(const std::weak_ptr<Light> pLight)
-	{
-		m_pRentLight = pLight;
-	}
-
-	ID3D11ShaderResourceView* GetRenderTex(const WriteType::kind type, const int num = 0);
+	inline void SetShaderBuffer(const std::weak_ptr<ShaderBuffer> ptr) { m_pShaderBuffer = ptr; }
 
 protected:
 	RenderPipeline() {}
 	~RenderPipeline() override{}
 
 private:
-
 	void Call(WriteType::kind typeW, DrawType::kind typeD);
 
 private:
 	RendererPtrList m_pDrawList;
-	std::vector<std::shared_ptr<MultiPass> > m_pMultiPassList;
-
-	std::weak_ptr<Camera> m_pRentCamera;
-	std::weak_ptr<Light> m_pRentLight;
+	std::weak_ptr<ShaderBuffer> m_pShaderBuffer;
 };
 

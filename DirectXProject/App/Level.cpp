@@ -35,14 +35,14 @@ void Level::Create(std::weak_ptr<SceneBase> pScene)
 	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localpos = { 25.0f,0.5f,0.0f };
+		pTransform.lock()->localpos = { 25.0f,0.0f,0.0f };
 		pTransform.lock()->localscale = { 20.0f,1.0f,30.0f };
 		if (!pInstancing.expired())
 		{
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(7, 0, 9), 0);
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6, 0, 9), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 
@@ -51,14 +51,14 @@ void Level::Create(std::weak_ptr<SceneBase> pScene)
 	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localpos = { -25.0f,0.5f,0.0f };
+		pTransform.lock()->localpos = { -25.0f,0.0f,0.0f };
 		pTransform.lock()->localscale = { 20.0f,1.0f,30.0f };
 		if (!pInstancing.expired())
 		{
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(7, 0, 9), 0);
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6 , 0, 9), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 
@@ -67,14 +67,14 @@ void Level::Create(std::weak_ptr<SceneBase> pScene)
 	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localpos = { 0.0f,0.5f,25.0f };
+		pTransform.lock()->localpos = { 0.0f,0.0f,25.0f };
 		pTransform.lock()->localscale = { 60.0f,1.0f,20.0f };
 		if (!pInstancing.expired())
 		{
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(20, 0, 7), 0);
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(18, 0, 6), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 
@@ -83,14 +83,30 @@ void Level::Create(std::weak_ptr<SceneBase> pScene)
 	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localpos = { 0.0f,0.5f,-25.0f };
-		pTransform.lock()->localscale = { 60.0f,1.0f,20.0f };
+		pTransform.lock()->localpos = { 20.0f,0.0f,-25.0f };
+		pTransform.lock()->localscale = { 30.0f,1.0f,20.0f };
 		if (!pInstancing.expired())
 		{
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(20, 0, 7), 0);
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 0, 6), Vector3(0.2f, 0, 0.2f));
+		}
+	}
+
+	pOutSideArea = FactoryMethod::GetInstance().CreateOutsideArea();
+	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
+	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localpos = { -20.0f,0.0f,-25.0f };
+		pTransform.lock()->localscale = { 30.0f,1.0f,20.0f };
+		if (!pInstancing.expired())
+		{
+			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
+			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
+			vMin.y = vMax.y = pTransform.lock()->localpos.y;
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 0, 6), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 }

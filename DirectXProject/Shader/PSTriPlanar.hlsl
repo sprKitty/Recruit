@@ -9,6 +9,12 @@ struct PS_IN
     float3 texSpaceLight : TEXCOORD5;
 };
 
+struct PS_OUT
+{
+    float4 main : SV_Target0;
+    float4 dof : SV_Target1;
+};
+
 struct LightInfo
 {
     float4 pos;
@@ -49,13 +55,20 @@ cbuffer ConstantBuffer2 : register(b2)
 }
 
 Texture2D TEX_MAIN : register(t0);
-Texture2D TEX_SCREEN : register(t1);
-Texture2D TEX_DOS : register(t2);
-Texture2D TEX_DOF : register(t3);
-Texture2D TEX_BUMP : register(t4);
-Texture2D TEX_CLIP : register(t5);
-Texture2D TEX_BLUR : register(t6);
+Texture2D TEX_WATER : register(t1);
+Texture2D TEX_WATERHEIGHT : register(t2);
+Texture2D TEX_WATERBUMP : register(t3);
+Texture2D TEX_DOS : register(t4);
+Texture2D TEX_DOF : register(t5);
+Texture2D TEX_BUMP : register(t6);
 Texture2D TEX_GRAYSCALE : register(t7);
+Texture2D TEX_BLURX : register(t8);
+Texture2D TEX_BLURY : register(t9);
+Texture2D TEX_KAWASE1 : register(t10);
+Texture2D TEX_KAWASE2 : register(t11);
+Texture2D TEX_KAWASE3 : register(t12);
+Texture2D TEX_KAWASE4 : register(t13);
+Texture2D TEX_EFFECT : register(t14);
 
 SamplerState WRAP : register(s0);
 SamplerState CRAMP : register(s1);
@@ -65,8 +78,10 @@ SamplerState MIRROR : register(s4);
 
 
 
-float4 main(PS_IN pin) : SV_Target
+PS_OUT main(PS_IN pin)
 {
+    PS_OUT pout;
+    
     float4 color = 1.0f;
     float3 blending = abs(pin.normal);
     blending = normalize(max(blending, 0.001f));
@@ -104,12 +119,23 @@ float4 main(PS_IN pin) : SV_Target
     mapUV.y = (1.0f - pin.lightPos.y / pin.lightPos.w) * 0.5f;
     float3 mapColor = TEX_DOS.Sample(BORDER, mapUV).rgb;
     depth = mapColor.r;
-    depth += mapColor.g / 256.0f; 
+    depth += mapColor.g / 256.0f;
     depth += mapColor.b / 256.0f / 256.0f;
-    if (inLVP - 0.00015f > depth)
-    {
-        color.rgb *= 0.4f;
-    }
     
-    return color;
+    inLVP -= 0.00005f;
+    color.rgb = (inLVP > depth) ? color.rgb * 0.5f : color.rgb;
+    pout.main = color;
+    
+    depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
+    color = float4(0, 0, 0, 1);
+    color.r = 2.0f * (1.3f - depth);
+    color.r = max(0, color.r);
+    color.r = min(1, color.r);
+    
+    color.b = 2.0f * (depth + 0.1f);
+    color.b = max(0, color.b);
+    color.b = min(1, color.b);
+    pout.dof = color;
+    
+    return pout;
 }

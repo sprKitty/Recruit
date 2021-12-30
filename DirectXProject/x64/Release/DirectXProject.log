@@ -1,2 +1,43 @@
-﻿  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSDOF.cso
+﻿  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSWaterReflection.cso
+  Camera.cpp
+  Collision.cpp
+  MasterWitch.cpp
+  Player.cpp
+  Collider.cpp
+  Image.cpp
+  Instancing.cpp
+  MagicRazer.cpp
+  BillBoardRenderer.cpp
+  Renderer2D.cpp
+  Renderer3D.cpp
+  FactoryMethod.cpp
+  Level.cpp
+  Light.cpp
+  MMDModel.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\app\mmdmodel.cpp(99): warning C4244: '初期化中': '__int64' から 'int' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\mmdmodel.cpp(108): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\string.h(90): note: 'strcat' の宣言を確認してください
+  OBJModel.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\app\objmodel.cpp(39): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\objmodel.cpp(99): warning C4267: '=': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  RenderPipeline.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(92): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(132): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  Game.cpp
+  SceneMgr.cpp
+  TexAnimation.cpp
+  コンパイル中...
+  ViewPoint.cpp
+  ShaderBuffer.cpp
+  Startup.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\startup.cpp(98): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' の宣言を確認してください
+  DrawBuffer.cpp
+  MessageWindow.cpp
+  Mouse.cpp
+  コード生成しています。
+  53 of 6059 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+    6 functions were new in current compilation
+    25 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
   DirectXProject.vcxproj -> C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\DirectXProject.exe

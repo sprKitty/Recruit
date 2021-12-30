@@ -1,5 +1,4 @@
 #pragma once
-#include "Component.h"
 #include <System/Texture.h>
 #include <Shader/ShaderBuffer.h>
 
@@ -11,7 +10,7 @@ public:
 
 	void Init();
 	void Uninit();
-	void Bind();
+	void Bind(const std::weak_ptr<ShaderBuffer>& pBuf);
 	
 	void SetTexture(const std::string str);
 	/*

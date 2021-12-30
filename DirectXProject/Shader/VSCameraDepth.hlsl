@@ -5,49 +5,45 @@ struct VS_IN
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
     float3 binormal : BINORMAL0;
+    uint inst : SV_InstanceID;
 };
 struct VS_OUT
 {
     float4 pos : SV_POSITION;
-    float4 depth : TEXCOORD2;
-    float4 wPos : POSITION1;
+    float2 uv : TEXCOORD0;
+    float4 depth : TEXCOORD1;
 };
 
-cbuffer World : register(b0)
+struct VP
 {
-    float4x4 world;
+    float4x4 view;
+    float4x4 proj;
 };
 
-cbuffer ViewProj : register(b1)
+cbuffer ConstantBuffer0 : register(b0)
 {
-    float4x4 camView;
-    float4x4 camProj;
-    float4x4 nearLightView;
-    float4x4 mediumLightView;
-    float4x4 farLightView;
-    float4x4 nearlightProj;
-    float4x4 mediumlightProj;
-    float4x4 farlightProj;
+    float4x4 g_Worlds[1024];
 };
 
-//cbuffer Sun : register(b2)
-//{
-//    float4x4 Sunview;
-//};
+cbuffer ConstantBuffer1 : register(b1)
+{
+    VP g_cameraVP[2];
+};
+
+cbuffer ConstantBuffer2 : register(b2)
+{
+    VP g_lightVP[2];
+};
 
 VS_OUT main(VS_IN vin)
 {
     VS_OUT vout;
 
     vout.pos = float4(vin.pos, 1);
-    
-    vout.pos = mul(vout.pos, world);
-    vout.wPos = vout.pos;
-    
-    vout.pos = mul(vout.pos, camView);
-    
-    vout.pos = mul(vout.pos, camProj);
+    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
+    vout.pos = mul(vout.pos, g_cameraVP[0].view);
+    vout.pos = mul(vout.pos, g_cameraVP[0].proj);
     vout.depth = vout.pos;
-
+    vout.uv = vin.uv;
     return vout;
 }

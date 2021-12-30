@@ -23,8 +23,8 @@ public:
 	void Uninit()override;
 	void Update()override;
 	
-	void Write(const WriteType::kind type)override {}
-	void Draw(const DrawType::kind type = DrawType::UI)override;
+	void Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)override {}
+	void Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type = DrawType::UI)override;
 
 	bool MouseCollision();
 	

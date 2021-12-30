@@ -8,6 +8,7 @@
 class Mouse;
 class Camera;
 class Mesh;
+class ShaderBuffer;
 
 class Collision : public Singleton<Collision>
 {
@@ -21,7 +22,7 @@ public:
 	void Initialize()override;
 	void Finalize()override;
 	void Update();
-	void Draw();
+	void Draw(const std::weak_ptr<ShaderBuffer> pBuf);
 
 	void AddCollider(const std::weak_ptr<Component>& pComponent);
 

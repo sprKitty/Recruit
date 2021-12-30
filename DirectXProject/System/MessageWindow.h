@@ -8,6 +8,7 @@
 #include <map>
 
 class Renderer2D;
+class ShaderBuffer;
 
 class MessageWindow : public Manager
 {
@@ -25,7 +26,7 @@ public:
 	* @param nAnimation •¶š‚ğ‰½•¶š•`‰æ‚·‚é‚©
 	*        default -1 •`‰æ•¶š”‚ğİ’è‚µ‚È‚¢
 	*/
-	void Draw();
+	void Draw(const std::weak_ptr<ShaderBuffer> pBuf);
 
 
 	static void CreateOffsetMap();

@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include <System/ClassDesign/Singleton.h>
 #include <memory>
+#include <vector>
 #include <Vector.h>
 
 #pragma comment(lib, "d3d11.lib")
@@ -54,7 +55,7 @@ public:
 	void Finalize()override;
 
 	const HRESULT Start(HWND hWnd, UINT width, UINT height, bool fullscreen);
-	void BeginDraw(D3D11_VIEWPORT* vp = nullptr, ID3D11RenderTargetView** pRTV = nullptr, ID3D11DepthStencilView* pDSV = nullptr, Vector4* pColor = nullptr, const int num = 1);
+	void BeginDraw(D3D11_VIEWPORT* vp = nullptr, ID3D11RenderTargetView** pRTV = nullptr, ID3D11DepthStencilView* pDSV = nullptr, const std::vector<Vector4>* clearList = nullptr, const int num = 1);
 	void EndDraw();
 
 	void SetBlendMode(const BlendMode::Kind kind);
@@ -70,11 +71,6 @@ public:
 		return m_pContext;
 	}
 
-	const std::weak_ptr<DepthStencil> GetDepthStencil()
-	{
-		return m_pDepthStencil;
-	}
-
 protected:
 	DirectX11() {}
 	~DirectX11()override {}
@@ -86,29 +82,8 @@ private:
 	ID3D11DeviceContext* m_pContext;
 	IDXGISwapChain* m_pSwapChain; 
 	ID3D11RenderTargetView* m_pBBRT;
-	std::shared_ptr<DepthStencil> m_pDepthStencil;
+	ID3D11DepthStencilView*	m_pDepthStencil;
 	ID3D11BlendState* m_pBlendState[BlendMode::BLEND_MAX];
 	ID3D11RasterizerState* m_pRasterizer[CullingMode::CULL_MAX];
 	D3D11_VIEWPORT m_vp;
-};
-
-
-class DepthStencil
-{
-public:
-	DepthStencil() {}
-	~DepthStencil()
-	{
-		SAFE_RELEASE(m_pDepthStencil);
-	}
-
-	const HRESULT Create(const UINT width, const UINT height, const DrawPass::Kind kind);
-
-	ID3D11DepthStencilView* Get()
-	{
-		return m_pDepthStencil;
-	}
-
-private:
-	ID3D11DepthStencilView*	m_pDepthStencil;
 };

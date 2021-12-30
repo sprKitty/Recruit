@@ -10,7 +10,9 @@ const char* pVSPath[] =
 	"Assets/VSNormal.cso",
 	"Assets/VSTriPlanar.cso",
 	"Assets/VSLightDepth.cso",
-	"Assets/VSDOF.cso",
+	"Assets/VSCameraDepth.cso",
+	"Assets/VSGaussianBlur.cso",
+	"Assets/VSWaterReflection.cso",
 };
 static_assert(!(static_cast<int>(VS_TYPE::MAX) < _countof(pVSPath)), "VSKindÇ÷ÇÃíËã`í«â¡ñYÇÍ");
 static_assert(!(static_cast<int>(VS_TYPE::MAX) > _countof(pVSPath)), "VSPathÇ÷ÇÃì«çûÉtÉ@ÉCÉãí«â¡ñYÇÍ");
@@ -23,7 +25,12 @@ const char* pPSPath[] =
 	"Assets/PSCharacter.cso",
 	"Assets/PSPixelColor.cso",
 	"Assets/PSLightDepth.cso",
+	"Assets/PSCameraDepth.cso",
+	"Assets/PSGaussianBlur.cso",
+	"Assets/PSKawaseBloom.cso",
+	"Assets/PSMixTexture.cso",
 	"Assets/PSDOF.cso",
+	"Assets/PSWaterReflection.cso",
 };
 static_assert(!(static_cast<int>(PS_TYPE::MAX) < _countof(pPSPath)), "PSKindÇ÷ÇÃíËã`í«â¡ñYÇÍ");
 static_assert(!(static_cast<int>(PS_TYPE::MAX) > _countof(pPSPath)), L"PSPathÇ÷ÇÃì«çûÉtÉ@ÉCÉãí«â¡ñYÇÍ");
@@ -73,6 +80,7 @@ void ShaderBuffer::Initialize()
 	hr = m_pCBList[CB_TYPE::CAMERA_INFO]->Create(sizeof(ShaderResource::CameraInfo));
 	hr = m_pCBList[CB_TYPE::LIGHT_INFO]->Create(sizeof(ShaderResource::LightInfo));
 	hr = m_pCBList[CB_TYPE::TEX_SETTING]->Create(sizeof(ShaderResource::TexSetting));
+	hr = m_pCBList[CB_TYPE::POSTEFFECT]->Create(sizeof(ShaderResource::PostEffect));
 
 
 	m_pCBList[static_cast<int>(CB_TYPE::INSTANCING_WORLD)]->BindVS(0);
@@ -80,11 +88,10 @@ void ShaderBuffer::Initialize()
 	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_VP)]->BindVS(2);
 	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->BindVS(3);
 
-	
-	
 	m_pCBList[static_cast<int>(CB_TYPE::CAMERA_INFO)]->BindPS(0);
 	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->BindPS(1);
 	m_pCBList[static_cast<int>(CB_TYPE::TEX_SETTING)]->BindPS(2);
+	m_pCBList[static_cast<int>(CB_TYPE::POSTEFFECT)]->BindPS(3);
 
 	InitParam();
 
@@ -105,10 +112,13 @@ void ShaderBuffer::InitParam()
 		DirectX::XMStoreFloat4x4(&m_instancingWorld[i], DirectX::XMMatrixIdentity());
 	}
 
-	DirectX::XMStoreFloat4x4(&m_cameraVP.info.view, DirectX::XMMatrixIdentity());
-	DirectX::XMStoreFloat4x4(&m_cameraVP.info.proj, DirectX::XMMatrixIdentity());
-	DirectX::XMStoreFloat4x4(&m_lightVP.info.view, DirectX::XMMatrixIdentity());
-	DirectX::XMStoreFloat4x4(&m_lightVP.info.proj, DirectX::XMMatrixIdentity());
+	for (int i = 0; i < 2; ++i)
+	{
+		DirectX::XMStoreFloat4x4(&m_cameraVP.info[i].view, DirectX::XMMatrixIdentity());
+		DirectX::XMStoreFloat4x4(&m_cameraVP.info[i].proj, DirectX::XMMatrixIdentity());
+		DirectX::XMStoreFloat4x4(&m_lightVP.info[i].proj, DirectX::XMMatrixIdentity());
+		DirectX::XMStoreFloat4x4(&m_lightVP.info[i].view, DirectX::XMMatrixIdentity());
+	}
 
 	//m_ps1.color = DirectX::XMFLOAT4(1, 1, 1, 1);
 	//m_ps1.nBlur = 0;
@@ -123,12 +133,12 @@ void ShaderBuffer::InitParam()
 	m_texSetting.fTime = 0;
 	m_nSpotNext = 0;
 
-	m_pCBList[static_cast<int>(CB_TYPE::INSTANCING_WORLD)]->Write(&m_instancingWorld);
-	m_pCBList[static_cast<int>(CB_TYPE::CAMEAR_VP)]->Write(&m_cameraVP);
-	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_VP)]->Write(&m_lightVP);
-	m_pCBList[static_cast<int>(CB_TYPE::CAMERA_INFO)]->Write(&m_cameraInfo);
-	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->Write(&m_lightInfo);
-	m_pCBList[static_cast<int>(CB_TYPE::TEX_SETTING)]->Write(&m_texSetting);
+	//m_postEffect.blur = { 0,0,0,0 };
+	
+	for (int i = 0; i < CB_TYPE::MAX; ++i)
+	{
+		Write(static_cast<CB_TYPE::Kind>(i));
+	}
 }
 
 void ShaderBuffer::Write(const CB_TYPE::Kind cb)
@@ -157,6 +167,10 @@ void ShaderBuffer::Write(const CB_TYPE::Kind cb)
 
 	case CB_TYPE::TEX_SETTING:
 		m_pCBList[cb]->Write(&m_texSetting);
+		break;
+
+	case CB_TYPE::POSTEFFECT:
+		m_pCBList[cb]->Write(&m_postEffect);
 		break;
 
 	case CB_TYPE::MAX:
@@ -209,6 +223,12 @@ void ShaderBuffer::SetTime(const float time)
 	Write(CB_TYPE::TEX_SETTING);
 }
 
+void ShaderBuffer::SetGameStartCnt(const float time)
+{
+	m_texSetting.fGameStartCnt = time;
+	Write(CB_TYPE::TEX_SETTING);
+}
+
 void ShaderBuffer::SetTexSamplerWRAP()
 {
 	m_texSetting.nWrap = 1;
@@ -237,17 +257,21 @@ void ShaderBuffer::SetInstancingWorld(const Vector3& vScl, const Vector3& vRot, 
 	Write(CB_TYPE::INSTANCING_WORLD);
 }
 
-void ShaderBuffer::SetCameraVP(const DirectX::XMMATRIX & mView, const DirectX::XMMATRIX & mProj)
+void ShaderBuffer::SetCameraVP(const DirectX::XMMATRIX & mView, const DirectX::XMMATRIX & mProj, const int num)
 {
-	DirectX::XMStoreFloat4x4(&m_cameraVP.info.view, DirectX::XMMatrixTranspose(mView));
-	DirectX::XMStoreFloat4x4(&m_cameraVP.info.proj, DirectX::XMMatrixTranspose(mProj));
+	if (num >= ShaderResource::VPBUFFER_SIZE)return;
+
+	DirectX::XMStoreFloat4x4(&m_cameraVP.info[num].view, DirectX::XMMatrixTranspose(mView));
+	DirectX::XMStoreFloat4x4(&m_cameraVP.info[num].proj, DirectX::XMMatrixTranspose(mProj));
 	Write(CB_TYPE::CAMEAR_VP);
 }
 
-void ShaderBuffer::SetLightVP(const DirectX::XMMATRIX & mView, const DirectX::XMMATRIX & mProj)
+void ShaderBuffer::SetLightVP(const DirectX::XMMATRIX & mView, const DirectX::XMMATRIX & mProj, const int num)
 {
-	DirectX::XMStoreFloat4x4(&m_lightVP.info.view, DirectX::XMMatrixTranspose(mView));
-	DirectX::XMStoreFloat4x4(&m_lightVP.info.proj, DirectX::XMMatrixTranspose(mProj));
+	if (num >= ShaderResource::VPBUFFER_SIZE)return;
+
+	DirectX::XMStoreFloat4x4(&m_lightVP.info[num].view, DirectX::XMMatrixTranspose(mView));
+	DirectX::XMStoreFloat4x4(&m_lightVP.info[num].proj, DirectX::XMMatrixTranspose(mProj));
 	Write(CB_TYPE::LIGHT_VP);
 }
 
@@ -261,4 +285,10 @@ void ShaderBuffer::SetCameraInfo(const ShaderResource::CameraInfo & camera)
 {
 	m_cameraInfo = camera;
 	Write(CB_TYPE::CAMERA_INFO);
+}
+
+void ShaderBuffer::SetPostEffectInfo(const ShaderResource::PostEffect & post)
+{
+	m_postEffect = post;
+	Write(CB_TYPE::POSTEFFECT);
 }

@@ -1,4 +1,6 @@
 #include "Character.h"
+#include <App/Component/Collider.h>
+#include <App/Component/Renderer/BillBoardRenderer.h>
 
 
 const bool  Character::PointAtoB_AStar()
@@ -72,4 +74,17 @@ const Chara_Direction::Kind Character::CalcDirection4(const float fDeg)
 	}
 
 	return Chara_Direction::MAX;
+}
+
+void Character::SetNeedComponent()
+{
+	if (m_pCollider.expired())
+	{
+		m_pCollider = m_pOwner.lock()->GetComponent<Collider>();
+	}
+
+	if (m_pBBR.expired())
+	{
+		m_pBBR = m_pOwner.lock()->GetComponent<BillBoardRenderer>();
+	}
 }

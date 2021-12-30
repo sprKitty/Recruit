@@ -11,7 +11,7 @@ void DirectX11::Finalize()
 	SAFE_RELEASE(m_pRasterizer[0]);
 	SAFE_RELEASE(m_pRasterizer[1]);
 
-	m_pDepthStencil.reset();
+	SAFE_RELEASE(m_pDepthStencil);
 	SAFE_RELEASE(m_pBBRT);
 
 	m_pContext->ClearState();
@@ -95,9 +95,6 @@ const HRESULT  DirectX11::Start(HWND hWnd, UINT width, UINT height, bool fullscr
 	hr = m_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &m_pBBRT);
 	SAFE_RELEASE(pBackBuffer);
 	if (FAILED(hr)) { return hr; }
-
-	m_pDepthStencil.reset(new DepthStencil());
-	m_pDepthStencil->Create(width, height, DrawPass::BACKBUFFER);
 
 	//--- アルファブレンド
 	D3D11_BLEND_DESC blendDesc;
@@ -200,6 +197,34 @@ const HRESULT  DirectX11::Start(HWND hWnd, UINT width, UINT height, bool fullscr
 	m_pContext->PSSetSamplers(4, 1, &pSamplerMIRROR);
 	SAFE_RELEASE(pSamplerMIRROR);
 
+
+	// 深度バッファ作成
+	ID3D11Texture2D* pTexDepth = nullptr;
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	ZeroMemory(&texDesc, sizeof(texDesc));
+	texDesc.Width = width;
+	texDesc.Height = height;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+	hr = DirectX11::GetInstance().GetDevice()->CreateTexture2D(&texDesc, nullptr, &pTexDepth);
+	if (FAILED(hr)) return E_FAIL;
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDescShadow = {};
+	ZeroMemory(&dsvDescShadow, sizeof(dsvDescShadow));
+	dsvDescShadow.Format = texDesc.Format;
+	dsvDescShadow.Texture2D.MipSlice = 0;
+	dsvDescShadow.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	hr = DirectX11::GetInstance().GetDevice()->CreateDepthStencilView(pTexDepth, &dsvDescShadow, &m_pDepthStencil);
+	if (FAILED(hr)) return E_FAIL;
+
+
 	//--- ラスタライズ
 	D3D11_RASTERIZER_DESC rasterDesc = {};
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
@@ -229,16 +254,9 @@ const HRESULT  DirectX11::Start(HWND hWnd, UINT width, UINT height, bool fullscr
 	return S_OK;
 }
 
-void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3D11DepthStencilView* pDSV, Vector4* pColor, const int num)
+void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3D11DepthStencilView* pDSV, const std::vector<Vector4>* clearList, const int num)
 {
-	float color[4] = { 0.8f, 0.8f, 0.9f,1.0f };
-	if (pColor)
-	{
-		color[0] = pColor->x;
-		color[1] = pColor->y;
-		color[2] = pColor->z;
-		color[3] = pColor->w;
-	}
+	float color[4] = { 0,0,0,0 };
 
 	if (vp)
 	{
@@ -253,6 +271,17 @@ void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3
 	{
 		for (int i = 0; i < num; ++i)
 		{
+			if (i < (*clearList).size())
+			{
+				color[0] = (*clearList)[i].x;
+				color[1] = (*clearList)[i].y;
+				color[2] = (*clearList)[i].z;
+				color[3] = (*clearList)[i].w;
+			}
+			else
+			{
+				int hs = 0;
+			}
 			m_pContext->ClearRenderTargetView(pRTV[i], color);
 		}
 		if (pDSV)
@@ -261,7 +290,7 @@ void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3
 		}
 		else
 		{
-			m_pContext->OMSetRenderTargets(num, pRTV, m_pDepthStencil->Get());
+			m_pContext->OMSetRenderTargets(num, pRTV, m_pDepthStencil);
 		}
 	}
 	else
@@ -273,7 +302,7 @@ void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3
 		}
 		else
 		{
-			m_pContext->OMSetRenderTargets(1, &m_pBBRT, m_pDepthStencil->Get());
+			m_pContext->OMSetRenderTargets(1, &m_pBBRT, m_pDepthStencil);
 		}
 	}
 	if (pDSV)
@@ -282,7 +311,7 @@ void DirectX11::BeginDraw(D3D11_VIEWPORT* vp, ID3D11RenderTargetView** pRTV, ID3
 	}
 	else
 	{
-		m_pContext->ClearDepthStencilView(m_pDepthStencil->Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		m_pContext->ClearDepthStencilView(m_pDepthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	}
 }
 
@@ -300,47 +329,4 @@ void DirectX11::SetBlendMode(const BlendMode::Kind kind)
 void DirectX11::SetCulling(CullingMode::Kind kind)
 {
 	m_pContext->RSSetState(m_pRasterizer[kind]);
-}
-
-const HRESULT DepthStencil::Create(const UINT width, const UINT height, const DrawPass::Kind kind)
-{
-	HRESULT hr;
-	ID3D11Texture2D* pTexDepth = nullptr;
-	D3D11_TEXTURE2D_DESC texDesc = {};
-	ZeroMemory(&texDesc, sizeof(texDesc));
-	texDesc.Width = width;
-	texDesc.Height = height;
-	texDesc.MipLevels = 1;
-	texDesc.ArraySize = 1;
-	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	texDesc.SampleDesc.Count = 1;
-	texDesc.SampleDesc.Quality = 0;
-	texDesc.Usage = D3D11_USAGE_DEFAULT;
-	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	texDesc.CPUAccessFlags = 0;
-	texDesc.MiscFlags = 0;
-	hr = DirectX11::GetInstance().GetDevice()->CreateTexture2D(&texDesc, nullptr, &pTexDepth);
-	if (FAILED(hr)) { return E_FAIL; }
-
-	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDescShadow = {};
-	ZeroMemory(&dsvDescShadow, sizeof(dsvDescShadow));
-	dsvDescShadow.Format = texDesc.Format;
-
-	switch (kind)
-	{
-	case DrawPass::BACKBUFFER:
-		dsvDescShadow.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		break;
-	case DrawPass::MULTIPATH:
-		dsvDescShadow.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-		break;
-	case DrawPass::MAX:
-	default:
-		break;
-	}
-	dsvDescShadow.Texture2D.MipSlice = 0;
-	hr = DirectX11::GetInstance().GetDevice()->CreateDepthStencilView(pTexDepth, &dsvDescShadow, &m_pDepthStencil);
-	if (FAILED(hr)) { return E_FAIL; }
-
-	return S_OK;
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include <App/Component/Component.h>
-#include <App/Component/Image.h>
 
 
 class Terrain : public Component

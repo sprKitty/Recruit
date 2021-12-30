@@ -45,8 +45,8 @@ Vector3 Mouse::CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX:
 void Mouse::CalcScreentoXZ()
 {
 	if (m_pCamera.expired())return;
-	DirectX::XMMATRIX mView = m_pCamera.lock()->GetView();
-	DirectX::XMMATRIX mProj = m_pCamera.lock()->GetProjection();
+	DirectX::XMMATRIX mView = m_pCamera.lock()->view.get();
+	DirectX::XMMATRIX mProj = m_pCamera.lock()->projection.get();
 	Vector3 vNear, vFar, vRay;
 	vNear = CalcScreenToWorld(0.0f, mView, mProj);
 	vFar = CalcScreenToWorld(1.0f, mView, mProj);

@@ -54,12 +54,15 @@ public:
 		}
 	}
 
+	inline void SetShaderBuffer(const std::weak_ptr<ShaderBuffer> ptr) { m_pShaderBuffer = ptr; }
+
 protected:
 	Object::OWNER_OBJECTLIST m_pObjList;
 	std::list<Object*> m_pUIList;
 
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Light> m_pLight;
+	std::weak_ptr<ShaderBuffer> m_pShaderBuffer;
 
 private:
 };

@@ -38,12 +38,12 @@ cbuffer ConstantBuffer0 : register(b0)
 
 cbuffer ConstantBuffer1 : register(b1)
 {
-    VP g_cameraVP;
+    VP g_cameraVP[2];
 };
 
 cbuffer ConstantBuffer2 : register(b2)
 {
-    VP g_lightVP;
+    VP g_lightVP[2];
 };
 
 cbuffer ConstantBuffer3 : register(b3)
@@ -58,15 +58,15 @@ VS_OUT main(VS_IN vin)
 
     vout.pos = float4(vin.pos, 1);
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.pos = mul(vout.pos, g_lightVP.view);
-    vout.pos = mul(vout.pos, g_lightVP.proj);
+    vout.pos = mul(vout.pos, g_lightVP[0].view);
+    vout.pos = mul(vout.pos, g_lightVP[0].proj);
     vout.lightPos = vout.pos;
     
     vout.pos = float4(vin.pos, 1);
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
     vout.wPos = vout.pos;
-    vout.pos = mul(vout.pos, g_cameraVP.view);
-    vout.pos = mul(vout.pos, g_cameraVP.proj);
+    vout.pos = mul(vout.pos, g_cameraVP[0].view);
+    vout.pos = mul(vout.pos, g_cameraVP[0].proj);
     vout.camPos = vout.pos;
     
 	vout.uv = vin.uv;

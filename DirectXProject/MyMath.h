@@ -54,6 +54,8 @@ namespace MyMath
 
 	const float Lerp(const float fTime, const float fStart, const float fEnd);
 
+	inline float GaussianDistribution(const Vector2& vPos, const float rho) { return exp(-(vPos.x * vPos.x + vPos.y * vPos.y) / (2.0f * rho * rho)); }
+
 	inline const float EaseOutCubic(const float fTime) { return  1.0f - static_cast<float>(pow(1.0f - fTime, 3)); }
 	
 	inline const float EaseOutExpo(const float fTime) { return  1.0f - static_cast<float>(pow(2, -10 * fTime)); }

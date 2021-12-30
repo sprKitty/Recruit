@@ -49,28 +49,28 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 	return pObj;
 }
 
-Object::WORKER_OBJ FactoryMethod::CreateTree()
+Object::WORKER_OBJ FactoryMethod::CreateWater()
 {
 	Object::OWNER_OBJ pObj(new Object());
-	pObj->SetType(ObjectType::OUTSIDE);
 	m_pObjectList.push_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
-	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
 
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localrot.y = 20;
-	}
-	if (!pRenderer3D.expired())
-	{
-		pRenderer3D.lock()->SetMainImage("tree");
-		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
+		pTransform.lock()->localscale.x = 100.0f;
+		pTransform.lock()->localscale.y = 0.05f;
+		pTransform.lock()->localscale.z = 100.0f;
 	}
 	if (!pMesh.expired())
 	{
-		pMesh.lock()->Set("tree2");
+		pMesh.lock()->Set("cube");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_WATER);
 	}
 
 	return pObj;
@@ -135,7 +135,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 	}
 	if (!pPlayer.expired() && !pBBR.expired())
 	{
-		pPlayer.lock()->SetBillBoardRenderer(pBBR);
 		pBBR.lock()->ZaxisUnlock();
 		pBBR.lock()->XaxisLock();
 		pBBR.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
@@ -180,7 +179,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())
@@ -216,7 +215,6 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	}	
 	if (!pMasterWitch.expired() && !pBBR.expired())
 	{
-		pMasterWitch.lock()->SetBillBoardRenderer(pBBR);
 		pBBR.lock()->ZaxisUnlock();
 		pBBR.lock()->XaxisLock();	
 		pBBR.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
@@ -254,7 +252,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())
@@ -288,7 +286,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())

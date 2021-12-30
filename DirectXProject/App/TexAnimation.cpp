@@ -206,9 +206,9 @@ void TexAnimation::Update(const int nType)
 	}
 }
 
-void TexAnimation::Bind()
+void TexAnimation::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 {
-	m_pImage->Bind();
+	m_pImage->Bind(pBuf);
 }
 
 const bool TexAnimation::IsSheetUpdate(const VectorInt2& vSheet)

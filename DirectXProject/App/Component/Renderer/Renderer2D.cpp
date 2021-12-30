@@ -35,14 +35,14 @@ void Renderer2D::Update()
 {
 }
 
-void Renderer2D::Draw(const DrawType::kind type)
+void Renderer2D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
 {
 	if (type != DrawType::UI)return;
 
 	if (m_isActive)
 	{
-		m_Image.Bind();
-		ShaderBuffer::GetInstance().SetWorld(MyMath::ConvertMatrix(
+		m_Image.Bind(pBuf);
+		pBuf.lock()->SetWorld(MyMath::ConvertMatrix(
 			Vector3(m_RectTransform.scale.x, m_RectTransform.scale.y, 0),
 			Vector3(0, 0, m_RectTransform.rot),
 			Vector3(SCREEN_WIDTH * 0.5f + m_RectTransform.pos.x, SCREEN_HEIGHT * 0.5f + m_RectTransform.pos.y, m_RectTransform.pos.z)));

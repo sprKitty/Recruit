@@ -1,9 +1,9 @@
 #pragma once
 #include <App/Component/Character/Character.h>
+#include <App/Component/Object.h>
 #include<System/ClassDesign/StateBase.h>
 
 
-class Object;
 class MagicBullet;
 class MagicBall;
 class MagicRazer;
@@ -80,6 +80,8 @@ private:
 	};
 
 private:
+	const bool HitUpdate();
+	
 	const bool CalcTarget();
 
 	const bool Wait();
@@ -107,6 +109,7 @@ private:
 	Witch_State::Master::Kind m_masterState;
 	Witch_State::Boss::Kind m_bossState;
 	Witch_State::Kind m_state;
+	Object::WORKER_OBJECTLIST m_pAttackObject;
 	std::vector<std::weak_ptr<MagicBullet> > m_pAttackList1;
 	std::vector<std::weak_ptr<MagicBullet> > m_pAttackList2;
 	std::vector<std::weak_ptr<MagicBall> > m_pAttackList3;

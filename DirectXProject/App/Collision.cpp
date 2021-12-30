@@ -15,7 +15,7 @@ void Collision::Initialize()
 	m_pSpheare.reset(new Mesh());
 	m_pSpheare->Set("sphere");
 #endif // _DEBUG
-	Vector2 first(100.0f, 100.0f);
+	Vector2 first(150.0f, 150.0f);
 	int nCnt = 0;
 	++nCnt;
 	for (int i = 0; i < CHIELD_NUM; ++i)
@@ -123,7 +123,7 @@ void Collision::Update()
 	}
 }
 
-void Collision::Draw()
+void Collision::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 {
 #ifdef _DEBUG
 	for (const auto& itr : m_pColliderList)
@@ -140,8 +140,9 @@ void Collision::Draw()
 		//DirectX::XMStoreFloat3(&vScale, s);
 		//DirectX::XMStoreFloat3(&vPos, p);
 		//mtx = MyMath::ConvertMatrix(Vector3().Convert(vScale), 0, Vector3().Convert(vPos));
-		ShaderBuffer::GetInstance().SetWorld(mtx);
-		ShaderBuffer::GetInstance().BindPS(PS_TYPE::COLOR);
+		pBuf.lock()->SetWorld(mtx);
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::COLOR);
 		for (int i = 0; i < ObjectType::MAX; ++i)
 		{
 			switch (itr.lock()->GetCollisionType(static_cast<ObjectType::Kind>(i)))
@@ -311,7 +312,7 @@ void Collision::AABB(const ColliderPtrList::iterator& itrA, const ColliderPtrLis
 		&& vDistance.y < (vScaleA.y + vScaleB.y) * 0.5f
 		&& vDistance.z < (vScaleA.z + vScaleB.z) * 0.5f)
 	{
-		DebugLog::GetInstance().FreeError("AABBの当たり判定が発生");
+		//DebugLog::GetInstance().FreeError("AABBの当たり判定が発生");
 		itrA->lock()->EnableHitType(CollisionType::AABB);
 		itrA->lock()->SetHitObject(CollisionType::AABB, itrB->lock()->m_pOwner);
 		itrB->lock()->EnableHitType(CollisionType::AABB);
@@ -377,7 +378,7 @@ void Collision::OBB(const ColliderPtrList::iterator& itrA, const ColliderPtrList
 			if (fL < fD) return;// 当たっていない
 		}
 	}
-	DebugLog::GetInstance().FreeError("OBBの当たり判定が発生");
+	//DebugLog::GetInstance().FreeError("OBBの当たり判定が発生");
 	itrA->lock()->EnableHitType(CollisionType::OBB);
 	itrA->lock()->SetHitObject(CollisionType::OBB, itrB->lock()->m_pOwner);
 	itrB->lock()->EnableHitType(CollisionType::OBB);
@@ -402,7 +403,7 @@ void Collision::BC(const ColliderPtrList::iterator& itrA, const ColliderPtrList:
 
 	if (fLength < radiusAB)
 	{
-		DebugLog::GetInstance().FreeError("球の当たり判定が発生");
+		//DebugLog::GetInstance().FreeError("球の当たり判定が発生");
 		itrA->lock()->EnableHitType(CollisionType::BC);
 		itrA->lock()->SetHitObject(CollisionType::BC, itrB->lock()->m_pOwner);
 		itrB->lock()->EnableHitType(CollisionType::BC);
@@ -412,7 +413,7 @@ void Collision::BC(const ColliderPtrList::iterator& itrA, const ColliderPtrList:
 
 void Collision::RayMesh(const ColliderPtrList::iterator& itrRay, const ColliderPtrList::iterator& itrMesh)
 {
-	DebugLog::GetInstance().FreeError("Rayとメッシュの当たり判定が発生");
+	//DebugLog::GetInstance().FreeError("Rayとメッシュの当たり判定が発生");
 }
 
 void Collision::MouseMesh(const ColliderPtrList::iterator& itrMesh)
@@ -423,7 +424,7 @@ void Collision::MouseMesh(const ColliderPtrList::iterator& itrMesh)
 	if (m_pMouse.expired())return;
 	if (m_pMouse.lock()->GetCamera().expired())return;
 
-	Vector3 vCameraN = m_pMouse.lock()->GetCamera().lock()->GetFront();
+	Vector3 vCameraN = m_pMouse.lock()->GetCamera().lock()->front.get();
 	vCameraN.Normalize();
 	Vector3 vMousePos = m_pMouse.lock()->GetWorldPos();
 	vCameraN *= -1;
@@ -472,7 +473,7 @@ void Collision::MouseMesh(const ColliderPtrList::iterator& itrMesh)
 		Vector3 V2X(X - V2);
 		dot = N.Dot(vValue.Cross(V2V0, V2X));
 		if (dot < 0.0f)continue;
-		DebugLog::GetInstance().FreeError("マウスとMeshの当たり判定が発生");
+		//DebugLog::GetInstance().FreeError("マウスとMeshの当たり判定が発生");
 		m_pMouse.lock()->SetHitType(itrMesh->lock()->m_pOwner.lock()->GetType());
 	}
 }

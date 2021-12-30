@@ -12,17 +12,6 @@ const Vector3 CameraInitLook(0, 0, 2);
 
 const float FOV = 30.0f;
 
-Camera::Camera()
-{
-}
-
-
-Camera::~Camera()
-{
-
-}
-
-
 void Camera::Init()
 {
 	m_vPos = m_vLatePos = CameraInitPos;
@@ -51,10 +40,10 @@ void Camera::Update()
 	float mouseMoveX = static_cast<float>(GetMouseMoveX());
 	float mouseMoveY = static_cast<float>(GetMouseMoveY());
 
-	if (!m_pTargetTrans.expired())
+	if (!m_pTargetTransform.expired())
 	{
 		Vector3 vDistance = m_vPos - m_vLook;
-		m_vLook = m_pTargetTrans.lock()->localpos + CameraInitLook;
+		m_vLook = m_pTargetTransform.lock()->localpos + CameraInitLook;
 		m_vPos = m_vLook + vDistance;
 		if (m_isLate)
 		{
@@ -123,48 +112,24 @@ void Camera::Update()
 	CalcProjection();
 }
 
-void Camera::CalcView()
-{
-	if (m_isLate)
-	{
-		m_mView = DirectX::XMMatrixLookAtLH(
-			DirectX::XMVectorSet(m_vLatePos.x, m_vLatePos.y, m_vLatePos.z, 0),
-			DirectX::XMVectorSet(m_vLateLook.x, m_vLateLook.y, m_vLateLook.z, 0),
-			DirectX::XMVectorSet(0, 1, 0, 0)
-		);
-	}
-	else
-	{
-		m_mView = DirectX::XMMatrixLookAtLH(
-			DirectX::XMVectorSet(m_vPos.x, m_vPos.y, m_vPos.z, 0),
-			DirectX::XMVectorSet(m_vLook.x, m_vLook.y, m_vLook.z, 0),
-			DirectX::XMVectorSet(0, 1, 0, 0)
-		);
-	}
-}
-
-
-void Camera::CalcProjection()
-{
-	m_mProjection = DirectX::XMMatrixPerspectiveFovLH(
-		DirectX::XMConvertToRadians(m_fFov), m_vScreenSize.x / m_vScreenSize.y, m_fNearClip, m_fFarClip
-	);
-}
-
-void Camera::Bind3D()
+void Camera::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)
 {
 	ShaderResource::CameraInfo cam;
 	cam.pos = { m_vPos.x, m_vPos.y, m_vPos.z, 0.0f };
-	ShaderBuffer::GetInstance().SetCameraVP(m_mView, m_mProjection);
-	ShaderBuffer::GetInstance().SetCameraInfo(cam);
+	pBuf.lock()->SetCameraVP(m_mView, m_mProjection, nBufferNum);
+	pBuf.lock()->SetCameraInfo(cam);
 	DirectX11::GetInstance().SetCulling(CullingMode::CULL_BACK);
 }
 
-void Camera::Bind2D()
+void Camera::Bind2D(const std::weak_ptr<ShaderBuffer> pBuf)
 {
 	DirectX::XMMATRIX mView, mProj;
+	ShaderResource::CameraInfo cam;
+	cam.pos = { m_vPos.x, m_vPos.y, m_vPos.z, 0.0f };
+	cam.vp = { m_vScreenSize.x,m_vScreenSize.y,0,0 };
 	mView = DirectX::XMMatrixIdentity();
-	mProj = DirectX::XMMatrixOrthographicOffCenterLH(0, m_vScreenSize.x, m_vScreenSize.y, (0), m_fNearClip, m_fFarClip);
-	ShaderBuffer::GetInstance().SetCameraVP(mView,mProj);
+	mProj = DirectX::XMMatrixOrthographicOffCenterLH(0, m_vScreenSize.x, m_vScreenSize.y, 0, m_fNearClip, m_fFarClip);
+	pBuf.lock()->SetCameraVP(mView, mProj, 0);
+	pBuf.lock()->SetCameraInfo(cam);
 	DirectX11::GetInstance().SetCulling(CullingMode::CULL_NONE);
 }

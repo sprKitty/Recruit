@@ -22,7 +22,7 @@ public:
 
 	Object::WORKER_OBJ CreateObject();
 	
-	Object::WORKER_OBJ CreateTree();
+	Object::WORKER_OBJ CreateWater();
 
 	Object::WORKER_OBJ CreateOutsideArea();
 

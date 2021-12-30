@@ -43,18 +43,18 @@ void BillBoardRenderer::Update()
 	CalcBillBoard();
 }
 
-void BillBoardRenderer::Write(const WriteType::kind type)
+void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
 
 	if (!m_pMainTexAnim.expired())
 	{
-		m_pMainTexAnim.lock()->Bind();
+		m_pMainTexAnim.lock()->Bind(pBuf);
 	}
 
 	if (!m_pTransform.expired())
 	{
-		ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+		pBuf.lock()->SetWorld(m_pTransform.lock()->GetWorldMatrix());
 	}
 
 	if (!m_pMesh.expired())
@@ -63,26 +63,50 @@ void BillBoardRenderer::Write(const WriteType::kind type)
 	}
 }
 
-void BillBoardRenderer::Draw(const DrawType::kind type)
+void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
 {
 	if (!m_isDrawType[type])
 	{
 		return;
 	}
 
+	switch (type)
+	{
+	case DrawType::WORLD_OF_NORMAL:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::NORMAL);
+		break;
+	case DrawType::WORLD_OF_TRIPLANAR:
+		pBuf.lock()->BindVS(VS_TYPE::TRIPLANAR);
+		pBuf.lock()->BindPS(PS_TYPE::TRIPLANAR);
+		break;
+	case DrawType::WORLD_OF_CHARACTER:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
+		break;
+	case DrawType::WORLD_OF_EFFECT:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::EFFECT);
+		break;
+	default:
+		break;
+	}
+	
+	CalcBillBoard();
+
 	if (!m_pMainTexAnim.expired())
 	{
-		m_pMainTexAnim.lock()->Bind();
+		m_pMainTexAnim.lock()->Bind(pBuf);
 	}
 	
 	if (!m_pBumpTexAnim.expired())
 	{
-		m_pBumpTexAnim.lock()->Bind();
+		m_pBumpTexAnim.lock()->Bind(pBuf);
 	}
 
 	if (!m_pTransform.expired())
 	{
-		ShaderBuffer::GetInstance().SetWorld(m_pTransform.lock()->GetWorldMatrix());
+		pBuf.lock()->SetWorld(m_pTransform.lock()->GetWorldMatrix());
 	}
 
 	if(!m_pMesh.expired())
@@ -94,7 +118,7 @@ void BillBoardRenderer::Draw(const DrawType::kind type)
 void BillBoardRenderer::CalcBillBoard()
 {
 	if (m_pCamera.expired())return;
-	DirectX::XMMATRIX mInvCam = DirectX::XMMatrixInverse(nullptr, m_pCamera.lock()->GetView());
+	DirectX::XMMATRIX mInvCam = DirectX::XMMatrixInverse(nullptr, m_pCamera.lock()->view.get());
 	DirectX::XMFLOAT4X4 vW;
 	DirectX::XMStoreFloat4x4(&vW, mInvCam);
 	vW._41 = 0.0f;
@@ -131,9 +155,4 @@ void BillBoardRenderer::CalcBillBoard()
 	{
 		m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
 	}
-	//mtx = DirectX::XMMATRIX(
-	//	DirectX::XMMatrixScaling(t.localscale.x, t.localscale.y, 0)
-	//	* mInvCam
-	//	* DirectX::XMMatrixTranslation(t.localpos.x, t.localpos.y, t.localpos.z));
-	//m_pOwner.lock()->SetWorldMatrix(mtx);
 }
