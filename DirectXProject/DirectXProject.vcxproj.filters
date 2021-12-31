@@ -51,6 +51,9 @@
     <Filter Include="C++ファイル\App\ViewPoint">
       <UniqueIdentifier>{8061375e-bd2c-4f30-8339-189470432990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C++ファイル\App\Level">
+      <UniqueIdentifier>{266fa714-8b11-4d50-8786-49de55fe2021}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader\ShaderBuffer.cpp">
@@ -155,9 +158,6 @@
     <ClCompile Include="System\DebugLog.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="App\Level.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\Component\Image.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
@@ -211,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="App\Component\Instancing.cpp">
       <Filter>C++ファイル\App\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Level\LV_MasterWitch.cpp">
+      <Filter>C++ファイル\App\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,9 +300,6 @@
     </ClInclude>
     <ClInclude Include="System\LoadFiles.h">
       <Filter>C++ファイル\System</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Level.h">
-      <Filter>C++ファイル\App</Filter>
     </ClInclude>
     <ClInclude Include="App\Scene\SceneBase.h">
       <Filter>C++ファイル\App\Scene</Filter>
@@ -405,6 +405,12 @@
     </ClInclude>
     <ClInclude Include="App\Light.h">
       <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Level\LV_MasterWitch.h">
+      <Filter>C++ファイル\App\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Level\LevelBase.h">
+      <Filter>C++ファイル\App\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

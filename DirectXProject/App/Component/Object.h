@@ -64,6 +64,7 @@ public:
 	void Uninit();
 	void Update();
 
+
 	//オブジェクトが持つコンポーネントを取得
 	template<class T>
 	inline std::weak_ptr<T> GetComponent()
@@ -74,9 +75,6 @@ public:
 			buff = std::dynamic_pointer_cast<T>(com);
 			if (!PTRNULLCHECK(buff)) return buff;
 		}
-//#ifdef _DEBUG
-		//std::cout << buff << "クラスが見つかりませんでした" << std::endl;
-//#endif // _DEBUG
 
 		return buff;
 	}

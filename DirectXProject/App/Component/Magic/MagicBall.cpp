@@ -40,6 +40,13 @@ void MagicBall::Reset()
 
 void MagicBall::Uninit()
 {
+	for (const auto& itr : m_pMagicBulletList)
+	{
+		if (itr.expired())continue;
+		if (itr.lock()->m_pOwner.expired())continue;
+		itr.lock()->m_pOwner.lock()->DisableActive();
+		itr.lock()->m_pOwner.lock()->EnableDelete();
+	}
 }
 
 void MagicBall::Update()

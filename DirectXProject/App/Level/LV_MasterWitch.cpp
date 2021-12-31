@@ -1,4 +1,4 @@
-#include "Level.h"
+#include "LV_MasterWitch.h"
 #include <App/FactoryMethod.h>
 #include <App/Scene/SceneBase.h>
 #include <App/Component/Renderer/Renderer3D.h>
@@ -7,7 +7,7 @@
 #include <App/Component/Instancing.h>
 
 
-void Level::Create(std::weak_ptr<SceneBase> pScene)
+void LV_MasterWitch::Create(std::weak_ptr<SceneBase> pScene)
 {
 	if (pScene.expired())return;
 
