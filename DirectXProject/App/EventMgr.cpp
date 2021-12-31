@@ -28,7 +28,7 @@ void EventMgr::SetEventInfo(const std::weak_ptr<Event> pEvent, const Object::WOR
 		std::shared_ptr<DelegateBase<bool> > pDelegate = Delegate<EventTrigger, bool>::CreateDelegator(pEventTrigger, &EventTrigger::Check);
 		ei.pEventTriggers.push_back(pDelegate);
 	}
-	ei.pEvent = Delegate<Event, void>::CreateDelegator(pEvent, &Event::EnablePlay);
+	ei.pEvent = pEvent;
 
 	m_EventInfos.push_back(ei);
 }
@@ -52,7 +52,10 @@ void EventMgr::CallFunc()
 		}
 		if (clear) // イベント実行
 		{
-			itrEI->pEvent->Execute();
+			if (!itrEI->pEvent.expired())
+			{
+				itrEI->pEvent.lock()->EnablePlay();
+			}
 		}
 		if (itrEI == m_EventInfos.end())break;
 		++itrEI;

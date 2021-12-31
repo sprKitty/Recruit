@@ -144,6 +144,7 @@ void MasterWitch::Uninit()
 	for (const auto& itr : m_pAttackObject)
 	{
 		if (itr.expired())continue;
+		itr.lock()->DisableActive();
 		itr.lock()->EnableDelete();
 	}
 

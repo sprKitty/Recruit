@@ -20,7 +20,7 @@ public:
 private:
 	struct EventInfo
 	{
-		std::shared_ptr<DelegateBase<void> > pEvent;
+		std::weak_ptr<Event> pEvent;
 		std::vector<std::shared_ptr<DelegateBase<bool> > > pEventTriggers;
 	};
 
