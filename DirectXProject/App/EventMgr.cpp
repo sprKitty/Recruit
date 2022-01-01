@@ -25,8 +25,8 @@ void EventMgr::SetEventInfo(const std::weak_ptr<Event> pEvent, const Object::WOR
 		
 		if (pEventTrigger.lock()->GetType() != type)continue;
 	
-		std::shared_ptr<DelegateBase<bool> > pDelegate = Delegate<EventTrigger, bool>::CreateDelegator(pEventTrigger, &EventTrigger::Check);
-		ei.pEventTriggers.push_back(pDelegate);
+		std::shared_ptr<DelegateBase<const bool> > pDelegate = Delegate<EventTrigger,const bool>::CreateDelegator(pEventTrigger, &EventTrigger::Check);
+		ei.pEventTriggers.emplace_back(pDelegate);
 	}
 	ei.pEvent = pEvent;
 

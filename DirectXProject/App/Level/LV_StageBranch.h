@@ -1,11 +1,11 @@
 #pragma once
 #include <App/Level/LevelBase.h>
 
-class LV_MasterWitch : public LevelBase
+class LV_StageBranch : public LevelBase
 {
 public:
-	LV_MasterWitch() {}
-	~LV_MasterWitch() override{}
+	LV_StageBranch() {}
+	~LV_StageBranch() override {}
 
 	void Initialize(const std::weak_ptr<SceneBase> pScene, const Object::WORKER_OBJ pObject, const std::weak_ptr<MessageWindow> pMW)override;
 

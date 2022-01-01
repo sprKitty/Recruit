@@ -29,30 +29,22 @@ public:
 	virtual Scene_Type::kind Update() = 0;
 	virtual void Draw() = 0;
 
-	virtual void AddObj(const Object::OWNER_OBJ& pObj)
-	{
-		if (!PTRNULLCHECK(pObj))
-		{
-			m_pObjList.push_back(std::move(pObj));
-		}
-	}
+	/*
+	* @brief オブジェクトリストに追加
+	*/
+	void AddObject(const Object::OWNER_OBJ& pObj);
+	
+	/*
+	* @brief ファクトリーのオブジェクトリストをシーンのリストに移動
+	*/
+	void MoveObject_FactoytoScene();
 
-	void DeleteObject()
-	{
-		for (auto itr = m_pObjList.begin(); itr != m_pObjList.end();)
-		{
-			if ((*itr)->IsDelete())
-			{
-				itr->reset();
-				itr = m_pObjList.erase(itr);
-			}
-			if (itr == m_pObjList.end())
-			{
-				break;
-			}
-			++itr;
-		}
-	}
+	/*
+	* @brief オブジェクトリストからオブジェクトを削除
+	*/
+	void DeleteObject();
+
+	const Object::WORKER_OBJECTLIST GetObjectList();
 
 	inline void SetShaderBuffer(const std::weak_ptr<ShaderBuffer> ptr) { m_pShaderBuffer = ptr; }
 

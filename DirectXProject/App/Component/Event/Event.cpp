@@ -30,10 +30,10 @@ void Event::Uninit()
 
 void Event::Update()
 {
-	if (!m_isPlay)return;
-	if (m_isFinishAll)return;
+	if (!m_isPlay)return; // イベントを実行できる条件が整っているか
+	if (m_isFinishAll)return; // イベントが実行済みか
 
-	if (m_pActionEvents[m_nArray]->IsFin())
+	if (m_pActionEvents[m_nArray]->IsFin()) // 現在のイベントが終わったか
 	{
 		int nSize = static_cast<int>(m_pActionEvents.size());
 		if (m_nArray >= nSize - 1)
@@ -58,5 +58,4 @@ void Event::ResetEvent()
 	{
 		itr->Init();
 	}
-	//m_pActiveItr = m_pActionEvents.begin();
 }

@@ -4,17 +4,21 @@
 #include <App/Component/Object.h>
 
 
+class MessageWindow;
+
 class LevelBase
 {
 public:
 	LevelBase() {}
 	virtual ~LevelBase() {}
 
-
-	virtual void Create(std::weak_ptr<SceneBase> pScene) = 0;
+	virtual void Initialize(const std::weak_ptr<SceneBase> pScene, const Object::WORKER_OBJ pObject, const std::weak_ptr<MessageWindow> pMW) = 0;
 	
 	// ‰ğ•úˆ—
-	inline void Finalize()
+	virtual void Finalize(const Object::WORKER_OBJ pObject) = 0;
+
+protected:
+	inline void ReleaseObjectList()
 	{
 		for (const auto& itr : m_pObjectList)
 		{

@@ -20,7 +20,7 @@ const char* g_pPlayerAnimPath[Player_State::MAX] =
 void Player::Init()
 {
 	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
-	m_pTransform.lock()->localpos = { 1,0.5f,1 };
+	m_pTransform.lock()->localpos.y = 0.5f;
 	m_vDestination = 0;
 	m_vMove = 0;
 	m_isMove = false;

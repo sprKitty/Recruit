@@ -215,6 +215,12 @@
     <ClCompile Include="App\Level\LV_MasterWitch.cpp">
       <Filter>C++ファイル\App\Level</Filter>
     </ClCompile>
+    <ClCompile Include="App\Level\LV_StageBranch.cpp">
+      <Filter>C++ファイル\App\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Scene\SceneBase.cpp">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -410,6 +416,9 @@
       <Filter>C++ファイル\App\Level</Filter>
     </ClInclude>
     <ClInclude Include="App\Level\LevelBase.h">
+      <Filter>C++ファイル\App\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Level\LV_StageBranch.h">
       <Filter>C++ファイル\App\Level</Filter>
     </ClInclude>
   </ItemGroup>

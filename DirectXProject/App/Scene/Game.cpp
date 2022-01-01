@@ -1,7 +1,7 @@
 #include <App/Scene/Game.h>
 #include <App/RenderPipeline.h>
 #include <App/FactoryMethod.h>
-#include <App/Level.h>
+#include <App/Level/LV_MasterWitch.h>
 #include <App/Collision.h>
 #include <App/Camera.h>
 #include <App/Light.h>
@@ -16,7 +16,6 @@
 #include <System/MessageWindow.h>
 #include <System/Geometory.h>
 #include <System/Sound/Sound.h>
-#include <System/Mouse.h>
 
 
 void Game::Init()
@@ -140,33 +139,16 @@ void Game::Init()
 	Object::WORKER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
 
 	Object::WORKER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
+
 	if (!pPlayer.expired())
 	{
 		m_pCamera->targetTransform.set(pPlayer.lock()->GetComponent<Transform>());
 	}
 
-	Object::WORKER_OBJ pMasterWitch = FactoryMethod::GetInstance().CreateBossWitchObject();
-	std::weak_ptr<Event> pTalkEvent = pMasterWitch.lock()->GetComponent<Event>();
-
-	std::shared_ptr<Talk> pTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
-	pTalk->SetMessageWindow(m_pMessageWindow);
-
-	FactoryMethod::GetInstance().CreateWater();
-	
-	if (!pMasterWitch.lock()->GetComponent<MasterWitch>().expired())
-	{
-		pMasterWitch.lock()->GetComponent<MasterWitch>().lock()->SetTarget(pPlayer);
-	}
-
-	Object::WORKER_OBJECTLIST pObjects = Object::ConvertWorker(m_pObjList);
-	if (!pTalkEvent.expired())
-	{
-		pTalkEvent.lock()->Add<Talk>(pTalk);
-		EventMgr::GetInstance().SetEventInfo(pTalkEvent, pObjects, EventTrigger::Type::TALK_1);
-	}
-
-	Level level;
-	level.Create(weak_from_this());
+	LV_MasterWitch level;
+	level.Initialize(weak_from_this(), pPlayer, m_pMessageWindow);
+	//level.Finalize(pPlayer);
+	//level.Initialize(weak_from_this(), pPlayer, m_pMessageWindow);
 }
 
 void Game::Uninit()
@@ -180,7 +162,7 @@ void Game::Uninit()
 Scene_Type::kind Game::Update()
 {
 	Scene_Type::kind scene = Scene_Type::SCENE_GAME;
-	FactoryMethod::GetInstance().MoveObjectList(m_pObjList);
+	MoveObject_FactoytoScene();
 	m_pKeyBind->Update();
 	m_pMouse->SetScreenPos(GetMousePosX(), GetMousePosY());
 	m_pMouse->CalcScreentoXZ();

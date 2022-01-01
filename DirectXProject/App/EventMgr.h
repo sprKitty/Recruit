@@ -21,7 +21,7 @@ private:
 	struct EventInfo
 	{
 		std::weak_ptr<Event> pEvent;
-		std::vector<std::shared_ptr<DelegateBase<bool> > > pEventTriggers;
+		std::vector<std::shared_ptr<DelegateBase<const bool> > > pEventTriggers;
 	};
 
 	EventMgr();

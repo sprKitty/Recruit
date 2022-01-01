@@ -10,6 +10,7 @@ EventTrigger::~EventTrigger()
 
 void EventTrigger::Init()
 {
+	m_isCaused = false;
 }
 
 void EventTrigger::Uninit()
@@ -18,9 +19,4 @@ void EventTrigger::Uninit()
 
 void EventTrigger::Update()
 {
-}
-
-bool EventTrigger::Check()
-{
-	return true;
 }

@@ -2,14 +2,26 @@
 #include <memory>
 #include <System/ClassDesign/Singleton.h>
 #include <App/Component/Object.h>
+#include <App/Component/Event/EventTrigger.h>
+#include <App/Component/Event/Event.h>
+#include <App/Component/Renderer/Renderer3D.h>
+#include <App/Component/Renderer/BillBoardRenderer.h>
+#include <App/Component/Mesh.h>
+#include <App/Component/Character/Player.h>
+#include <App/Component/Character/MasterWitch.h>
+#include <App/Component/Transform.h>
+#include <App/Component/Collider.h>
+#include <App/Component/Magic/MagicBullet.h>
+#include <App/Component/Magic/MagicBall.h>
+#include <App/Component/Magic/MagicRazer.h>
+#include <App/Component/Instancing.h>
+#include <App/Camera.h>
+#include <App/Light.h>
+#include <App/Event/Talk.h>
+#include <App/EventMgr.h>
+#include <App/GameKeyBind.h>
+#include <System/Mouse.h>
 
-
-class Camera;
-class Light;
-class Mouse;
-class Talk;
-class Light;
-class GameKeyBind;
 
 class FactoryMethod : public Singleton<FactoryMethod>
 {

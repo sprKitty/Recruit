@@ -188,12 +188,14 @@
     <ClCompile Include="App\FactoryMethod.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Level\LV_MasterWitch.cpp" />
+    <ClCompile Include="App\Level\LV_StageBranch.cpp" />
     <ClCompile Include="App\Light.cpp" />
     <ClCompile Include="App\MeshData.cpp" />
     <ClCompile Include="App\MMDModel.cpp" />
     <ClCompile Include="App\OBJModel.cpp" />
     <ClCompile Include="App\RenderPipeline.cpp" />
     <ClCompile Include="App\Scene\Game.cpp" />
+    <ClCompile Include="App\Scene\SceneBase.cpp" />
     <ClCompile Include="App\Scene\SceneMgr.cpp" />
     <ClCompile Include="App\TexAnimation.cpp" />
     <ClCompile Include="App\TextureData.cpp" />
@@ -248,6 +250,7 @@
     <ClInclude Include="App\GameKeyBind.h" />
     <ClInclude Include="App\Level\LevelBase.h" />
     <ClInclude Include="App\Level\LV_MasterWitch.h" />
+    <ClInclude Include="App\Level\LV_StageBranch.h" />
     <ClInclude Include="App\Light.h" />
     <ClInclude Include="App\MeshData.h" />
     <ClInclude Include="App\MMDModel.h" />

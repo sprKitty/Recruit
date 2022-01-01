@@ -1,23 +1,4 @@
 #include "FactoryMethod.h"
-#include <App/Component/Event/EventTrigger.h>
-#include <App/Component/Event/Event.h>
-#include <App/Component/Renderer/Renderer3D.h>
-#include <App/Component/Renderer/BillBoardRenderer.h>
-#include <App/Component/Mesh.h>
-#include <App/Component/Character/Player.h>
-#include <App/Component/Character/MasterWitch.h>
-#include <App/Component/Transform.h>
-#include <App/Component/Collider.h>
-#include <App/Component/Magic/MagicBullet.h>
-#include <App/Component/Magic/MagicBall.h>
-#include <App/Component/Magic/MagicRazer.h>
-#include <App/Component/Instancing.h>
-#include <App/Camera.h>
-#include <App/Light.h>
-#include <App/Event/Talk.h>
-#include <App/EventMgr.h>
-#include <App/GameKeyBind.h>
-#include <System/Mouse.h>
 
 
 Object::WORKER_OBJ FactoryMethod::CreateObject()
@@ -119,7 +100,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 	std::weak_ptr<Player> pPlayer = pObj->AddComponent<Player>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
-	std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	if (!pCollider.expired())
 	{
@@ -150,10 +130,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 		pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsNotHitObject));
 		pGKB.lock()->SetKeyInfo(KeyBind::ATTACK, KeyType::TRIGGER, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableAttack), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsHitAnyObject));
 	}
-	if (!pET.expired())
-	{
-		pET.lock()->SetType(EventTrigger::Type::TALK_1);
-	}
 	return pObj;
 }
 
@@ -179,7 +155,6 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())
@@ -196,11 +171,11 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	pObj->SetType(ObjectType::BOSSWITCH);
 	m_pObjectList.push_back(pObj);
 
-	pObj->AddComponent<Event>();
 	std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
+	pObj->AddComponent<Event>();
 	if (!pCollider.expired())
 	{
 		pCollider.lock()->SetScaleDeviation(0.5f);
@@ -252,7 +227,6 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())
@@ -286,7 +260,6 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
-		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 	}
 	if (!pCollider.expired())

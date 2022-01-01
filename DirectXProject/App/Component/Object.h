@@ -91,17 +91,17 @@ public:
 	}
 
 	template<class T>
-	inline void RemoveCompont(std::weak_ptr<Component> pCom)
+	inline void RemoveComponent()
 	{
 		for (std::vector<std::shared_ptr<Component> >::iterator itr = ComponentList.begin(); itr != ComponentList.end();)
 		{
-			if (pCom.lock().get() == itr->get()) // アドレスが同じオブジェクトか
+			T* buff = dynamic_cast<T*>(itr->get());
+			if (buff)
 			{
-				T* buff = dynamic_cast<T*>(itr->get());
 				buff->Uninit();
 				itr = ComponentList.erase(itr);
-				return;
 			}
+
 			if (itr == ComponentList.end())break;
 			++itr;
 		}

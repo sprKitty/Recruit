@@ -14,10 +14,7 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	inline void EnablePlay()
-	{
-		m_isPlay = true;
-	}
+	inline void EnablePlay() { m_isPlay = true; }
 
 	void ResetEvent();
 
@@ -33,7 +30,7 @@ public:
 	template<class T>
 	inline void Add(const std::shared_ptr<T>& pT)
 	{
-		m_pActionEvents.push_back(std::move(pT));
+		m_pActionEvents.emplace_back(pT);
 	}
 
 private:

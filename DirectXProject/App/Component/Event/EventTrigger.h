@@ -20,11 +20,17 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	bool Check();
+	/*
+	* @brief trigger‚ğ—LŒøó‘Ô‚É‚·‚é
+	*/
+	inline void Cause() { m_isCaused = true; }
 
-	Type& GetType() { return m_type; }
-	void SetType(Type type) { m_type = type; }
+	inline const bool Check() { return m_isCaused; }
+
+	inline  const Type GetType() { return m_type; }
+	inline void SetType(const Type type) { m_type = type; }
 
 private:
 	Type m_type;
+	bool m_isCaused; // trigger‚ª—LŒø‚©
 };
