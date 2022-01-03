@@ -36,7 +36,7 @@ const STRINGMAP& LoadFiles::CSV(const char * pPath)
 			}
 			else
 			{
-				texts.push_back(word);
+				texts.emplace_back(word);
 			}
 		}
 		if (title.empty())continue;

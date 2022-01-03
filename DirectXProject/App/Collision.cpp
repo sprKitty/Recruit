@@ -50,7 +50,7 @@ void Collision::Update()
 	for (int i = 0; i < CHIELD_NUM; ++i)
 	{
 		std::vector<NODE*> pNodeList;
-		pNodeList.push_back(m_pNode[i]);
+		pNodeList.emplace_back(m_pNode[i]);
 		Excute(pNodeList);
 		SameListJudge(m_pNode[i]->pList);
 		ClearNodeColliderList(0, m_pNode[i]);
@@ -167,7 +167,7 @@ void Collision::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 void Collision::AddCollider(const std::weak_ptr<Component>& pComponent)
 {
 	std::weak_ptr<Collider> pRenderer = std::dynamic_pointer_cast<Collider>(pComponent.lock());
-	m_pColliderList.push_back(pRenderer);
+	m_pColliderList.emplace_back(pRenderer);
 }
 
 void Collision::ReleaseCollider(const std::weak_ptr<Component>& pComponent)
@@ -312,7 +312,6 @@ void Collision::AABB(const ColliderPtrList::iterator& itrA, const ColliderPtrLis
 		&& vDistance.y < (vScaleA.y + vScaleB.y) * 0.5f
 		&& vDistance.z < (vScaleA.z + vScaleB.z) * 0.5f)
 	{
-		//DebugLog::GetInstance().FreeError("AABB‚Ì“–‚½‚è”»’è‚ª”­¶");
 		itrA->lock()->EnableHitType(CollisionType::AABB);
 		itrA->lock()->SetHitObject(CollisionType::AABB, itrB->lock()->m_pOwner);
 		itrB->lock()->EnableHitType(CollisionType::AABB);
@@ -486,7 +485,7 @@ void Collision::Excute(std::vector<NODE*>& pParentList)
 		NODE* pNode = pList[pParentList.size() - 1];
 		if (pNode->pChiled[i])
 		{
-			pList.push_back(pNode->pChiled[i]);
+			pList.emplace_back(pNode->pChiled[i]);
 			for (int j = 0; j < pParentList.size(); ++j)
 			{
 				DifferentListJudge(pList[j]->pList, pNode->pChiled[i]->pList);
@@ -708,7 +707,7 @@ void Collision::SetQuadTree()
 		}
 		if (!isNextSerch)
 		{
-			pNode->pList.push_back(m_pColliderList[i]);
+			pNode->pList.emplace_back(m_pColliderList[i]);
 		}
 		else
 		{
@@ -726,11 +725,11 @@ void Collision::SetQuadTree()
 					}
 				}
 				if (isSkip)continue;
-				pNodeList.push_back(pSecNode);
+				pNodeList.emplace_back(pSecNode);
 			}
 			for (const auto& itr : pNodeList)
 			{
-				itr->pList.push_back(m_pColliderList[i]);
+				itr->pList.emplace_back(m_pColliderList[i]);
 			}
 		}
 	}

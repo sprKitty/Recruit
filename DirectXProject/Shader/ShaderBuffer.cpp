@@ -13,6 +13,7 @@ const char* pVSPath[] =
 	"Assets/VSCameraDepth.cso",
 	"Assets/VSGaussianBlur.cso",
 	"Assets/VSWaterReflection.cso",
+	"Assets/VSGrassMove.cso",
 };
 static_assert(!(static_cast<int>(VS_TYPE::MAX) < _countof(pVSPath)), "VSKindへの定義追加忘れ");
 static_assert(!(static_cast<int>(VS_TYPE::MAX) > _countof(pVSPath)), "VSPathへの読込ファイル追加忘れ");
@@ -120,11 +121,6 @@ void ShaderBuffer::InitParam()
 		DirectX::XMStoreFloat4x4(&m_lightVP.info[i].view, DirectX::XMMatrixIdentity());
 	}
 
-	//m_ps1.color = DirectX::XMFLOAT4(1, 1, 1, 1);
-	//m_ps1.nBlur = 0;
-	//m_ps1.nWidth = SCREEN_WIDTH;
-	//m_ps1.nHeight = SCREEN_HEIGHT;
-	//m_ps1.nDummy = 0;
 	m_texSetting.tiling = DirectX::XMFLOAT2(1, 1);
 	m_texSetting.offset = DirectX::XMFLOAT2(0, 0);
 	m_texSetting.color = DirectX::XMFLOAT4(1, 1, 1, 1);
@@ -133,8 +129,6 @@ void ShaderBuffer::InitParam()
 	m_texSetting.fTime = 0;
 	m_nSpotNext = 0;
 
-	//m_postEffect.blur = { 0,0,0,0 };
-	
 	for (int i = 0; i < CB_TYPE::MAX; ++i)
 	{
 		Write(static_cast<CB_TYPE::Kind>(i));
@@ -189,7 +183,13 @@ void ShaderBuffer::BindPS(const PS_TYPE::Kind ps)
 	m_pPSList[ps]->Bind();
 }
 
-void ShaderBuffer::SetTexture(ID3D11ShaderResourceView * pTex, const ShaderResource::TEX_TYPE type)
+void ShaderBuffer::SetTextureVS(ID3D11ShaderResourceView * pTex, const ShaderResource::TEX_TYPE type)
+{
+	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
+	pContext->VSSetShaderResources(static_cast<int>(type), 1, &pTex);
+}
+
+void ShaderBuffer::SetTexturePS(ID3D11ShaderResourceView * pTex, const ShaderResource::TEX_TYPE type)
 {
 	ID3D11DeviceContext* pContext = DirectX11::GetInstance().GetContext();
 	pContext->PSSetShaderResources(static_cast<int>(type), 1, &pTex);

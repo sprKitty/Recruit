@@ -21,11 +21,12 @@ namespace ObjectType
 		BOSSWITCH,
 		BOSSATTACK1,
 		BOSSATTACK2,
-		BOSSATTACK3,
-		BOSSATTACK4,
-		BOSSATTACK5,
-		LEVEL,
+		STAGE,
 		OUTSIDE,
+		OUTSIDE_NORTH,
+		OUTSIDE_EAST,
+		OUTSIDE_WEST,
+		OUTSIDE_SOUTH,
 
 		MAX
 	};
@@ -49,7 +50,7 @@ public:
 		{
 			WORKER_OBJ pObj(itr);
 
-			pWorkerObjects.push_back(itr);
+			pWorkerObjects.emplace_back(itr);
 		}
 
 		return pWorkerObjects;
@@ -85,7 +86,7 @@ public:
 	{
 		std::shared_ptr<T> buff(new T());
 		buff->m_pOwner = weak_from_this();
-		ComponentList.push_back(buff);
+		ComponentList.emplace_back(buff);
 		buff->Init();
 		return buff;
 	}
@@ -119,12 +120,12 @@ public:
 			}
 			else
 			{
-				ComponentList.push_back(std::move(list[i]));
+				ComponentList.emplace_back(std::move(list[i]));
 			}
 		}
 		if (num != -1)
 		{
-			ComponentList.push_back(std::move(list[num]));
+			ComponentList.emplace_back(std::move(list[num]));
 		}
 	}
 

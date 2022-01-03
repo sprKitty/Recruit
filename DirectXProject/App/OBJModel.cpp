@@ -65,7 +65,7 @@ const MeshData::Info OBJModel::Load(const char * pPath)
 		surface.vPos1 = pVtxList[i + 1].pos;
 		surface.vPos2 = pVtxList[i + 2].pos;
 		surface.vNormal = pVtxList[i].normal;
-		info.surfaceList.push_back(surface);
+		info.surfaceList.emplace_back(surface);
 	}
 
 	hr = info.pDrawBuffer->CreateVertexBuffer(pVtxList, sizeof(MyMath::Vertex), nVtxNum);

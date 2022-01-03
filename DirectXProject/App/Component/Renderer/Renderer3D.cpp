@@ -74,7 +74,11 @@ void Renderer3D::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::
 
 void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
 {
-	if (!m_isDrawType[type])return;
+	if (type == DrawType::UI)return;
+	if (type != DrawType::MAX)
+	{
+		if (!m_isDrawType[type])return;
+	}
 
 	switch (type)
 	{
@@ -97,6 +101,10 @@ void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::ki
 	case DrawType::WORLD_OF_WATER:
 		pBuf.lock()->BindVS(VS_TYPE::WATERREFLECTION);
 		pBuf.lock()->BindPS(PS_TYPE::WATERREFLECTION);
+		break;
+	case DrawType::WORLD_OF_GRASS:
+		pBuf.lock()->BindVS(VS_TYPE::GRASSMOVE);
+		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
 		break;
 	default:
 		break;
@@ -129,12 +137,12 @@ void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::ki
 void Renderer3D::SetMainImage(const std::string str)
 {
 	m_pMainImage.reset(new Image());
-	m_pMainImage->SetTexture(str.c_str());
+	m_pMainImage->SetTexturePS(str.c_str());
 }
 
 void Renderer3D::SetBumpImage(const std::string str)
 {
 	m_pBumpImage.reset(new Image());
-	m_pBumpImage->SetTexture(str.c_str());
+	m_pBumpImage->SetTexturePS(str.c_str());
 	m_pBumpImage->SetTexType(ShaderResource::TEX_TYPE::BUMP);
 }

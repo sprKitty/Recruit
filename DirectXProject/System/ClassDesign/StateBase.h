@@ -55,7 +55,7 @@ public:
 	*/
 	void AddActionFunc(const std::weak_ptr<T>& pT, const ActionFunc func)
 	{
-		m_pEventFuncList.push_back(Delegate<T, const bool>::CreateDelegator(pT, func));
+		m_pEventFuncList.emplace_back(Delegate<T, const bool>::CreateDelegator(pT, func));
 	}
 
 	/*

@@ -65,9 +65,10 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer> pBuf, const Writ
 
 void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
 {
-	if (!m_isDrawType[type])
+	if (type == DrawType::UI)return;
+	if (type != DrawType::MAX)
 	{
-		return;
+		if (!m_isDrawType[type])return;
 	}
 
 	switch (type)

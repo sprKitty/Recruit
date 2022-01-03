@@ -30,20 +30,20 @@ bool OBJParser::Load(const char * fileName)
 		{
 			Vector3 vtx;
 			fscanf(fp, "%f %f %fn", &vtx.x, &vtx.y, &vtx.z);
-			m_vtxList.push_back(vtx);
+			m_vtxList.emplace_back(vtx);
 		}
 		else if (strcmp(lineHeader, "vt") == 0)
 		{
 			Vector2 uv;
 			fscanf(fp, "%f %fn", &uv.x, &uv.y);
 			uv.y = 1 - uv.y;
-			m_uvList.push_back(uv);
+			m_uvList.emplace_back(uv);
 		}
 		else if (strcmp(lineHeader, "vn") == 0)
 		{
 			Vector3 normal;
 			fscanf(fp, "%f %f %f n", &normal.x, &normal.y, &normal.z);
-			m_normalList.push_back(normal);
+			m_normalList.emplace_back(normal);
 		}
 		else if (strcmp(lineHeader, "f") == 0)
 		{
@@ -53,15 +53,15 @@ bool OBJParser::Load(const char * fileName)
 			if (matches != 9)
 				return false;
 
-			m_vtxIndexList.push_back(vtxIdx[0]);
-			m_vtxIndexList.push_back(vtxIdx[1]);
-			m_vtxIndexList.push_back(vtxIdx[2]);
-			m_uvIndexList.push_back(uvIdx[0]);
-			m_uvIndexList.push_back(uvIdx[1]);
-			m_uvIndexList.push_back(uvIdx[2]);
-			m_normalIndexList.push_back(normalIdx[0]);
-			m_normalIndexList.push_back(normalIdx[1]);
-			m_normalIndexList.push_back(normalIdx[2]);
+			m_vtxIndexList.emplace_back(vtxIdx[0]);
+			m_vtxIndexList.emplace_back(vtxIdx[1]);
+			m_vtxIndexList.emplace_back(vtxIdx[2]);
+			m_uvIndexList.emplace_back(uvIdx[0]);
+			m_uvIndexList.emplace_back(uvIdx[1]);
+			m_uvIndexList.emplace_back(uvIdx[2]);
+			m_normalIndexList.emplace_back(normalIdx[0]);
+			m_normalIndexList.emplace_back(normalIdx[1]);
+			m_normalIndexList.emplace_back(normalIdx[2]);
 		}
 	}
 	fclose(fp);

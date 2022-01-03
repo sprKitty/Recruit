@@ -1,6 +1,6 @@
 #pragma once
 #include <App/Scene/SceneBase.h>
-
+#include <App/Level/LevelBase.h>
 
 class Mouse;
 class GameKeyBind;
@@ -18,6 +18,8 @@ public:
 	void Draw()override;
 
 private:
+	Object::WORKER_OBJ m_pPlayer;
+	std::unique_ptr<LevelBase> m_pLevel;
 	std::shared_ptr<Mouse> m_pMouse;
 	std::shared_ptr<GameKeyBind> m_pKeyBind;
 	std::shared_ptr<MessageWindow> m_pMessageWindow;

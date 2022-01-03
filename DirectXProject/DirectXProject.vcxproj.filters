@@ -477,5 +477,8 @@
     <FxCompile Include="Shader\VSWaterReflection.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\VSGrassMove.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

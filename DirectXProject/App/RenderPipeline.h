@@ -64,7 +64,8 @@ protected:
 	~RenderPipeline() override{}
 
 private:
-	void Call(WriteType::kind typeW, DrawType::kind typeD);
+	void CallWrite(WriteType::kind type);
+	void CallDraw(DrawType::kind type);
 
 private:
 	RendererPtrList m_pDrawList;

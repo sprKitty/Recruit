@@ -21,7 +21,7 @@ void MagicBall::Init()
 	{
 		std::weak_ptr<Object> pObj = FactoryMethod::GetInstance().CreateBossWitchMagicBullet();
 		if (pObj.expired())continue;
-		m_pMagicBulletList.push_back(pObj.lock()->GetComponent<MagicBullet>());
+		m_pMagicBulletList.emplace_back(pObj.lock()->GetComponent<MagicBullet>());
 	}
 
 	std::weak_ptr<MagicBall> pMB = std::dynamic_pointer_cast<MagicBall>(weak_from_this().lock());

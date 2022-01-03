@@ -28,6 +28,8 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	MeshData::GetInstance().Load("field2.obj");
 	MeshData::GetInstance().Load("sphere.obj");
 	MeshData::GetInstance().Load("tree2.obj");
+	MeshData::GetInstance().Load("grass.obj");
+	MeshData::GetInstance().Load("branchField.obj");
 	TextureData::GetInstance().Initialize();
 	TextureData::GetInstance().Load("samp.png", "characterchip/");
 	TextureData::GetInstance().Load("sampattack.png", "characterchip/");
@@ -36,11 +38,14 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	TextureData::GetInstance().Load("textframe.png");
 	TextureData::GetInstance().Load("terrain.png");
 	TextureData::GetInstance().Load("terrainBump.png");
+	TextureData::GetInstance().Load("terrainGrass.png");
+	TextureData::GetInstance().Load("terrainGrassBump.png");
 	TextureData::GetInstance().Load("tree.png");
+	TextureData::GetInstance().Load("grass.png");
 	TextureData::GetInstance().Load("noise.png", "GrayScale/");
 	TextureData::GetInstance().Load("noiseBump.png", "GrayScale/");
-	m_pShaderBuffer->SetTexture(TextureData::GetInstance().Get("noise.png"), ShaderResource::TEX_TYPE::WATER_HEIGHT);
-	m_pShaderBuffer->SetTexture(TextureData::GetInstance().Get("noiseBump.png"), ShaderResource::TEX_TYPE::WATER_BUMP);
+	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noise.png"), ShaderResource::TEX_TYPE::WATER_HEIGHT);
+	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noiseBump.png"), ShaderResource::TEX_TYPE::WATER_BUMP);
 	Collision::GetInstance().Initialize();
 	srand(timeGetTime());
 
@@ -80,7 +85,7 @@ void SceneMgr::Update()
 
 void SceneMgr::Draw()
 {
-	m_pShaderBuffer->SetTexture(TextureData::GetInstance().Get("noise.png"), ShaderResource::TEX_TYPE::WATER_HEIGHT);
-	m_pShaderBuffer->SetTexture(TextureData::GetInstance().Get("noiseBump.png"), ShaderResource::TEX_TYPE::WATER_BUMP);
+	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noise.png"), ShaderResource::TEX_TYPE::WATER_HEIGHT);
+	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noiseBump.png"), ShaderResource::TEX_TYPE::WATER_BUMP);
 	m_pSceneList[m_NowScene]->Draw();
 }

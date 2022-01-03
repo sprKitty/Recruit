@@ -20,6 +20,7 @@ namespace VS_TYPE
 		CAMERADEPTH,
 		GAUSSIANBLUR,
 		WATERREFLECTION,
+		GRASSMOVE,
 
 		MAX
 	};
@@ -41,6 +42,7 @@ namespace PS_TYPE
 		MIX,
 		DOF,
 		WATERREFLECTION,
+		
 		MAX
 	};
 }
@@ -185,7 +187,8 @@ public:
 	*		TEX_BLUR,
 	*		TEX_GRAYSCALE,
 	*/
-	void SetTexture(ID3D11ShaderResourceView* pTex = nullptr, const ShaderResource::TEX_TYPE type = ShaderResource::TEX_TYPE::MAIN);
+	void SetTextureVS(ID3D11ShaderResourceView* pTex = nullptr, const ShaderResource::TEX_TYPE type = ShaderResource::TEX_TYPE::MAIN);
+	void SetTexturePS(ID3D11ShaderResourceView* pTex = nullptr, const ShaderResource::TEX_TYPE type = ShaderResource::TEX_TYPE::MAIN);
 	
 	void SetTexTilingOffset(const Vector2& scale, const Vector2& offset);
 	void SetMultiplyColor(const Vector4& color);

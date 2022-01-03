@@ -242,7 +242,7 @@ IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound)
 			return NULL;
 		}
 		// ソースをリストに追加
-		g_sourceList.push_back(pSource);
+		g_sourceList.emplace_back(pSource);
 	}
 
 	pSource->SubmitSourceBuffer(pSound);

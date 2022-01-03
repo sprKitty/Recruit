@@ -5,7 +5,7 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::NONE);
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
@@ -33,7 +33,7 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 Object::WORKER_OBJ FactoryMethod::CreateWater()
 {
 	Object::OWNER_OBJ pObj(new Object());
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
@@ -41,13 +41,13 @@ Object::WORKER_OBJ FactoryMethod::CreateWater()
 
 	if (!pTransform.expired())
 	{
+		pTransform.lock()->localpos.y = 0.05f;
 		pTransform.lock()->localscale.x = 100.0f;
-		pTransform.lock()->localscale.y = 0.05f;
 		pTransform.lock()->localscale.z = 100.0f;
 	}
 	if (!pMesh.expired())
 	{
-		pMesh.lock()->Set("cube");
+		pMesh.lock()->Set("field2");
 	}
 	if (!pRenderer3D.expired())
 	{
@@ -61,7 +61,7 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::OUTSIDE);
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
@@ -91,11 +91,42 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	return pObj;
 }
 
+Object::WORKER_OBJ FactoryMethod::CreateTransitionLevel()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	m_pObjectList.emplace_back(pObj);
+
+	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+	std::weak_ptr<Instancing> pInst = pObj->AddComponent<Instancing>();
+	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	if (!pCollider.expired())
+	{
+		pCollider.lock()->DisableMouseCollision();
+		pCollider.lock()->SetCollisionType(ObjectType::PLAYER, CollisionType::AABB);
+	}
+	if (!pMesh.expired())
+	{
+		pMesh.lock()->Set("cube");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->SetMainImage("grass");
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
+	}
+	if (!pInst.expired())
+	{
+		pInst.lock()->Set("grass");
+	}
+	return pObj;
+}
+
 Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB)
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::PLAYER);
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Player> pPlayer = pObj->AddComponent<Player>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
@@ -108,6 +139,10 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSATTACK1, CollisionType::BC);
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSATTACK2, CollisionType::OBB);
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSWITCH, CollisionType::BC);
+		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_NORTH, CollisionType::AABB);
+		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_WEST, CollisionType::AABB);
+		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_EAST, CollisionType::AABB);
+		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_SOUTH, CollisionType::AABB);
 	}
 	if (!pMesh.expired())
 	{
@@ -137,7 +172,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::PLAYERATTACK);
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<MagicBullet> pMB = pObj->AddComponent<MagicBullet>();
@@ -169,7 +204,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 {
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::BOSSWITCH);
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<MasterWitch> pMasterWitch = pObj->AddComponent<MasterWitch>();
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
@@ -209,7 +244,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::BOSSATTACK1);
 	pObj->DisableActive();
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<MagicBullet> pMB = pObj->AddComponent<MagicBullet>();
@@ -242,7 +277,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::BOSSATTACK2);
 	pObj->DisableActive();
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<MagicBall> pMB = pObj->AddComponent<MagicBall>();
@@ -274,7 +309,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchRazer()
 	Object::OWNER_OBJ pObj(new Object());
 	pObj->SetType(ObjectType::BOSSATTACK2);
 	pObj->DisableActive();
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 
 	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
 	std::weak_ptr<MagicRazer> pMR = pObj->AddComponent<MagicRazer>();
@@ -301,14 +336,14 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchRazer()
 Object::WORKER_OBJ FactoryMethod::CreateBoss1Object()
 {
 	Object::OWNER_OBJ pObj(new Object());
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 	return pObj;
 }
 
 Object::WORKER_OBJ FactoryMethod::CreateEventObject()
 {
 	Object::OWNER_OBJ pObj(new Object());
-	m_pObjectList.push_back(pObj);
+	m_pObjectList.emplace_back(pObj);
 	pObj->AddComponent<Event>();
 	return pObj;
 }
@@ -330,7 +365,7 @@ void FactoryMethod::MoveObjectList(Object::OWNER_OBJECTLIST & pObjectList)
 		{
 			m_pObjectList[i]->EndSortComponent(pT);
 		}
-		pObjectList.push_back(m_pObjectList[i]);
+		pObjectList.emplace_back(m_pObjectList[i]);
 	}
 	m_pObjectList.clear();
 }

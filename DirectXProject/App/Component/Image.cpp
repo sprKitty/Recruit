@@ -22,9 +22,9 @@ void Image::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 	pBuf.lock()->SetTexTilingOffset(m_vTiling, m_vOffset);
 
 	if (m_pTex)
-		pBuf.lock()->SetTexture(m_pTex, m_type);
+		pBuf.lock()->SetTexturePS(m_pTex, m_type);
 	else
-		pBuf.lock()->SetTexture(nullptr, m_type);
+		pBuf.lock()->SetTexturePS(nullptr, m_type);
 
 	if (m_isWRAP)
 		pBuf.lock()->SetTexSamplerWRAP();
@@ -34,7 +34,7 @@ void Image::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 	pBuf.lock()->SetMultiplyColor(m_vMultiplyColor);
 }
 
-void Image::SetTexture(const std::string str)
+void Image::SetTexturePS(const std::string str)
 {
 	m_pTex = TextureData::GetInstance().Get(str);
 }

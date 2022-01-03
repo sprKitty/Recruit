@@ -39,7 +39,7 @@ void MasterWitch::Init()
 	{
 		std::shared_ptr<TexAnimation> pTexAnim(new TexAnimation());
 		pTexAnim->LoadData(g_pWitchAnimPath[i]);
-		m_pTexAnimList.push_back(pTexAnim);
+		m_pTexAnimList.emplace_back(pTexAnim);
 	}
 
 	std::weak_ptr<Object> pObj;
@@ -101,11 +101,11 @@ void MasterWitch::Init()
 	{
 		for (int i = 0; i < Witch_State::Master::MAX; ++i)
 		{
-			m_pMasterStateList.push_back(std::move(std::make_unique<State<MasterWitch> >()));
+			m_pMasterStateList.emplace_back(std::move(std::make_unique<State<MasterWitch> >()));
 		}
 		for (int i = 0; i < Witch_State::Boss::MAX; ++i)
 		{
-			m_pBossStateList.push_back(std::move(std::make_unique<State<MasterWitch> >()));
+			m_pBossStateList.emplace_back(std::move(std::make_unique<State<MasterWitch> >()));
 		}
 		
 		m_pMasterStateList[Witch_State::Master::WAIT]->AddActionFunc(pMW, &MasterWitch::CalcTarget);

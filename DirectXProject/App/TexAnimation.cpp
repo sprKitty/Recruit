@@ -26,7 +26,7 @@ void TexAnimation::LoadData(const char * pPath)
 	{
 		if (itr.first == "1ファイル名")
 		{
-			m_pImage->SetTexture(itr.second[0].c_str());
+			m_pImage->SetTexturePS(itr.second[0].c_str());
 		}
 		else if (itr.first == "2アニメーションスピード")
 		{
@@ -74,7 +74,7 @@ void TexAnimation::LoadData(const char * pPath)
 			Vector2 vTile = m_pImage->m_vTiling;
 			for (int i = 0; i < itr.second.size(); i+=2)
 			{
-				m_vStartOffsetList.push_back(Vector2(std::stof(itr.second[i]) * vTile.x, std::stof(itr.second[i + 1]) * vTile.y));
+				m_vStartOffsetList.emplace_back(Vector2(std::stof(itr.second[i]) * vTile.x, std::stof(itr.second[i + 1]) * vTile.y));
 			}
 		}
 		else if (itr.first == "7スタートシート")

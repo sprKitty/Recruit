@@ -8,6 +8,7 @@
 
 void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Object::WORKER_OBJ pObject, const std::weak_ptr<MessageWindow> pMW)
 {
+	if (pScene.expired())return;
 	if (!pObject.expired())
 	{
 		std::weak_ptr<EventTrigger> pET(pObject.lock()->AddComponent<EventTrigger>());
@@ -21,8 +22,6 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			pTransform.lock()->localpos.z = -30.0f;
 		}
 	}
-
-	if (pScene.expired())return;
 
 	std::weak_ptr<Event> pTalkEvent;
 	std::shared_ptr<Talk> pTalk;
@@ -45,14 +44,14 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 
 	Object::OWNER_OBJ pTerrain;
 	pTerrain.reset(new Object());
-	pTerrain->SetType(ObjectType::LEVEL);
+	pTerrain->SetType(ObjectType::STAGE);
 	std::weak_ptr<Transform> pTransform = pTerrain->GetComponent<Transform>();
 	std::weak_ptr<Renderer3D> pRenderer3D = pTerrain->AddComponent<Renderer3D>();
 	std::weak_ptr<Mesh> pMesh = pTerrain->AddComponent<Mesh>();
 	if (!pMesh.expired() && !pRenderer3D.expired() && !pTransform.expired())
 	{
-		pTransform.lock()->localscale.x = 50.0f;
-		pTransform.lock()->localscale.z = 50.0f;
+		pTransform.lock()->localscale.x = 500.0f;
+		pTransform.lock()->localscale.z = 500.0f;
 		pMesh.lock()->Set("field2.obj");
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 		pRenderer3D.lock()->SetMainImage("terrain");
@@ -75,7 +74,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6, 0, 9), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6, 1, 9), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -92,7 +91,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6 , 0, 9), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6 , 1, 9), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -109,7 +108,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(18, 0, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(18, 1, 6), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -126,7 +125,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 0, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 1, 6), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -143,11 +142,29 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
-			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 0, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 1, 6), Vector3(0.2f, 0, 0.2f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
 
+	pOutSideArea = FactoryMethod::GetInstance().CreateTransitionLevel();
+	pOutSideArea.lock()->SetType(ObjectType::OUTSIDE_SOUTH);
+	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
+	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localpos = { 0.0f,0.0f,-50.0f };
+		pTransform.lock()->localscale = { 10.0f,10.0f,30.0f };
+		if (!pInstancing.expired())
+		{
+			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
+			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
+			vMin.y = vMax.y = pTransform.lock()->localpos.y;
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(15, 1, 15), Vector3(0.6f, 0, 0.6f));
+			pInstancing.lock()->scale.set(1.0f);
+		}
+	}
+	m_pObjectList.emplace_back(pOutSideArea);
 	pScene.lock()->MoveObject_FactoytoScene();
 
 	if (!pTalkEvent.expired())
@@ -157,11 +174,58 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	}
 }
 
+const Level_Type::Kind LV_MasterWitch::Transition(const Object::WORKER_OBJ pObject)
+{
+	if (!pObject.expired())
+	{
+		std::weak_ptr<Collider> pCollider = pObject.lock()->GetComponent<Collider>();
+		if (!pCollider.expired())
+		{
+			Collider::HitInfo info = pCollider.lock()->IsHitInfo(CollisionType::AABB);
+			if (info.isFlg)
+			{
+				if (!info.pObj.expired())
+				{
+					ObjectType::Kind type = info.pObj.lock()->GetType();
+
+					switch (type)
+					{
+					case ObjectType::OUTSIDE_SOUTH:
+						Finalize(pObject);
+						return Level_Type::BRANCH;
+
+					case ObjectType::NONE:
+					case ObjectType::PLAYER:
+					case ObjectType::PLAYERATTACK:
+					case ObjectType::BOSSWITCH:
+					case ObjectType::BOSSATTACK1:
+					case ObjectType::BOSSATTACK2:
+					case ObjectType::STAGE:
+					case ObjectType::OUTSIDE:
+					case ObjectType::OUTSIDE_NORTH:
+					case ObjectType::OUTSIDE_EAST:
+					case ObjectType::OUTSIDE_WEST:
+					case ObjectType::MAX:
+					default:
+						break;
+					}
+				}
+			}
+		}
+	}
+	return Level_Type::MAX;
+}
+
 void LV_MasterWitch::Finalize(const Object::WORKER_OBJ pObject)
 {
 	if (!pObject.expired())
 	{
 		pObject.lock()->RemoveComponent<EventTrigger>();
+		std::weak_ptr<Transform> pTransform = pObject.lock()->GetComponent<Transform>();
+		if (!pTransform.expired())
+		{
+			pTransform.lock()->localpos.z = 30.0f;
+		}
 	}
 	ReleaseObjectList();
 }

@@ -17,15 +17,15 @@ void Talk::Load(const char * pPath)
 			for (int i = 1; i < itr.first.size(); i += 2)
 			{
 				std::string str = itr.first.substr(i, 2);
-				info.vTitle.push_back(MessageWindow::GetOffset(str));
+				info.vTitle.emplace_back(MessageWindow::GetOffset(str));
 			}
 
 			for (int i = 0; i < itr.second[0].size(); i += 2)
 			{
 				std::string str = itr.second[0].substr(i, 2);
-				info.vMain.push_back(MessageWindow::GetOffset(str));
+				info.vMain.emplace_back(MessageWindow::GetOffset(str));
 			}
-			m_Infos.push_back(info);
+			m_Infos.emplace_back(info);
 		}
 	}
 }

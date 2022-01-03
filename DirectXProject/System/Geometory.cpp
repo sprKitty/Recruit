@@ -65,7 +65,7 @@ MeshData::Info Geometory::CreateCharacterPolygon()
 		surface.vPos1 = vtxCharacterPolygon[i + 1].pos;
 		surface.vPos2 = vtxCharacterPolygon[i + 2].pos;
 		surface.vNormal = vtxCharacterPolygon[i].normal;
-		info.surfaceList.push_back(surface);
+		info.surfaceList.emplace_back(surface);
 	}
 
 	hr = info.pDrawBuffer->CreateVertexBuffer(vtxCharacterPolygon, sizeof(MyMath::Vertex), _countof(vtxCharacterPolygon));
@@ -149,7 +149,7 @@ MeshData::Info Geometory::CreateCube()
 		surface.vPos1 = vtxCube[i + 1].pos;
 		surface.vPos2 = vtxCube[i + 2].pos;
 		surface.vNormal = vtxCube[i].normal;
-		info.surfaceList.push_back(surface);
+		info.surfaceList.emplace_back(surface);
 	}
 
 	hr = info.pDrawBuffer->CreateVertexBuffer(vtxCube, sizeof(MyMath::Vertex), _countof(vtxCube));

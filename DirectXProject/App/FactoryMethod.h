@@ -38,6 +38,8 @@ public:
 
 	Object::WORKER_OBJ CreateOutsideArea();
 
+	Object::WORKER_OBJ CreateTransitionLevel();
+
 	Object::WORKER_OBJ CreatePlayerObject(std::weak_ptr<GameKeyBind> pGKB);
 
 	Object::WORKER_OBJ CreatePlayerMagic();

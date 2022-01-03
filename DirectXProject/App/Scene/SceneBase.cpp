@@ -5,7 +5,7 @@ void SceneBase::AddObject(const Object::OWNER_OBJ & pObj)
 {
 	if (!PTRNULLCHECK(pObj))
 	{
-		m_pObjList.push_back(std::move(pObj));
+		m_pObjList.emplace_back(std::move(pObj));
 	}
 }
 

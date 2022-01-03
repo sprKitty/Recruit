@@ -30,13 +30,18 @@ void EventMgr::SetEventInfo(const std::weak_ptr<Event> pEvent, const Object::WOR
 	}
 	ei.pEvent = pEvent;
 
-	m_EventInfos.push_back(ei);
+	m_EventInfos.emplace_back(ei);
 }
 
 void EventMgr::CallFunc()
 {
 	for (std::vector<EventInfo>::const_iterator itrEI = m_EventInfos.begin(); itrEI != m_EventInfos.end();)
 	{
+		if (itrEI->pEvent.expired())
+		{
+			itrEI = m_EventInfos.erase(itrEI);
+			continue;
+		}
 		bool clear = true;
 		for (auto itrET : itrEI->pEventTriggers)
 		{

@@ -4,6 +4,19 @@
 #include <App/Component/Object.h>
 
 
+namespace Level_Type
+{
+	enum Kind
+	{
+		BRANCH,
+		MASTERWITCH,
+		DRAGON1,
+		DRAGON2,
+		TUTORIAL,
+		MAX,
+	};
+}
+
 class MessageWindow;
 
 class LevelBase
@@ -12,9 +25,19 @@ public:
 	LevelBase() {}
 	virtual ~LevelBase() {}
 
+	/*
+	* @brief ‰Šú‰»ˆ—
+	*/
 	virtual void Initialize(const std::weak_ptr<SceneBase> pScene, const Object::WORKER_OBJ pObject, const std::weak_ptr<MessageWindow> pMW) = 0;
 	
-	// ‰ğ•úˆ—
+	/*
+	* @brief XVˆ—
+	*/
+	virtual const Level_Type::Kind Transition(const Object::WORKER_OBJ pObject) = 0;
+
+	/*
+	* @brief ‰ğ•úˆ—
+	*/
 	virtual void Finalize(const Object::WORKER_OBJ pObject) = 0;
 
 protected:

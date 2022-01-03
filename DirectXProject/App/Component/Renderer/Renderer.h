@@ -21,6 +21,7 @@ namespace DrawType
 		WORLD_OF_TRIPLANAR,	// 
 		WORLD_OF_CHARACTER,	// キャラクター用
 		WORLD_OF_WATER,	// 
+		WORLD_OF_GRASS,	// 
 		UI,
 		MAX,
 	};

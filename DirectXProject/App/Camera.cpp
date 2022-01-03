@@ -22,7 +22,7 @@ void Camera::Init()
 	m_vSide = { 1.0f,0.0f,0.0f };
 	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_fNearClip = 1.0f;
-	m_fFarClip = 80.0f;
+	m_fFarClip = 500.0f;
 	m_fFov = FOV;
 	m_isLate = false;
 	CalcView();

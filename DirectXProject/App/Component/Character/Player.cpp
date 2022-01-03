@@ -32,7 +32,7 @@ void Player::Init()
 	{
 		std::shared_ptr<TexAnimation> pImage(new TexAnimation());
 		pImage->LoadData(g_pPlayerAnimPath[i]);
-		m_pTexAnimList.push_back(pImage);
+		m_pTexAnimList.emplace_back(pImage);
 	}
 
 	std::weak_ptr<Player> pThis = std::dynamic_pointer_cast<Player>(weak_from_this().lock());
@@ -41,7 +41,7 @@ void Player::Init()
 		for (int i = 0; i < Player_State::MAX; ++i)
 		{
 			State<Player>::PTR pState(new State<Player>());
-			m_pStateList.push_back(std::move(pState));
+			m_pStateList.emplace_back(std::move(pState));
 		}
 
 		m_pStateList[Player_State::WAIT]->AddActionFunc(pThis, &Player::CalcDestination);

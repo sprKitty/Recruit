@@ -235,7 +235,7 @@ void MMDModel::Draw()
 	for (int i = 0; i < m_materialNum; ++i)
 	{
 		int tex = m_pMaterial[i].texture;
-		//ShaderBuffer::GetInstance().SetTexture(m_ppTexture[tex]);
+		//ShaderBuffer::GetInstance().SetTexturePS(m_ppTexture[tex]);
 		m_pBuffer->Draw1(
 			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
 			start, m_pMaterial[i].faceNum);

@@ -26,8 +26,8 @@ public:
 	void SetExecuteFunc(const std::shared_ptr<DelegateBase<void, const Vector3&> > pFunc);
 	void CalcScreentoXZ();
 	
-	inline const bool IsHitAnyObject() { return m_HitType != ObjectType::LEVEL && m_HitType != ObjectType::OUTSIDE; }
-	inline const bool IsNotHitObject() { return m_HitType == ObjectType::LEVEL; }
+	inline const bool IsHitAnyObject() { return m_HitType != ObjectType::STAGE && m_HitType != ObjectType::OUTSIDE && m_HitType != ObjectType::OUTSIDE_NORTH && m_HitType != ObjectType::OUTSIDE_WEST && m_HitType != ObjectType::OUTSIDE_EAST && m_HitType != ObjectType::OUTSIDE_SOUTH; }
+	inline const bool IsNotHitObject() { return m_HitType == ObjectType::STAGE; }
 	inline void SetHitType(const ObjectType::Kind type) { m_HitType = type; }
 	inline const Vector3& GetWorldPos() { return m_vWorldpos; }
 	inline const std::weak_ptr<Camera>& GetCamera() { return m_pCamera; }

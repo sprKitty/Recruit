@@ -2,6 +2,7 @@
 #include <App/RenderPipeline.h>
 #include <App/FactoryMethod.h>
 #include <App/Level/LV_MasterWitch.h>
+#include <App/Level/LV_StageBranch.h>
 #include <App/Collision.h>
 #include <App/Camera.h>
 #include <App/Light.h>
@@ -138,17 +139,15 @@ void Game::Init()
 
 	Object::WORKER_OBJ pObj = FactoryMethod::GetInstance().CreateObject();
 
-	Object::WORKER_OBJ pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
+	m_pPlayer = FactoryMethod::GetInstance().CreatePlayerObject(m_pKeyBind);
 
-	if (!pPlayer.expired())
+	if (!m_pPlayer.expired())
 	{
-		m_pCamera->targetTransform.set(pPlayer.lock()->GetComponent<Transform>());
+		m_pCamera->targetTransform.set(m_pPlayer.lock()->GetComponent<Transform>());
 	}
 
-	LV_MasterWitch level;
-	level.Initialize(weak_from_this(), pPlayer, m_pMessageWindow);
-	//level.Finalize(pPlayer);
-	//level.Initialize(weak_from_this(), pPlayer, m_pMessageWindow);
+	m_pLevel.reset(new LV_StageBranch());
+	m_pLevel->Initialize(weak_from_this(), m_pPlayer, m_pMessageWindow);
 }
 
 void Game::Uninit()
@@ -167,20 +166,42 @@ Scene_Type::kind Game::Update()
 	m_pMouse->SetScreenPos(GetMousePosX(), GetMousePosY());
 	m_pMouse->CalcScreentoXZ();
 
+
 	EventMgr::GetInstance().CallFunc();
 
-	for (auto pObj : m_pObjList)
+	switch (m_pLevel->Transition(m_pPlayer))
 	{
-		if (pObj->IsActive())
+	case Level_Type::BRANCH:
+		m_pLevel.reset(new LV_StageBranch());
+		m_pLevel->Initialize(weak_from_this(), m_pPlayer, m_pMessageWindow);
+		break;
+	case Level_Type::MASTERWITCH:
+		m_pLevel.reset(new LV_MasterWitch());
+		m_pLevel->Initialize(weak_from_this(), m_pPlayer, m_pMessageWindow);
+		break;
+	case Level_Type::DRAGON1:
+		break;
+	case Level_Type::DRAGON2:
+		break;
+	case Level_Type::TUTORIAL:
+		break;
+	case Level_Type::MAX:
+	default:
+		for (auto pObj : m_pObjList)
 		{
-			pObj->Update();
+			if (pObj->IsActive())
+			{
+				pObj->Update();
+			}
 		}
+		break;
 	}
 
 	m_pCamera->Update();
 	m_pLight->Update();
 	m_pCameraDepth->CopyParameter(m_pCamera);
 	m_pEffectCamera->CopyParameter(m_pCamera);
+
 	return scene;
 }
 
@@ -228,13 +249,13 @@ void Game::Draw()
 	m_pMessageWindow->Draw(m_pShaderBuffer);
 
 	m_pShaderBuffer.lock()->BindPS(PS_TYPE::NORMAL);
-	m_pShaderBuffer.lock()->SetTexture(m_pKawaseBloom->GetRenderingTexture(0));
+	m_pShaderBuffer.lock()->SetTexturePS(m_pKawaseBloom->GetRenderingTexture(0));
 	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(SCREEN_WIDTH * 0.2f, SCREEN_HEIGHT * 0.2f, 0), Vector3(0, 0, 0), Vector3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f, 0));
 	m_pShaderBuffer.lock()->SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();
 
-	m_pShaderBuffer.lock()->SetTexture(m_pKawaseBloom->GetRenderingTexture(0), ShaderResource::TEX_TYPE::EFFECT);
-	m_pShaderBuffer.lock()->SetTexture(m_pCameraDepth->GetRenderingTexture(0));
+	m_pShaderBuffer.lock()->SetTexturePS(m_pKawaseBloom->GetRenderingTexture(0), ShaderResource::TEX_TYPE::EFFECT);
+	m_pShaderBuffer.lock()->SetTexturePS(m_pCameraDepth->GetRenderingTexture(0));
 	mtx = MyMath::ConvertMatrix(Vector3(SCREEN_WIDTH, SCREEN_HEIGHT, 0), Vector3(0, 0, 0), Vector3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 10));
 	m_pShaderBuffer.lock()->SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();

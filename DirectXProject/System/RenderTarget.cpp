@@ -52,7 +52,7 @@ void RenderTarget::Create(const FLOAT width, const FLOAT height, const DXGI_FORM
 	m_vp.Height = height;
 	m_vp.MinDepth = 0.0f;
 	m_vp.MaxDepth = 1.0f;
-	m_vClearColorList.push_back(vClearColor);
+	m_vClearColorList.emplace_back(vClearColor);
 
 	memset(&texDesc, 0, sizeof(texDesc));
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -96,7 +96,7 @@ void RenderTarget::Addition(const DXGI_FORMAT format, const Vector4& vClearColor
 {
 	ID3D11RenderTargetView** ppRTV = std::move(m_ppRTV);
 	ID3D11ShaderResourceView** ppSRV = std::move(m_ppSRV);
-	m_vClearColorList.push_back(vClearColor);
+	m_vClearColorList.emplace_back(vClearColor);
 	++m_nNum;
 	HRESULT hr;
 	D3D11_TEXTURE2D_DESC texDesc;

@@ -17,7 +17,7 @@ void Mouse::Update()
 
 void Mouse::SetExecuteFunc(const std::shared_ptr<DelegateBase<void, const Vector3&> > pFunc)
 {
-	m_pFunctionList.push_back(pFunc);
+	m_pFunctionList.emplace_back(pFunc);
 }
 
 Vector3 Mouse::CalcScreenToWorld(float depthZ, DirectX::XMMATRIX mView, DirectX::XMMATRIX mProj)
@@ -60,7 +60,7 @@ void Mouse::CalcScreentoXZ()
 		float LP0 = vNear.Dot(Vector3(0, 1, 0));
 		vNear *= -1.0f;
 		m_vWorldpos = vNear + vRay * (LP0 / Lray);
-		m_HitType = ObjectType::LEVEL;
+		m_HitType = ObjectType::STAGE;
 		for (const auto itr : m_pFunctionList)
 		{
 			itr->Execute(m_vWorldpos);		// é¿çs
