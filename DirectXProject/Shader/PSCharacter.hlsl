@@ -90,9 +90,11 @@ PS_OUT main(PS_IN pin)
     
     float depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
     color = float4(0, 0, 0, 1);
-    color.r = 2.0f * (1.3f - depth);
-    color.r = max(0, color.r);
-    color.r = min(1, color.r);
+    color.r = pow(pin.camPos.z / pin.camPos.w, 30);
+    
+    color.g = 2.0f * (1.3f - depth);
+    color.g = max(0, color.g);
+    color.g = min(1, color.g);
     
     color.b = 2.0f * (depth + 0.1f);
     color.b = max(0, color.b);

@@ -42,6 +42,8 @@ namespace PS_TYPE
 		MIX,
 		DOF,
 		WATERREFLECTION,
+		MAINSCREEN,
+		FADE,
 		
 		MAX
 	};

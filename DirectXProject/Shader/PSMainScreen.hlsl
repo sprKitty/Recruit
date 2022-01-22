@@ -2,7 +2,10 @@ struct PS_IN
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
-    float4 depth : TEXCOORD1;
+    float3 normal : TEXCOORD1;
+    float4 wPos : TEXCOORD2;
+    float4 lightPos : TEXCOORD3;
+    float4 camPos : TEXCOORD4;
 };
 
 struct LightInfo
@@ -16,6 +19,7 @@ struct LightInfo
 struct CameraInfo
 {
     float4 pos;
+    float4 vpSize;
 };
 
 struct TexSetting
@@ -66,23 +70,26 @@ SamplerState BORDER : register(s2);
 SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
+const float3 g_Luminance = float3(0.299f, 0.587f, 0.114f);
 
-float4 main(PS_IN pin) : SV_Target0
+float4 main(PS_IN pin) : SV_Target
 {
-    int nCramp = 1 - g_texSetting.nWrap;
-    float fAlpha = TEX_MAIN.Sample(WRAP, pin.uv * g_texSetting.tile + g_texSetting.offset).a * g_texSetting.nWrap;
-    fAlpha += TEX_MAIN.Sample(CRAMP, pin.uv * g_texSetting.tile + g_texSetting.offset).a * nCramp;
-    clip(fAlpha - 0.1f);
+    float4 mainTex = TEX_MAIN.Sample(WRAP, pin.uv);
+    float camMain = TEX_DOF.Sample(WRAP, pin.uv).r;
+    float camEffect = TEX_DOS.Sample(WRAP, pin.uv).r;
+    float4 color = 1;
     
-    float depth = (pin.depth.y + pin.depth.z) / 80.0f;
-    float4 color = { 0, 0, 0, 1 };
-    color.r = 2.0f * (1.3f - depth);
-    color.r = max(0, color.r);
-    color.r = min(1, color.r);
-    
-    color.b = 2.0f * (depth + 0.1f);
-    color.b = max(0, color.b);
-    color.b = min(1, color.b);
+    if (camEffect < camMain + 0.01f)
+    {
+        float4 effectTex = TEX_EFFECT.Sample(WRAP, pin.uv);
+        color.r = (mainTex.r > effectTex.r) ? mainTex.r : effectTex.r;
+        color.g = (mainTex.g > effectTex.g) ? mainTex.g : effectTex.g;
+        color.b = (mainTex.b > effectTex.b) ? mainTex.b : effectTex.b;
+    }
+    else
+    {
+        color.rgb = mainTex;
+    }
     
     return color;
 }

@@ -8,6 +8,12 @@ struct PS_IN
     float4 camPos : TEXCOORD4;
 };
 
+struct PS_OUT
+{
+    float4 main : SV_Target0;
+    float4 dof : SV_Target1;
+};
+
 struct LightInfo
 {
     float4 pos;
@@ -70,9 +76,22 @@ SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
 
-
-float4 main(PS_IN pin) : SV_Target0
+PS_OUT main(PS_IN pin)
 {
-    float4 color = { 255.0f / 255.0f , 165.0f / 255.0f , 100.0f / 255.0f, 1 };
-    return color;
+    PS_OUT pout;
+    float4 color = { 0, 0, 0, 1 };
+    float depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
+    color = float4(0, 0, 0, 1);
+    color.r = pow(pin.camPos.z / pin.camPos.w, 30);
+    
+    color.g = 2.0f * (1.3f - depth);
+    color.g = max(0, color.g);
+    color.g = min(1, color.g);
+    
+    color.b = 2.0f * (depth + 0.1f);
+    color.b = max(0, color.b);
+    color.b = min(1, color.b);
+    pout.main = float4(255.0f / 255.0f, 165.0f / 255.0f, 100.0f / 255.0f, 1.0f);
+    pout.dof = color;
+    return pout;
 }

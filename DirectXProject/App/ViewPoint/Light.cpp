@@ -1,4 +1,4 @@
-#include <App/Light.h>
+#include <App/ViewPoint/Light.h>
 #include <Shader/ShaderBuffer.h>
 #include <math.h>
 #include <System/Input.h>
@@ -40,6 +40,9 @@ void Light::Update()
 {
 	CalcView();
 	CalcProjection();
+	CalcWorldMatrix();
+	CreateViewFrustum();
+	UpdateViewFrustum();
 }
 
 void Light::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)

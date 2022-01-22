@@ -46,9 +46,7 @@ protected:
 		for (const auto& itr : m_pObjectList)
 		{
 			if (itr.expired())continue;
-
-			itr.lock()->DisableActive();
-			itr.lock()->EnableDelete();
+			itr.lock()->Uninit();
 		}
 	}
 

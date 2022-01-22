@@ -71,14 +71,9 @@ SamplerState MIRROR : register(s4);
 
 
 
-float4 main(PS_IN pin) : SV_Target
+float4 main(PS_IN pin) : SV_Target0
 {
-    float4 BG = TEX_MAIN.Sample(WRAP, pin.uv);
-    float4 FG = TEX_EFFECT.Sample(WRAP, pin.uv);
-    float4 color = 1;
-    color.r = (BG.r > FG.r) ? BG.r : FG.r;
-    color.g = (BG.g > FG.g) ? BG.g : FG.g;
-    color.b = (BG.b > FG.b) ? BG.b : FG.b;
-    
+    float4 color = TEX_MAIN.Sample(WRAP, pin.uv);
+    clip(color.a - 0.1f);
     return color;
 }

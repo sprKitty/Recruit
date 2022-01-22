@@ -7,25 +7,20 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 	pObj->SetType(ObjectType::NONE);
 	m_pObjectList.emplace_back(pObj);
 
-	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
+	std::weak_ptr<Renderer3D> pR3D = pObj->AddComponent<Renderer3D>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
 	if (!pMesh.expired())
 	{
-		pMesh.lock()->Set("board");
+		pMesh.lock()->Set("character");
 	}
-	if (!pBBR.expired())
+	if (!pR3D.expired())
 	{
-		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_NORMAL);
 		if (!m_pCamera.expired())
 		{
-			pBBR.lock()->ZaxisUnlock();
-			pBBR.lock()->XaxisLock();
-			pBBR.lock()->SetCamera(m_pCamera);
+			pR3D.lock()->SetMainImage("titleCharacter");
+			pR3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+			pR3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 		}
-	}
-	if (!m_pMouse.expired())
-	{
-		m_pMouse.lock()->SetExecuteFunc(Delegate<Transform, void, const Vector3&>::CreateDelegator(pObj->GetComponent<Transform>(), &Transform::SetPos));
 	}
 	return pObj;
 }
@@ -57,6 +52,33 @@ Object::WORKER_OBJ FactoryMethod::CreateWater()
 	return pObj;
 }
 
+Object::WORKER_OBJ FactoryMethod::CreateTerrain()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	m_pObjectList.emplace_back(pObj);
+
+	std::weak_ptr<Transform> pTransform = pObj->GetComponent<Transform>();
+	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localpos.y = 20.0f;
+		pTransform.lock()->localscale.x = 20.0f;
+		pTransform.lock()->localscale.z = 20.0f;
+	}
+	if (!pMesh.expired())
+	{
+		pMesh.lock()->Set("field2");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
+	}
+
+	return pObj;
+}
+
 Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 {
 	Object::OWNER_OBJ pObj(new Object());
@@ -70,6 +92,7 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	if (!pCollider.expired())
 	{
 		pCollider.lock()->EnableMouseCollision();
+		pCollider.lock()->SetCollisionType(ObjectType::PLAYER, CollisionType::AABB);
 		pCollider.lock()->SetCollisionType(ObjectType::PLAYERATTACK, CollisionType::AABB);
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSATTACK1, CollisionType::AABB);
 	}
@@ -87,6 +110,27 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	if (!pInst.expired())
 	{
 		pInst.lock()->Set("tree2");
+	}
+	return pObj;
+}
+
+Object::WORKER_OBJ FactoryMethod::CreateFence()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	pObj->SetType(ObjectType::OUTSIDE);
+	m_pObjectList.emplace_back(pObj);
+
+	std::weak_ptr<Renderer3D> pRenderer3D = pObj->AddComponent<Renderer3D>();
+	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
+	if (!pMesh.expired())
+	{
+		pMesh.lock()->Set("fence");
+	}
+	if (!pRenderer3D.expired())
+	{
+		pRenderer3D.lock()->SetMainImage("terrainGrass");
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
 	return pObj;
 }
@@ -139,6 +183,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSATTACK1, CollisionType::BC);
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSATTACK2, CollisionType::OBB);
 		pCollider.lock()->SetCollisionType(ObjectType::BOSSWITCH, CollisionType::BC);
+		pCollider.lock()->SetCollisionType(ObjectType::STAGE, CollisionType::AABB);
 		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_NORTH, CollisionType::AABB);
 		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_WEST, CollisionType::AABB);
 		pCollider.lock()->SetCollisionType(ObjectType::OUTSIDE_EAST, CollisionType::AABB);
@@ -210,9 +255,13 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	std::weak_ptr<BillBoardRenderer> pBBR = pObj->AddComponent<BillBoardRenderer>();
 	std::weak_ptr<Mesh> pMesh = pObj->AddComponent<Mesh>();
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
-	pObj->AddComponent<Event>();
+	pObj->AddComponent<Event>().lock()->type.set(Event_Type::TALK_1);
+	pObj->AddComponent<Event>().lock()->type.set(Event_Type::TALK_2);
+	pObj->AddComponent<EventTrigger>().lock()->type.set(Event_Type::TALK_1);
+	pObj->AddComponent<EventTrigger>().lock()->type.set(Event_Type::TALK_2);
 	if (!pCollider.expired())
 	{
+
 		pCollider.lock()->SetScaleDeviation(0.5f);
 		pCollider.lock()->SetPosDeviation(Vector3(0, 0, 0.0f));
 		pCollider.lock()->SetCollisionType(ObjectType::PLAYER, CollisionType::BC);
@@ -230,11 +279,6 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 		pBBR.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 		pBBR.lock()->SetCamera(m_pCamera);
-	}
-	std::weak_ptr<EventTrigger> pET(pObj->AddComponent<EventTrigger>());
-	if (!pET.expired())
-	{
-		pET.lock()->SetType(EventTrigger::Type::TALK_1);
 	}
 	return pObj;
 }
@@ -327,7 +371,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchRazer()
 	}	
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 	}
 	return pObj;

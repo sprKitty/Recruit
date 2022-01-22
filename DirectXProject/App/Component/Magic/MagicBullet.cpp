@@ -58,7 +58,7 @@ void MagicBullet::SetStartPos(const Vector3 & vPos)
 
 const bool  MagicBullet::CollideUpdate()
 {
-	Collider::HitInfo hitInfoAABB = m_pCollider.lock()->IsHitInfo(CollisionType::AABB);
+	Collider::HitInfo hitInfoAABB = m_pCollider.lock()->GetHitInfo(CollisionType::AABB);
 	if (hitInfoAABB.isFlg)
 	{
 		if (!hitInfoAABB.pObj.expired())
@@ -71,7 +71,7 @@ const bool  MagicBullet::CollideUpdate()
 		}
 	}
 
-	Collider::HitInfo hitInfoBC = m_pCollider.lock()->IsHitInfo(CollisionType::BC);
+	Collider::HitInfo hitInfoBC = m_pCollider.lock()->GetHitInfo(CollisionType::BC);
 	if (hitInfoBC.isFlg)
 	{
 		if (!hitInfoBC.pObj.expired())

@@ -6,6 +6,16 @@
 #include <tuple>
 
 
+namespace FrustumType
+{
+	enum kind
+	{
+		INSIDE,
+		PARTLYINSIDE,
+		OUTSIDE,
+	};
+}
+
 class Transform;
 class RenderTarget;
 class ShaderBuffer;
@@ -23,10 +33,12 @@ public:
 	virtual void Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum = 0) = 0;
 
 	void CopyParameter(const std::weak_ptr<ViewPoint> pVP);
-	void CalcRefletion(const Vector3* pLook = nullptr, const Vector3* pNormal = nullptr);
+	void CalcReflect(const Vector3* pPoint = nullptr, const Vector3* pNormal = nullptr);
 	void Restore();
 	void BindRenderTarget();
 	
+	const FrustumType::kind CollisionViewFrustum(const DirectX::XMFLOAT3& pos, const float fRadius);
+
 	inline const float GetAspect() { return m_vScreenSize.x / m_vScreenSize.y; }
 
 	inline void SetRenderTarget(std::unique_ptr<RenderTarget>& pRT) { m_pRenderTarget = std::move(pRT); }
@@ -36,6 +48,7 @@ public:
 	Property<std::weak_ptr<Transform> >			targetTransform;
 	Property<DirectX::XMMATRIX>					view;
 	Property<DirectX::XMMATRIX>					projection;
+	Property<DirectX::XMFLOAT4X4>				worldMatrix;
 	Property<Vector4>							color;
 	Property<Vector3>							position;
 	Property<Vector3>							look;
@@ -52,12 +65,20 @@ public:
 protected:
 	void CalcView(const float fUp = 1.0f);
 	void CalcProjection();
+	void CalcWorldMatrix();
+	void CreateViewFrustum();
+	void UpdateViewFrustum();
 
 protected:
+	const int FRUSTUM_SIZE = 6;
+	
 	std::unique_ptr<RenderTarget>	m_pRenderTarget;
 	std::weak_ptr<Transform>		m_pTargetTransform;	// 
-	DirectX::XMMATRIX				m_mView;			// 
+	DirectX::XMMATRIX				m_mView;			//  
 	DirectX::XMMATRIX				m_mProjection;		// 
+	DirectX::XMFLOAT4X4				m_mWorldMatrix;		//
+	std::vector<DirectX::XMFLOAT4>	m_frustum;			// éãêçë‰
+	std::vector<DirectX::XMFLOAT4>	m_frustumWorld;			// éãêçë‰
 	Vector4							m_vColor;			// êF
 	Vector3							m_vPos;				// ç¿ïW
 	Vector3							m_vLook;			// íçéãì_

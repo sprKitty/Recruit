@@ -1,4 +1,4 @@
-#include <App/Camera.h>
+#include <App/ViewPoint/Camera.h>
 #include <App/Component/Transform.h>
 #include <System/Input.h>
 #include <System/Clocker.h>
@@ -7,15 +7,15 @@
 #include <System/DirectX.h>
 #include <math.h>
 
-const Vector3 CameraInitPos(0, 20, -25);
-const Vector3 CameraInitLook(0, 0, 2);
+const Vector3 Camera::CameraInitPos(0, 20, -25);
+const Vector3 Camera::CameraInitLook(0, 0, 2);
 
-const float FOV = 30.0f;
+const float Camera::FOV = 30.0f;
 
 void Camera::Init()
 {
-	m_vPos = m_vLatePos = CameraInitPos;
-	m_vLook = m_vLateLook = CameraInitLook;
+	m_vPos =  CameraInitPos;
+	m_vLook = CameraInitLook;
 	m_vUp = { 0.0f,1.0f,0.0f };
 	m_vFront = m_vLook - m_vPos;
 	m_vFront.Normalize();
@@ -24,9 +24,11 @@ void Camera::Init()
 	m_fNearClip = 1.0f;
 	m_fFarClip = 500.0f;
 	m_fFov = FOV;
-	m_isLate = false;
 	CalcView();
 	CalcProjection();
+	CalcWorldMatrix();
+	CreateViewFrustum();
+	UpdateViewFrustum();
 }
 
 
@@ -45,28 +47,12 @@ void Camera::Update()
 		Vector3 vDistance = m_vPos - m_vLook;
 		m_vLook = m_pTargetTransform.lock()->localpos + CameraInitLook;
 		m_vPos = m_vLook + vDistance;
-		if (m_isLate)
-		{
-			Vector3 moveLook = m_vLook - m_vLateLook;
-			Vector3 movePos = m_vPos - m_vLatePos;
-			moveLook *= Clocker::GetInstance().GetFrameTime() * 2.0f;
-			movePos *= Clocker::GetInstance().GetFrameTime() * 2.0f;
-			m_vLateLook = moveLook + m_vLateLook;
-			m_vLatePos = movePos + m_vLatePos;
-		}
 	}
 
 	DirectX::XMVECTOR vPos, vLook;
-	if (m_isLate)
-	{
-		vPos = DirectX::XMLoadFloat3(&m_vLatePos.Convert());
-		vLook = DirectX::XMLoadFloat3(&m_vLateLook.Convert());
-	}
-	else
-	{
-		vPos = DirectX::XMLoadFloat3(&m_vPos.Convert());
-		vLook = DirectX::XMLoadFloat3(&m_vLook.Convert());
-	}
+	vPos = DirectX::XMLoadFloat3(&m_vPos.Convert());
+	vLook = DirectX::XMLoadFloat3(&m_vLook.Convert());
+
 	DirectX::XMVECTOR vFront = DirectX::XMVectorSubtract(vLook, vPos);
 	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&m_vUp.Convert());
 
@@ -86,20 +72,10 @@ void Camera::Update()
 	}
 
 	DirectX::XMFLOAT3 value;
-	if (m_isLate)
-	{
-		DirectX::XMStoreFloat3(&value, vPos);
-		m_vLatePos.Convert(value);
-		DirectX::XMStoreFloat3(&value, vLook);
-		m_vLateLook.Convert(value);
-	}
-	else
-	{
-		DirectX::XMStoreFloat3(&value, vPos);
-		m_vPos.Convert(value);
-		DirectX::XMStoreFloat3(&value, vLook);
-		m_vLook.Convert(value);
-	}
+	DirectX::XMStoreFloat3(&value, vPos);
+	m_vPos.Convert(value);
+	DirectX::XMStoreFloat3(&value, vLook);
+	m_vLook.Convert(value);
 	DirectX::XMStoreFloat3(&value, vUp);
 	m_vUp.Convert(value);
 	DirectX::XMStoreFloat3(&value, vSide);
@@ -110,6 +86,9 @@ void Camera::Update()
 
 	CalcView();
 	CalcProjection();
+	CalcWorldMatrix();
+	CreateViewFrustum();
+	UpdateViewFrustum();
 }
 
 void Camera::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)

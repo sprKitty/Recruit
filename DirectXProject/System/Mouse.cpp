@@ -1,6 +1,6 @@
 #include "Mouse.h"
 #include <Defines.h>
-#include <App/Camera.h>
+#include <App/ViewPoint/Camera.h>
 
 
 void Mouse::Initialize()

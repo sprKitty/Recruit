@@ -15,8 +15,9 @@
 #include <App/Component/Magic/MagicBall.h>
 #include <App/Component/Magic/MagicRazer.h>
 #include <App/Component/Instancing.h>
-#include <App/Camera.h>
-#include <App/Light.h>
+#include <App/Component/RootMotion.h>
+#include <App/ViewPoint/Camera.h>
+#include <App/ViewPoint/Light.h>
 #include <App/Event/Talk.h>
 #include <App/EventMgr.h>
 #include <App/GameKeyBind.h>
@@ -35,8 +36,12 @@ public:
 	Object::WORKER_OBJ CreateObject();
 	
 	Object::WORKER_OBJ CreateWater();
+	
+	Object::WORKER_OBJ CreateTerrain();
 
 	Object::WORKER_OBJ CreateOutsideArea();
+
+	Object::WORKER_OBJ CreateFence();
 
 	Object::WORKER_OBJ CreateTransitionLevel();
 

@@ -12,7 +12,7 @@ public:
 	void Uninit();
 	void Bind(const std::weak_ptr<ShaderBuffer>& pBuf);
 	
-	void SetTexturePS(const std::string str);
+	void SetTexture(const std::string str);
 	/*
 	*	ShaderResource::
 	*		TEX_MAIN = 0,

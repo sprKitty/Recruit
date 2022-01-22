@@ -1,8 +1,10 @@
 #include "Event.h"
+#include <App/EventMgr.h>
 #include <App/Event/EventBase.h>
 
 Event::Event()
 {
+	type = Property<Event_Type::Kind>(&m_type);
 }
 
 Event::~Event()
@@ -11,9 +13,11 @@ Event::~Event()
 
 void Event::Init()
 {
+	EventMgr::GetInstance().AddEvent(weak_from_this());
 	m_isPlay = false;
 	m_isFinishAll = false;
 	m_nArray = 0;
+	m_type = Event_Type::MAX;
 	for (const auto& itr : m_pActionEvents)
 	{
 		itr->Init();
@@ -26,6 +30,7 @@ void Event::Uninit()
 	{
 		itr->Uninit();
 	}
+	EventMgr::GetInstance().ReleaseEvent(weak_from_this());
 }
 
 void Event::Update()

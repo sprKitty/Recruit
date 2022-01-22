@@ -2,6 +2,7 @@
 #include <App/Component/Transform.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Event/Event.h>
+#include <App/Component/Event/EventTrigger.h>
 #include <App/Component/Magic/MagicBall.h>
 #include <App/Component/Magic/MagicBullet.h>
 #include <App/Component/Magic/MagicRazer.h>
@@ -22,7 +23,6 @@ const char* g_pWitchAnimPath[Witch_State::Boss::MAX] =
 	"Assets/csv/witchattack.csv",
 	"Assets/csv/witchwait.csv",
 	"Assets/csv/witchwait.csv",
-	//"Assets/csv/witchwait.csv",
 };
 
 void MasterWitch::Init()
@@ -144,8 +144,7 @@ void MasterWitch::Uninit()
 	for (const auto& itr : m_pAttackObject)
 	{
 		if (itr.expired())continue;
-		itr.lock()->DisableActive();
-		itr.lock()->EnableDelete();
+		itr.lock()->Uninit();
 	}
 
 	m_pMasterStateList.clear();
@@ -159,7 +158,16 @@ void MasterWitch::Update()
 
 	if (HitUpdate())
 	{
-		m_pOwner.lock()->EnableDelete();
+		weak_ptr_list<EventTrigger> pETList = m_pOwner.lock()->GetComponentList<EventTrigger>();
+		for (const auto& itr : pETList)
+		{
+			if (itr.expired())continue;
+
+			if (itr.lock()->type.get() == Event_Type::TALK_2)
+			{
+				itr.lock()->Cause();
+			}
+		}
 		return;
 	}
 
@@ -179,7 +187,7 @@ void MasterWitch::Update()
 		m_pTexAnimList[m_masterState]->Update(m_Direction);
 		if (!m_pBBR.expired())
 		{
-			m_pBBR.lock()->SetMainImage(m_pTexAnimList[m_masterState]);
+			m_pBBR.lock()->SetMainTexAnimation(m_pTexAnimList[m_masterState]);
 		}
 		break;
 	
@@ -197,7 +205,7 @@ void MasterWitch::Update()
 		m_pTexAnimList[m_bossState]->Update(m_Direction);
 		if (!m_pBBR.expired())
 		{
-			m_pBBR.lock()->SetMainImage(m_pTexAnimList[m_bossState]);
+			m_pBBR.lock()->SetMainTexAnimation(m_pTexAnimList[m_bossState]);
 		}
 		break;
 	
@@ -209,7 +217,7 @@ void MasterWitch::Update()
 
 const bool MasterWitch::HitUpdate()
 {
-	Collider::HitInfo hitInfoBC = m_pCollider.lock()->IsHitInfo(CollisionType::BC);
+	Collider::HitInfo hitInfoBC = m_pCollider.lock()->GetHitInfo(CollisionType::BC);
 
 	if (hitInfoBC.isFlg)
 	{
@@ -217,7 +225,8 @@ const bool MasterWitch::HitUpdate()
 		{
 			if (hitInfoBC.pObj.lock()->GetType() == ObjectType::PLAYERATTACK)
 			{
-				return true;
+				--m_nHP;
+				return CheckDie();
 			}
 		}
 	}

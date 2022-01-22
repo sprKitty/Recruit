@@ -132,6 +132,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -151,6 +152,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -163,7 +165,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App\Camera.cpp" />
     <ClCompile Include="App\Collision.cpp" />
     <ClCompile Include="App\Component\Character\Character.cpp" />
     <ClCompile Include="App\Component\Character\MasterWitch.cpp" />
@@ -181,25 +182,31 @@
     <ClCompile Include="App\Component\Renderer\BillBoardRenderer.cpp" />
     <ClCompile Include="App\Component\Renderer\Renderer2D.cpp" />
     <ClCompile Include="App\Component\Renderer\Renderer3D.cpp" />
+    <ClCompile Include="App\Component\RootMotion.cpp" />
     <ClCompile Include="App\Component\Terrain.cpp" />
     <ClCompile Include="App\Component\Transform.cpp" />
     <ClCompile Include="App\EventMgr.cpp" />
     <ClCompile Include="App\Event\Talk.cpp" />
     <ClCompile Include="App\FactoryMethod.cpp" />
+    <ClCompile Include="App\Fade.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Level\LV_MasterWitch.cpp" />
     <ClCompile Include="App\Level\LV_StageBranch.cpp" />
-    <ClCompile Include="App\Light.cpp" />
     <ClCompile Include="App\MeshData.cpp" />
     <ClCompile Include="App\MMDModel.cpp" />
     <ClCompile Include="App\OBJModel.cpp" />
     <ClCompile Include="App\RenderPipeline.cpp" />
-    <ClCompile Include="App\Scene\Game.cpp" />
+    <ClCompile Include="App\Scene\GameScene.cpp" />
     <ClCompile Include="App\Scene\SceneBase.cpp" />
     <ClCompile Include="App\Scene\SceneMgr.cpp" />
+    <ClCompile Include="App\Scene\TitleScene.cpp" />
     <ClCompile Include="App\TexAnimation.cpp" />
     <ClCompile Include="App\TextureData.cpp" />
-    <ClCompile Include="App\ViewPoint.cpp" />
+    <ClCompile Include="App\ViewPoint\Camera.cpp" />
+    <ClCompile Include="App\ViewPoint\LateCamera.cpp" />
+    <ClCompile Include="App\ViewPoint\Light.cpp" />
+    <ClCompile Include="App\ViewPoint\RotationCamera.cpp" />
+    <ClCompile Include="App\ViewPoint\ViewPoint.cpp" />
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="Shader\ShaderBuffer.cpp" />
     <ClCompile Include="Startup.cpp" />
@@ -220,7 +227,6 @@
     <ClCompile Include="System\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\Camera.h" />
     <ClInclude Include="App\Collision.h" />
     <ClInclude Include="App\Component\Character\Character.h" />
     <ClInclude Include="App\Component\Character\MasterWitch.h" />
@@ -241,27 +247,33 @@
     <ClInclude Include="App\Component\Renderer\Renderer.h" />
     <ClInclude Include="App\Component\Renderer\Renderer2D.h" />
     <ClInclude Include="App\Component\Renderer\Renderer3D.h" />
+    <ClInclude Include="App\Component\RootMotion.h" />
     <ClInclude Include="App\Component\Terrain.h" />
     <ClInclude Include="App\Component\Transform.h" />
     <ClInclude Include="App\EventMgr.h" />
     <ClInclude Include="App\Event\EventBase.h" />
     <ClInclude Include="App\Event\Talk.h" />
     <ClInclude Include="App\FactoryMethod.h" />
+    <ClInclude Include="App\Fade.h" />
     <ClInclude Include="App\GameKeyBind.h" />
     <ClInclude Include="App\Level\LevelBase.h" />
     <ClInclude Include="App\Level\LV_MasterWitch.h" />
     <ClInclude Include="App\Level\LV_StageBranch.h" />
-    <ClInclude Include="App\Light.h" />
     <ClInclude Include="App\MeshData.h" />
     <ClInclude Include="App\MMDModel.h" />
     <ClInclude Include="App\OBJModel.h" />
     <ClInclude Include="App\RenderPipeline.h" />
-    <ClInclude Include="App\Scene\Game.h" />
+    <ClInclude Include="App\Scene\GameScene.h" />
     <ClInclude Include="App\Scene\SceneBase.h" />
     <ClInclude Include="App\Scene\SceneMgr.h" />
+    <ClInclude Include="App\Scene\TitleScene.h" />
     <ClInclude Include="App\TexAnimation.h" />
     <ClInclude Include="App\TextureData.h" />
-    <ClInclude Include="App\ViewPoint.h" />
+    <ClInclude Include="App\ViewPoint\Camera.h" />
+    <ClInclude Include="App\ViewPoint\LateCamera.h" />
+    <ClInclude Include="App\ViewPoint\Light.h" />
+    <ClInclude Include="App\ViewPoint\RotationCamera.h" />
+    <ClInclude Include="App\ViewPoint\ViewPoint.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Shader\ShaderBuffer.h" />
@@ -288,15 +300,9 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PSCameraDepth.hlsl">
+    <FxCompile Include="Shader\PSCameraDepth.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\PSCharacter.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -319,6 +325,16 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\PSEffect.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\PSFade.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -351,6 +367,16 @@
     <FxCompile Include="Shader\PSLightDepth.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shader\PSMainScreen.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\PSMixTexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

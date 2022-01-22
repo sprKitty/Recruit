@@ -1,7 +1,41 @@
-﻿  LV_StageBranch.cpp
+﻿  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSKawaseBloom.cso
+C:\Users\taker\Desktop\MyGame\Recruit\DirectXProject\Shader\PSMainScreen.hlsl(73,14-57): warning X3207: Initializer used on a global 'const' variable. This requires setting an external constant. If a literal is desired, use 'static const' instead.
+C:\Users\taker\Desktop\MyGame\Recruit\DirectXProject\Shader\PSMainScreen.hlsl(91,9-27): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSMainScreen.cso
+C:\Users\taker\Desktop\MyGame\Recruit\DirectXProject\Shader\PSTriPlanar.hlsl(81,11-22): warning X3578: Output value 'main' is not completely initialized
+  
+  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSTriPlanar.cso
+C:\Users\taker\Desktop\MyGame\Recruit\DirectXProject\Shader\PSWaterReflection.hlsl(98,11-97): warning X3206: implicit truncation of vector type
+C:\Users\taker\Desktop\MyGame\Recruit\DirectXProject\Shader\PSWaterReflection.hlsl(98,43-78): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+  
+  compilation object save succeeded; see C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\PSWaterReflection.cso
+  MasterWitch.cpp
+  Player.cpp
+  Event.cpp
+  EventTrigger.cpp
+  MagicBall.cpp
+  BillBoardRenderer.cpp
+  Renderer3D.cpp
+  EventMgr.cpp
+  FactoryMethod.cpp
+  LV_MasterWitch.cpp
+  LV_StageBranch.cpp
+  RenderPipeline.cpp
+  GameScene.cpp
+  SceneBase.cpp
+  SceneMgr.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(74): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(115): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\component\magic\magicball.cpp(86): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+  TitleScene.cpp
+  Startup.cpp
+c:\users\taker\desktop\mygame\recruit\directxproject\app\scene\scenemgr.cpp(113): warning C4244: '引数': 'double' から 'const float' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\startup.cpp(98): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' の宣言を確認してください
   コード生成しています。
-  1 of 6088 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  658 of 6667 functions ( 9.9%) were compiled, the rest were copied from previous compilation.
+    68 functions were new in current compilation
+    384 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   DirectXProject.vcxproj -> C:\Users\taker\Desktop\MyGame\Recruit\x64\Release\DirectXProject.exe

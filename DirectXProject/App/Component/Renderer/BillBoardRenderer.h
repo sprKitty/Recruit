@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderer.h"
-
+#include <App/Component/Image.h>
 
 class Camera;
 class TexAnimation;
@@ -17,8 +17,10 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	void Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)override;
-	void Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)override;
+	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)override;
+	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)override;
+
+	void CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)override;
 
 	inline void XaxisLock() 
 	{ 
@@ -55,8 +57,9 @@ public:
 		m_pCamera = pCamera;
 	}
 
-	inline void SetMainImage(const std::weak_ptr<TexAnimation> pImage) { m_pMainTexAnim = std::move(pImage); }
-	inline void SetBumpImage(const std::weak_ptr<TexAnimation> pImage) { m_pBumpTexAnim = std::move(pImage); }
+	inline void SetImage(const std::string& str) { m_Image.SetTexture(str); }
+	inline void SetMainTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pMainTexAnim = std::move(pImage); }
+	inline void SetBumpTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pBumpTexAnim = std::move(pImage); }
 
 	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
 	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
@@ -80,4 +83,5 @@ private:
 	std::weak_ptr<TexAnimation> m_pMainTexAnim;
 	std::weak_ptr<TexAnimation> m_pBumpTexAnim;
 	std::weak_ptr<Mesh> m_pMesh;
+	Image m_Image;
 };

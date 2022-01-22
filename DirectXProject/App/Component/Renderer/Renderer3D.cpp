@@ -49,9 +49,10 @@ void Renderer3D::Update()
 	}
 }
 
-void Renderer3D::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)
+void Renderer3D::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
+	if (m_frustumType == FrustumType::OUTSIDE)return;
 
 	if (!PTRNULLCHECK(m_pMainImage))
 	{
@@ -72,9 +73,10 @@ void Renderer3D::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::
 	}
 }
 
-void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
+void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
 	if (type == DrawType::UI)return;
+	if (m_frustumType == FrustumType::OUTSIDE)return;
 	if (type != DrawType::MAX)
 	{
 		if (!m_isDrawType[type])return;
@@ -134,15 +136,33 @@ void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::ki
 	}
 }
 
+void Renderer3D::CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)
+{
+	if (pVP.expired())return;
+
+	if (!m_pTransform.expired())
+	{
+		float fRadius = 0;
+		DirectX::XMMATRIX mtx = m_pTransform.lock()->GetWorldMatrix();
+		DirectX::XMFLOAT4X4 w;
+		DirectX::XMStoreFloat4x4(&w, mtx);
+		fRadius = (w._11 > fRadius) ? w._11 : fRadius;
+		fRadius = (w._22 > fRadius) ? w._22 : fRadius;
+		fRadius = (w._33 > fRadius) ? w._33 : fRadius;
+		w._42 += (fRadius * 0.5f);
+		m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
+	}
+}
+
 void Renderer3D::SetMainImage(const std::string str)
 {
 	m_pMainImage.reset(new Image());
-	m_pMainImage->SetTexturePS(str.c_str());
+	m_pMainImage->SetTexture(str.c_str());
 }
 
 void Renderer3D::SetBumpImage(const std::string str)
 {
 	m_pBumpImage.reset(new Image());
-	m_pBumpImage->SetTexturePS(str.c_str());
+	m_pBumpImage->SetTexture(str.c_str());
 	m_pBumpImage->SetTexType(ShaderResource::TEX_TYPE::BUMP);
 }

@@ -35,7 +35,7 @@ void Player::Init()
 		m_pTexAnimList.emplace_back(pImage);
 	}
 
-	std::weak_ptr<Player> pThis = std::dynamic_pointer_cast<Player>(weak_from_this().lock());
+	std::weak_ptr<Player> pThis = std::dynamic_pointer_cast<Player>(shared_from_this());
 	if (!pThis.expired())
 	{
 		for (int i = 0; i < Player_State::MAX; ++i)
@@ -44,10 +44,14 @@ void Player::Init()
 			m_pStateList.emplace_back(std::move(pState));
 		}
 
+		m_pStateList[Player_State::WAIT]->AddActionFunc(pThis, &Player::SetDestination);
+		m_pStateList[Player_State::WAIT]->AddActionFunc(pThis, &Player::CollisionMove);
 		m_pStateList[Player_State::WAIT]->AddActionFunc(pThis, &Player::CalcDestination);
 		m_pStateList[Player_State::WAIT]->AddActionFunc(pThis, &Player::DestinationCollision);
 		m_pStateList[Player_State::WAIT]->SetTransitionFunc(pThis, &Player::WaitStateChange);
 
+		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::SetDestination);
+		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::CollisionMove);
 		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::CalcDestination);
 		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::DestinationCollision);
 		m_pStateList[Player_State::WALK]->AddActionFunc(pThis, &Player::Move);
@@ -55,7 +59,6 @@ void Player::Init()
 
 		m_pStateList[Player_State::ATTACK]->AddActionFunc(pThis, &Player::AttackAction);
 		m_pStateList[Player_State::ATTACK]->SetTransitionFunc(pThis, &Player::AttackStateChange);
-
 	}
 }
 
@@ -68,6 +71,10 @@ void Player::Update()
 {
 	Player_State::Kind oldState = m_state;
 
+	if (m_pRootMotion.expired())
+	{
+		m_pRootMotion = m_pOwner.lock()->GetComponent<RootMotion>();
+	}
 	SetNeedComponent();
 
 	if (m_pStateList[m_state]->Action())
@@ -84,7 +91,7 @@ void Player::Update()
 
 	if (!m_pBBR.expired())
 	{
-		m_pBBR.lock()->SetMainImage(m_pTexAnimList[m_state]);
+		m_pBBR.lock()->SetMainTexAnimation(m_pTexAnimList[m_state]);
 	}
 }
 
@@ -121,7 +128,6 @@ const bool Player::AttackAction()
 				pMB.lock()->SetStartPos(vPos);
 				pMB.lock()->SetType(MagicType::FIRE);
 				pMB.lock()->SetDiretion(vDir);
-				//pMB.lock()->m_pOwner.lock()->Update();
 			}
 		}
 		m_isAttack = false;
@@ -190,6 +196,7 @@ const int Player::AttackStateChange()
 
 const bool Player::Move()
 {
+	m_vOldPos = m_pTransform.lock()->localpos;
 	m_pTransform.lock()->localpos.x += m_vMove.x * Clocker::GetInstance().GetFrameTime();
 	m_pTransform.lock()->localpos.z += m_vMove.z * Clocker::GetInstance().GetFrameTime();
 
@@ -201,18 +208,71 @@ void Player::SetMousePos(const Vector3 & vPos)
 	m_vMousePos = vPos;
 }
 
+const bool Player::SetDestination()
+{
+	if (m_isChangeDestination)
+	{
+		m_vDestination.x = m_vMousePos.x;
+		m_vDestination.z = m_vMousePos.z;
+		//m_vKeepDestination.x = m_vMousePos.x;
+		//m_vKeepDestination.z = m_vMousePos.z;
+	}
+	return true;
+}
+
+const bool Player::CollisionMove()
+{
+	if (m_pRootMotion.expired())return true;
+
+	std::weak_ptr<Collider> pCollider = m_pOwner.lock()->GetComponent<Collider>();
+	if (pCollider.expired())return true;
+
+	Collider::HitInfo info = m_pCollider.lock()->GetHitInfo(CollisionType::AABB);
+	bool isReCalc = false; // 再計算判定
+	if (!m_pRootMotion.lock()->IsRootListEmpty())
+	{
+		m_isChangeDestination = true;
+		if (!info.isFlg)	// 当たっていなかったら実行　当たっていたら再度最短迂回路を計算
+		{
+			m_vDestination = m_pRootMotion.lock()->CalcGuide(m_pTransform.lock()->localpos);
+			return true;
+		}
+		else
+		{
+			isReCalc = true;
+		}
+	}
+
+	if (!info.isFlg)return true; // 当たっていなかったらスキップ
+	if (info.pObj.expired())return true; // オブジェクト情報が設定されていなかったらスキップ
+	ObjectType::Kind type = info.pObj.lock()->GetType();
+
+	if (type != ObjectType::STAGE)return true; // 関係がないオブジェクトなのでスキップ
+
+
+	if (m_pRootMotion.lock()->IsRootListEmpty()
+		|| isReCalc)
+	{
+		m_pTransform.lock()->localpos = m_vOldPos;
+		m_pRootMotion.lock()->CalcRoot(m_vDestination, m_pTransform.lock()->localpos, true);
+	}
+	m_vDestination = m_pRootMotion.lock()->CalcGuide(m_pTransform.lock()->localpos);
+	m_isChangeDestination = true;
+
+	return true;
+}
+
 const bool Player::CalcDestination()
 {
 	if (m_isChangeDestination)
 	{ 
 		Vector3 vPos = m_pTransform.lock()->localpos;
-		m_vDestination.x = m_vMousePos.x;
-		m_vDestination.z = m_vMousePos.z;
 		m_vMove.x = m_vDestination.x - vPos.x;
 		m_vMove.z = m_vDestination.z - vPos.z;
 		m_vMove.Normalize();
 		m_vMove *= OneSecMoveSpeed;
 		float fRad = MyMath::Radian(vPos.x, vPos.z, vPos.x + m_vMove.x, vPos.z + m_vMove.z);
+		fRad = std::isnan(fRad) ? DirectX::XMConvertToRadians(-90.0f) : fRad;
 		m_Direction = CalcDirection8(DirectX::XMConvertToDegrees(fRad));
 		m_isChangeDestination = false;
 	}
@@ -225,6 +285,10 @@ void Player::EnableChangeDestination()
 		|| m_state == Player_State::WALK)
 	{
 		m_isChangeDestination = true;
+		if (!m_pRootMotion.expired())
+		{
+			m_pRootMotion.lock()->ClearRootList();
+		}
 	}
 }
 

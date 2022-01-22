@@ -26,7 +26,7 @@ void TexAnimation::LoadData(const char * pPath)
 	{
 		if (itr.first == "1ファイル名")
 		{
-			m_pImage->SetTexturePS(itr.second[0].c_str());
+			m_pImage->SetTexture(itr.second[0].c_str());
 		}
 		else if (itr.first == "2アニメーションスピード")
 		{

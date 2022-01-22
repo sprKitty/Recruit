@@ -123,19 +123,21 @@ PS_OUT main(PS_IN pin)
     depth += mapColor.b / 256.0f / 256.0f;
     
     inLVP -= 0.00005f;
-    color.rgb = (inLVP > depth) ? color.rgb * 0.5f : color.rgb;
+    color.rgb = (inLVP > depth + 0.00005f) ? color.rgb * 0.5f : color.rgb;
     pout.main = color;
     
-    depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
-    color = float4(0, 0, 0, 1);
-    color.r = 2.0f * (1.3f - depth);
-    color.r = max(0, color.r);
-    color.r = min(1, color.r);
+    //depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
+    //color = float4(0, 0, 0, 1);
+    //color.r = pow(pin.camPos.z / pin.camPos.w, 30);
     
-    color.b = 2.0f * (depth + 0.1f);
-    color.b = max(0, color.b);
-    color.b = min(1, color.b);
-    pout.dof = color;
+    //color.g = 2.0f * (1.3f - depth);
+    //color.g = max(0, color.g);
+    //color.g = min(1, color.g);
+    
+    //color.b = 2.0f * (depth + 0.1f);
+    //color.b = max(0, color.b);
+    //color.b = min(1, color.b);
+    //pout.dof = color;
     
     return pout;
 }

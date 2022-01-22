@@ -65,28 +65,43 @@ public:
 	void Uninit();
 	void Update();
 
+	
+
 
 	//オブジェクトが持つコンポーネントを取得
 	template<class T>
-	inline std::weak_ptr<T> GetComponent()
+	inline const std::weak_ptr<T> GetComponent()
 	{
 		std::weak_ptr<T> buff;
-		for (std::shared_ptr<Component> com : ComponentList)
+		for (std::shared_ptr<Component> com : m_pComponentList)
 		{
 			buff = std::dynamic_pointer_cast<T>(com);
-			if (!PTRNULLCHECK(buff)) return buff;
+			if (!buff.expired()) return buff;
 		}
 
 		return buff;
 	}
 
+	template<class T>
+	inline const std::vector<std::weak_ptr<T>> GetComponentList()
+	{
+		std::vector<std::weak_ptr<T>> pList;
+		std::weak_ptr<T> buff;
+		for (std::shared_ptr<Component> itr : m_pComponentList)
+		{
+			buff = std::dynamic_pointer_cast<T>(itr);
+			if (!buff.expired()) pList.emplace_back(buff); // 空でなければ追加
+		}
+		return pList;
+	}
+
 	//オブジェクトが持つコンポーネントを追加
 	template<class T>
-	inline std::weak_ptr<T> AddComponent()
+	inline const std::weak_ptr<T> AddComponent()
 	{
 		std::shared_ptr<T> buff(new T());
 		buff->m_pOwner = weak_from_this();
-		ComponentList.emplace_back(buff);
+		m_pComponentList.emplace_back(buff);
 		buff->Init();
 		return buff;
 	}
@@ -94,23 +109,23 @@ public:
 	template<class T>
 	inline void RemoveComponent()
 	{
-		for (std::vector<std::shared_ptr<Component> >::iterator itr = ComponentList.begin(); itr != ComponentList.end();)
+		for (std::vector<std::shared_ptr<Component> >::iterator itr = m_pComponentList.begin(); itr != m_pComponentList.end();)
 		{
 			T* buff = dynamic_cast<T*>(itr->get());
 			if (buff)
 			{
 				buff->Uninit();
-				itr = ComponentList.erase(itr);
+				itr = m_pComponentList.erase(itr);
 			}
 
-			if (itr == ComponentList.end())break;
+			if (itr == m_pComponentList.end())break;
 			++itr;
 		}
 	}
 
 	void EndSortComponent(std::weak_ptr<Component> pCom)
 	{
-		std::vector<std::shared_ptr<Component> > list = std::move(ComponentList);
+		std::vector<std::shared_ptr<Component> > list = std::move(m_pComponentList);
 		int num = -1;
 		for (int i = 0; i < list.size(); ++i)
 		{
@@ -120,12 +135,12 @@ public:
 			}
 			else
 			{
-				ComponentList.emplace_back(std::move(list[i]));
+				m_pComponentList.emplace_back(std::move(list[i]));
 			}
 		}
 		if (num != -1)
 		{
-			ComponentList.emplace_back(std::move(list[num]));
+			m_pComponentList.emplace_back(std::move(list[num]));
 		}
 	}
 
@@ -179,7 +194,7 @@ public:
 private:
 	ObjectType::Kind m_type;
 	std::weak_ptr<Object> m_pParent;
-	std::vector<std::shared_ptr<Component> > ComponentList;
+	std::vector<std::shared_ptr<Component> > m_pComponentList;
 	bool m_isDelete;
 	bool m_isActive;
 };

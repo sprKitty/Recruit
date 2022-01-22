@@ -18,6 +18,8 @@ namespace Player_State
 	};
 }
 
+class RootMotion;
+
 class Player : public Character
 {
 public:
@@ -36,6 +38,8 @@ protected:
 	const bool Move()override;
 
 private:
+	const bool SetDestination();
+	const bool CollisionMove();
 	const bool CalcDestination();
 	const bool DestinationCollision();
 	const bool AttackAction();
@@ -47,11 +51,14 @@ private:
 private:
 	const float OneSecMoveSpeed = 3.0f;
 
+	std::weak_ptr<Object> m_pTalkOccurObj;
+	std::weak_ptr<RootMotion> m_pRootMotion;
 	State<Player>::PTRLIST m_pStateList;
 	Player_State::Kind m_state;
 	Vector3 m_vMousePos;
 	Vector3 m_vDestination;
 	Vector3 m_vMove;
+	Vector3 m_vOldPos;
 	bool m_isMove;
 	bool m_isAttack;
 	bool m_isChangeDestination;

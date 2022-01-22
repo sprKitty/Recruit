@@ -1,5 +1,7 @@
 #pragma once
 #include <App/Component/Component.h>
+#include <App/Component/Event/EventTrigger.h>
+#include <System/ClassDesign/Property.h>
 #include <memory>
 
 class EventBase;
@@ -33,9 +35,13 @@ public:
 		m_pActionEvents.emplace_back(pT);
 	}
 
+public:
+	Property<Event_Type::Kind> type;
+
 private:
 	bool m_isPlay;
 	bool m_isFinishAll;
 	std::vector<std::shared_ptr<EventBase> > m_pActionEvents;
 	int m_nArray;
+	Event_Type::Kind m_type;
 };

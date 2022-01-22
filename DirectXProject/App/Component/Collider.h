@@ -88,7 +88,7 @@ public:
 		return CollisionType::NONE;
 	}
 
-	inline const HitInfo& IsHitInfo(const CollisionType::Kind type)
+	inline const HitInfo& GetHitInfo(const CollisionType::Kind type)
 	{
 		return m_HitInfoList[type];
 	}

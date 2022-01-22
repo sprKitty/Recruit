@@ -20,3 +20,8 @@ constexpr float DEVISIONY = 22.5f / HALFSCREEN_HEIGHT;
 
 #define PTRNULLCHECK(ptr) ((ptr.use_count() == 0))
 
+template <class T>
+using weak_ptr_list = std::vector<std::weak_ptr<T>>;
+
+template <class T>
+using shared_ptr_list = std::vector<std::shared_ptr<T>>;

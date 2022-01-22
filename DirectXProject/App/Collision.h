@@ -22,16 +22,15 @@ public:
 	void Initialize()override;
 	void Finalize()override;
 	void Update();
+	void MouseColUpdate();
 	void Draw(const std::weak_ptr<ShaderBuffer> pBuf);
+
 
 	void AddCollider(const std::weak_ptr<Component>& pComponent);
 
 	void ReleaseCollider(const std::weak_ptr<Component>& pComponent);
 
-	inline void SetMouse(const std::weak_ptr<Mouse> pMouse)
-	{
-		m_pMouse = pMouse;
-	}
+	inline void SetMouse(const std::weak_ptr<Mouse> pMouse) { m_pMouse = pMouse; }
 
 protected:
 	Collision() {}

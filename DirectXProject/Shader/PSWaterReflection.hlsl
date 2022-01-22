@@ -83,31 +83,31 @@ SamplerState MIRROR : register(s4);
 
 float4 main(PS_IN pin) : SV_Target
 {
-    float4 color = 1.5f;
+    float4 color = 1;
     
-    float3 dir = normalize(g_cameraInfo.pos.xyz - pin.worldPos.xyz);
-    
-    float2 uv = pin.uv;
-    uv *= 1.f;
-    uv.xy += g_texSetting.fGameStartCnt * .01f;
-    float height = TEX_GRAYSCALE.Sample(WRAP, pin.uv).r;
-    
-    float2 texUV = uv + .08f * height * dir.xy;
-    float3 N = TEX_WATERBUMP.Sample(WRAP, texUV).xyz * 2.f - 1.f;
-    float3 L = normalize(g_lightInfo.pos.xyz - pin.worldPos.xyz);
-    
-    float3 R = 2.f * N * dot(N, L) - L;
-    float I = pow(saturate(dot(R, dir)), 1) + .5f;
-    I *= TEX_WATERHEIGHT.Sample(WRAP, uv).r;
+    float3 EyeVec = normalize(pin.worldPos.xyz - g_cameraInfo.pos.xyz);
+    float3 LightVec = normalize(pin.worldPos.xyz - g_lightInfo.pos.xyz); //光線ベクトル
+    float height = TEX_WATERHEIGHT.Sample(WRAP, pin.uv).r;
+    float2 texUV = pin.uv + .2f * height * EyeVec.xy + g_texSetting.fGameStartCnt * 0.1f;
+    float3 bumpTex = TEX_WATERBUMP.Sample(WRAP, texUV).rgb * 2.0f - 1.0f;
+    float3 N = (dot(bumpTex, pin.texSpaceLight) + 1.0f) * 0.5f;
+    float3 R = reflect(EyeVec, N);
+    float3 RL = max(dot(R, LightVec),0.f);
+    float3 lightColor = g_lightInfo.color.rgb;
+    float waterTopAddPower = 1.0f;
+    float waterTopAddColor = lightColor * pow(1.f - abs(dot(EyeVec, N)), 10.f) * waterTopAddPower;
+
+    float3 spe = { 2.0f, 1.8f, 1.2f }; // 反射色
     
     float2 mapUV;
     mapUV.x = (1.0f + pin.reflectionCam.x / pin.reflectionCam.w) * 0.5f;
     mapUV.y = (1.0f - pin.reflectionCam.y / pin.reflectionCam.w) * 0.5f;
     float3 mapColor = TEX_WATER.Sample(CRAMP, mapUV).rgb;
-    color.rgb -= I;
-    color *= float4(.0f / 255.f, 120.f / 255.f, 200.f / 255.f, 1);
-    color.rgb *= mapColor;
-    color.a = .8f;
+    color.rgb = mapColor;
+    color.rgb += (waterTopAddColor * TEX_WATERHEIGHT.Sample(WRAP, texUV).r);
+    color.rgb += (spe * pow(RL, 64));
+    color.rgb *= N;
+    color.a = 0.85f;
     
     return color;
 }

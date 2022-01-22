@@ -1,6 +1,7 @@
 #pragma once
 #include <App/Component/Component.h>
 #include <Shader/ShaderBuffer.h>
+#include <App/ViewPoint/ViewPoint.h>
 
 namespace WriteType
 {
@@ -39,7 +40,11 @@ public:
 	virtual void Uninit()override {}
 	virtual void Update()override {}
 
-	virtual void Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type) {}
-	virtual void Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type) {}
+	virtual void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type) {}
+	virtual void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type) {}
 
+	virtual void CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP) {}
+
+protected:
+	FrustumType::kind m_frustumType;
 };

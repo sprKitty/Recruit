@@ -7,6 +7,7 @@
 class MagicBullet;
 class MagicBall;
 class MagicRazer;
+class EventTrigger;
 
 namespace Witch_State
 {
@@ -50,10 +51,7 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	inline void SetTarget(const std::weak_ptr<Object>& pTarget)
-	{
-		m_pTarget = pTarget;
-	}
+	inline void SetTarget(const std::weak_ptr<Object>& pTarget) { m_pTarget = pTarget; }
 
 private:
 	struct RotateBullet
@@ -104,7 +102,6 @@ private:
 	static float CHARGE_RAZER_TIME;
 	static float INIT_RAZER_LENGTH;
 	static float MAX_RAZER_LENGTH;
-
 
 	Witch_State::Master::Kind m_masterState;
 	Witch_State::Boss::Kind m_bossState;

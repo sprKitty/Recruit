@@ -20,9 +20,11 @@ public:
 	void Uninit()override;
 	void Update()override;
 	
-	void Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)override;
-	void Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)override;
+	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)override;
+	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)override;
 
+	void CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)override;
+	
 	void SetMainImage(const std::string str);
 	void SetBumpImage(const std::string str);
 

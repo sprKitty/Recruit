@@ -32,6 +32,8 @@ const char* pPSPath[] =
 	"Assets/PSMixTexture.cso",
 	"Assets/PSDOF.cso",
 	"Assets/PSWaterReflection.cso",
+	"Assets/PSMainScreen.cso",
+	"Assets/PSFade.cso",
 };
 static_assert(!(static_cast<int>(PS_TYPE::MAX) < _countof(pPSPath)), "PSKindへの定義追加忘れ");
 static_assert(!(static_cast<int>(PS_TYPE::MAX) > _countof(pPSPath)), L"PSPathへの読込ファイル追加忘れ");
@@ -85,12 +87,14 @@ void ShaderBuffer::Initialize()
 
 
 	m_pCBList[static_cast<int>(CB_TYPE::INSTANCING_WORLD)]->BindVS(0);
+
 	m_pCBList[static_cast<int>(CB_TYPE::CAMEAR_VP)]->BindVS(1);
 	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_VP)]->BindVS(2);
+
 	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->BindVS(3);
+	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->BindPS(1);
 
 	m_pCBList[static_cast<int>(CB_TYPE::CAMERA_INFO)]->BindPS(0);
-	m_pCBList[static_cast<int>(CB_TYPE::LIGHT_INFO)]->BindPS(1);
 	m_pCBList[static_cast<int>(CB_TYPE::TEX_SETTING)]->BindPS(2);
 	m_pCBList[static_cast<int>(CB_TYPE::POSTEFFECT)]->BindPS(3);
 

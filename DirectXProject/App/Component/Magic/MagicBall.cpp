@@ -44,8 +44,7 @@ void MagicBall::Uninit()
 	{
 		if (itr.expired())continue;
 		if (itr.lock()->m_pOwner.expired())continue;
-		itr.lock()->m_pOwner.lock()->DisableActive();
-		itr.lock()->m_pOwner.lock()->EnableDelete();
+		itr.lock()->m_pOwner.lock()->Uninit();
 	}
 }
 

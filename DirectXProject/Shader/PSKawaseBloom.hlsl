@@ -80,7 +80,7 @@ SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
 
-float4 main(PS_IN pin) : SV_Target
+float4 main(PS_IN pin) : SV_Target0
 {
     float4 color = 0;
     

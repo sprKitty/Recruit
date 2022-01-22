@@ -2,7 +2,7 @@
 #include <MyMath.h>
 #include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
-#include <App/Camera.h>
+#include <App/ViewPoint/Camera.h>
 #include <System/Mouse.h>
 #include <System/DebugLog.h>
 #include <Shader/ShaderBuffer.h>
@@ -55,7 +55,10 @@ void Collision::Update()
 		SameListJudge(m_pNode[i]->pList);
 		ClearNodeColliderList(0, m_pNode[i]);
 	}
+}
 
+void Collision::MouseColUpdate()
+{
 	for (ColliderPtrList::iterator itrA = m_pColliderList.begin(); itrA != m_pColliderList.end();)
 	{
 		if (itrA->lock()->m_pOwner.lock()->IsActive())
@@ -64,56 +67,6 @@ void Collision::Update()
 			{
 				MouseMesh(itrA);
 			}
-			//for (ColliderPtrList::iterator itrB = itrA; itrB != m_pColliderList.end();)
-			//{
-			//	++itrB;
-			//	if (itrB == m_pColliderList.end())
-			//	{
-			//		break;
-			//	}
-			//	if (itrB->lock()->m_pOwner.lock()->IsActive())
-			//	{
-			//		CollisionType::Kind typeA = itrA->lock()->GetCollisionType(itrB->lock()->m_pOwner.lock()->GetType());
-			//		CollisionType::Kind typeB = itrB->lock()->GetCollisionType(itrA->lock()->m_pOwner.lock()->GetType());
-			//		switch (typeA)
-			//		{
-			//		case CollisionType::AABB:
-			//			if (typeB == CollisionType::AABB)
-			//			{
-			//				AABB(itrA, itrB);
-			//			}
-			//			break;
-			//		case CollisionType::OBB:
-			//			if (typeB == CollisionType::OBB)
-			//			{
-			//				OBB(itrA, itrB);
-			//			}
-			//			break;
-			//		case CollisionType::BC:
-			//			if (typeB == CollisionType::BC)
-			//			{
-			//				BC(itrA, itrB);
-			//			}
-			//			break;
-			//		case CollisionType::RAY:
-			//			if (typeB == CollisionType::MESH)
-			//			{
-			//				RayMesh(itrA, itrB);
-			//			}
-			//			break;
-			//		case CollisionType::MESH:
-			//			if (typeB == CollisionType::RAY)
-			//			{
-			//				RayMesh(itrB, itrA);
-			//			}
-			//			break;
-			//		case CollisionType::NONE:
-			//		case CollisionType::MAX:
-			//		default:
-			//			continue;
-			//		}
-			//	}
-			//}
 		}
 		++itrA;
 		if (itrA == m_pColliderList.end())

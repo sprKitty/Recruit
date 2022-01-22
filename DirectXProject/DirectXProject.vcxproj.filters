@@ -65,9 +65,6 @@
     <ClCompile Include="App\Event\Talk.cpp">
       <Filter>C++ファイル\App\Event</Filter>
     </ClCompile>
-    <ClCompile Include="App\Scene\Game.cpp">
-      <Filter>C++ファイル\App\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="App\Scene\SceneMgr.cpp">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
@@ -200,15 +197,6 @@
     <ClCompile Include="App\Component\Magic\MagicBall.cpp">
       <Filter>C++ファイル\App\Component\Magic</Filter>
     </ClCompile>
-    <ClCompile Include="App\Camera.cpp">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClCompile>
-    <ClCompile Include="App\ViewPoint.cpp">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Light.cpp">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClCompile>
     <ClCompile Include="App\Component\Instancing.cpp">
       <Filter>C++ファイル\App\Component</Filter>
     </ClCompile>
@@ -221,6 +209,31 @@
     <ClCompile Include="App\Scene\SceneBase.cpp">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="App\Fade.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Component\RootMotion.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Scene\GameScene.cpp">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\Camera.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\Light.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\ViewPoint.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\LateCamera.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Scene\TitleScene.cpp">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\RotationCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -255,9 +268,6 @@
     </ClInclude>
     <ClInclude Include="App\MMDModel.h">
       <Filter>C++ファイル\App</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Scene\Game.h">
-      <Filter>C++ファイル\App\Scene</Filter>
     </ClInclude>
     <ClInclude Include="System\RenderTarget.h">
       <Filter>C++ファイル\System</Filter>
@@ -403,15 +413,6 @@
     <ClInclude Include="System\ClassDesign\Property.h">
       <Filter>C++ファイル\System\ClassDesign</Filter>
     </ClInclude>
-    <ClInclude Include="App\Camera.h">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="App\ViewPoint.h">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="App\Light.h">
-      <Filter>C++ファイル\App\ViewPoint</Filter>
-    </ClInclude>
     <ClInclude Include="App\Level\LV_MasterWitch.h">
       <Filter>C++ファイル\App\Level</Filter>
     </ClInclude>
@@ -420,6 +421,33 @@
     </ClInclude>
     <ClInclude Include="App\Level\LV_StageBranch.h">
       <Filter>C++ファイル\App\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Component\RootMotion.h">
+      <Filter>C++ファイル\App\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Fade.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Scene\TitleScene.h">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Scene\GameScene.h">
+      <Filter>C++ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint\Camera.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint\Light.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint\ViewPoint.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint\LateCamera.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ViewPoint\RotationCamera.h">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -462,9 +490,6 @@
     <FxCompile Include="Shader\PSMixTexture.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="PSCameraDepth.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\VSCameraDepth.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
@@ -479,6 +504,15 @@
     </FxCompile>
     <FxCompile Include="Shader\VSGrassMove.hlsl">
       <Filter>リソース ファイル\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSMainScreen.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSCameraDepth.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSFade.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

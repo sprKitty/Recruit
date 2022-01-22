@@ -34,7 +34,7 @@ void Image::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 	pBuf.lock()->SetMultiplyColor(m_vMultiplyColor);
 }
 
-void Image::SetTexturePS(const std::string str)
+void Image::SetTexture(const std::string str)
 {
 	m_pTex = TextureData::GetInstance().Get(str);
 }

@@ -3,7 +3,7 @@
 #include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
 #include <App/TexAnimation.h>
-#include <App/Camera.h>
+#include <App/ViewPoint/Camera.h>
 #include <App/RenderPipeline.h>
 #include <System/DebugLog.h>
 
@@ -43,13 +43,18 @@ void BillBoardRenderer::Update()
 	CalcBillBoard();
 }
 
-void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer> pBuf, const WriteType::kind type)
+void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)
 {
 	if (!m_isWriteType[type])return;
+	if (m_frustumType == FrustumType::OUTSIDE)return;
 
 	if (!m_pMainTexAnim.expired())
 	{
 		m_pMainTexAnim.lock()->Bind(pBuf);
+	}
+	else
+	{
+		m_Image.Bind(pBuf);
 	}
 
 	if (!m_pTransform.expired())
@@ -63,13 +68,16 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer> pBuf, const Writ
 	}
 }
 
-void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
+void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
 	if (type == DrawType::UI)return;
+	if (m_frustumType == FrustumType::OUTSIDE)return;
 	if (type != DrawType::MAX)
 	{
 		if (!m_isDrawType[type])return;
 	}
+
+	CalcBillBoard();
 
 	switch (type)
 	{
@@ -93,11 +101,14 @@ void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawT
 		break;
 	}
 	
-	CalcBillBoard();
 
 	if (!m_pMainTexAnim.expired())
 	{
 		m_pMainTexAnim.lock()->Bind(pBuf);
+	}
+	else
+	{
+		m_Image.Bind(pBuf);
 	}
 	
 	if (!m_pBumpTexAnim.expired())
@@ -113,6 +124,25 @@ void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawT
 	if(!m_pMesh.expired())
 	{
 		m_pMesh.lock()->Bind();
+	}
+}
+
+void BillBoardRenderer::CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)
+{
+	if (pVP.expired())return;
+
+	CalcBillBoard();
+	
+	if (!m_pTransform.expired())
+	{
+		float fRadius = 0;
+		DirectX::XMMATRIX mtx = m_pTransform.lock()->GetWorldMatrix();
+		DirectX::XMFLOAT4X4 w;
+		DirectX::XMStoreFloat4x4(&w, mtx);
+		fRadius = (w._11 > fRadius) ? w._11 : fRadius;
+		fRadius = (w._22 > fRadius) ? w._22 : fRadius;
+		fRadius = (w._33 > fRadius) ? w._33 : fRadius;
+		m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
 	}
 }
 

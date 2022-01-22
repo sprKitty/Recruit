@@ -1,17 +1,20 @@
 #pragma once
 #include <App/Component/Component.h>
+#include <System/ClassDesign/Property.h>
 
-class EventTrigger: public Component
+namespace Event_Type
 {
-public:
-	enum class Type
+	enum Kind
 	{
 		TALK_1,
-		CAMERASHAKE_1,
+		TALK_2,
 
 		MAX,
 	};
+}
 
+class EventTrigger: public Component
+{
 public:
 	EventTrigger();
 	~EventTrigger()override;
@@ -25,12 +28,12 @@ public:
 	*/
 	inline void Cause() { m_isCaused = true; }
 
-	inline const bool Check() { return m_isCaused; }
+	inline const bool Check() { return true; }
 
-	inline  const Type GetType() { return m_type; }
-	inline void SetType(const Type type) { m_type = type; }
+public:
+	Property<Event_Type::Kind> type;
 
 private:
-	Type m_type;
+	Event_Type::Kind m_type;
 	bool m_isCaused; // trigger‚ª—LŒø‚©
 };

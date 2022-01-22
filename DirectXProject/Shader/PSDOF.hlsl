@@ -73,7 +73,7 @@ float4 main(PS_IN pin) :SV_Target0
     float4 depth = TEX_DOF.Sample(CRAMP, pin.uv);
     float4 blur = TEX_BLURX.Sample(CRAMP, pin.uv);
     
-    float lerp = 1.0f - depth.r + 1.0f - depth.b;
+    float lerp = 1.0f - depth.g + 1.0f - depth.b;
     float4 color = blur * lerp + main * (1.0f - lerp);
     return color;
 }

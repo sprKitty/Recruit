@@ -11,39 +11,38 @@ Object::Object()
 Object::~Object()
 {
 	Uninit();
-	for (auto com : ComponentList)
+	for (auto& itr : m_pComponentList)
 	{
-		com.reset();
+		itr.reset();
 	}
-	ComponentList.clear();
+	m_pComponentList.clear();
 }
 
 void Object::Init()
 {
 	AddComponent<Transform>();
-	auto buff = ComponentList;
 	m_isDelete = false;
 	m_isActive = true;
-	for (auto com : buff)
+	for (const auto& itr : m_pComponentList)
 	{
-		com->Init();
+		itr->Init();
 	}
 }
 
 void Object::Uninit()
 {
-	auto buff = ComponentList;
-	for (auto com : buff)
+	m_isActive = false;
+	m_isDelete = true;
+	for (const auto& itr : m_pComponentList)
 	{
-		com->Uninit();
+		itr->Uninit();
 	}
 }
 
 void Object::Update()
 {
-	auto buff = ComponentList;
-	for (auto com : buff)
+	for (const auto& itr : m_pComponentList)
 	{
-		com->Update();
+		itr->Update();
 	}
 }

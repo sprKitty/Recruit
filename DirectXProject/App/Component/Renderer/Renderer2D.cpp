@@ -8,21 +8,11 @@
 #include <System/Geometory.h>
 #include <System/Input.h>
 
-Renderer2D::Renderer2D()
-	:m_isActive(true)
-{
-
-}
-
-
-Renderer2D::~Renderer2D()
-{
-}
-
 
 void Renderer2D::Init()
 {
 	m_Image.Init();
+	m_isActive = true;
 }
 
 void Renderer2D::Uninit()
@@ -35,9 +25,10 @@ void Renderer2D::Update()
 {
 }
 
-void Renderer2D::Draw(const std::weak_ptr<ShaderBuffer> pBuf, const DrawType::kind type)
+void Renderer2D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
 	if (type != DrawType::UI)return;
+	if (pBuf.expired())return;
 
 	if (m_isActive)
 	{

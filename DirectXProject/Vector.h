@@ -583,6 +583,18 @@ public:
 		return *this;
 	}
 
+	const float Length()
+	{
+		return sqrtf(x * x + y * y + z * z + w * w);
+	}
+
+	Vector4& Normalize()
+	{
+		float length = Length();
+		*this /= length;
+		return *this;
+	}
+
 	DirectX::XMFLOAT4 Convert()
 	{
 		DirectX::XMFLOAT4 v4;

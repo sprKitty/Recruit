@@ -8,6 +8,12 @@ struct PS_IN
     float4 camPos : TEXCOORD4;
 };
 
+struct PS_OUT
+{
+    float4 mainColor : SV_Target0;
+    float4 depth : SV_Target1;
+};
+
 struct LightInfo
 {
     float4 pos;
@@ -79,30 +85,46 @@ SamplerState BORDER : register(s2);
 SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
-
-float4 main(PS_IN pin) : SV_Target
+PS_OUT main(PS_IN pin)
 {
-    float4 color = 0;
+    PS_OUT pout;
+    
+    pout.mainColor = float4(0, 0, 0, 1);
     float2 size = g_cameraInfo.vpSize.xy;
     
+    pout.mainColor += g_postEffect.blur[0].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[0].x, g_postEffect.blur[0].y));
+    pout.mainColor += g_postEffect.blur[1].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y));
+    pout.mainColor += g_postEffect.blur[2].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y));
+    pout.mainColor += g_postEffect.blur[3].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y));
+    pout.mainColor += g_postEffect.blur[4].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y));
+    pout.mainColor += g_postEffect.blur[5].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y));
+    pout.mainColor += g_postEffect.blur[6].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y));
+    pout.mainColor += g_postEffect.blur[7].z * TEX_EFFECT.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y));
+    pout.mainColor += g_postEffect.blur[1].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y));
+    pout.mainColor += g_postEffect.blur[2].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y));
+    pout.mainColor += g_postEffect.blur[3].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y));
+    pout.mainColor += g_postEffect.blur[4].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y));
+    pout.mainColor += g_postEffect.blur[5].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y));
+    pout.mainColor += g_postEffect.blur[6].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y));
+    pout.mainColor += g_postEffect.blur[7].z * TEX_EFFECT.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y));
     
-    color += g_postEffect.blur[0].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[0].x, g_postEffect.blur[0].y));
-    color += g_postEffect.blur[1].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y));
-    color += g_postEffect.blur[2].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y));
-    color += g_postEffect.blur[3].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y));
-    color += g_postEffect.blur[4].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y));
-    color += g_postEffect.blur[5].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y));
-    color += g_postEffect.blur[6].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y));
-    color += g_postEffect.blur[7].z * TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y));
-    color += g_postEffect.blur[1].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y));
-    color += g_postEffect.blur[2].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y));
-    color += g_postEffect.blur[3].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y));
-    color += g_postEffect.blur[4].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y));
-    color += g_postEffect.blur[5].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y));
-    color += g_postEffect.blur[6].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y));
-    color += g_postEffect.blur[7].z * TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y));
+    pout.depth = TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[0].x, g_postEffect.blur[0].y));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv + float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[1].x, g_postEffect.blur[1].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[2].x, g_postEffect.blur[2].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[3].x, g_postEffect.blur[3].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[4].x, g_postEffect.blur[4].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[5].x, g_postEffect.blur[5].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[6].x, g_postEffect.blur[6].y)));
+    pout.depth = min(pout.depth, TEX_DOF.Sample(CRAMP, pin.uv - float2(g_postEffect.blur[7].x, g_postEffect.blur[7].y)));
     
-    clip(color.a - 0.1f);
-    color.a = 1;
-    return color;
+    clip(pout.mainColor.a - 0.1f);
+    pout.mainColor.a = 1;
+    return pout;
 }
