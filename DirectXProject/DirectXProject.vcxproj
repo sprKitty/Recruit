@@ -172,7 +172,6 @@
     <ClCompile Include="App\Component\Collider.cpp" />
     <ClCompile Include="App\Component\Event\Event.cpp" />
     <ClCompile Include="App\Component\Event\EventTrigger.cpp" />
-    <ClCompile Include="App\Component\Image.cpp" />
     <ClCompile Include="App\Component\Instancing.cpp" />
     <ClCompile Include="App\Component\Magic\MagicBall.cpp" />
     <ClCompile Include="App\Component\Magic\MagicBullet.cpp" />
@@ -188,8 +187,12 @@
     <ClCompile Include="App\EventMgr.cpp" />
     <ClCompile Include="App\Event\Talk.cpp" />
     <ClCompile Include="App\FactoryMethod.cpp" />
-    <ClCompile Include="App\Fade.cpp" />
+    <ClCompile Include="App\Fade\Character_Fade.cpp" />
+    <ClCompile Include="App\Fade\FadeBase.cpp" />
+    <ClCompile Include="App\Fade\MagicUI_Fade.cpp" />
+    <ClCompile Include="App\Fade\Scene_Level_Fade.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
+    <ClCompile Include="App\Image.cpp" />
     <ClCompile Include="App\Level\LV_MasterWitch.cpp" />
     <ClCompile Include="App\Level\LV_StageBranch.cpp" />
     <ClCompile Include="App\MeshData.cpp" />
@@ -235,7 +238,6 @@
     <ClInclude Include="App\Component\Component.h" />
     <ClInclude Include="App\Component\Event\Event.h" />
     <ClInclude Include="App\Component\Event\EventTrigger.h" />
-    <ClInclude Include="App\Component\Image.h" />
     <ClInclude Include="App\Component\Instancing.h" />
     <ClInclude Include="App\Component\Magic\MagicBase.h" />
     <ClInclude Include="App\Component\Magic\MagicBall.h" />
@@ -254,8 +256,12 @@
     <ClInclude Include="App\Event\EventBase.h" />
     <ClInclude Include="App\Event\Talk.h" />
     <ClInclude Include="App\FactoryMethod.h" />
-    <ClInclude Include="App\Fade.h" />
+    <ClInclude Include="App\Fade\Character_Fade.h" />
+    <ClInclude Include="App\Fade\FadeBase.h" />
+    <ClInclude Include="App\Fade\MagicUI_Fade.h" />
+    <ClInclude Include="App\Fade\Scene_Level_Fade.h" />
     <ClInclude Include="App\GameKeyBind.h" />
+    <ClInclude Include="App\Image.h" />
     <ClInclude Include="App\Level\LevelBase.h" />
     <ClInclude Include="App\Level\LV_MasterWitch.h" />
     <ClInclude Include="App\Level\LV_StageBranch.h" />

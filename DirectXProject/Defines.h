@@ -13,9 +13,6 @@
 #define HALFSCREEN_WIDTH (SCREEN_WIDTH / 2)
 #define HALFSCREEN_HEIGHT (SCREEN_HEIGHT / 2)
 
-constexpr float DEVISIONX = 9.0f / HALFSCREEN_WIDTH;
-constexpr float DEVISIONY = 22.5f / HALFSCREEN_HEIGHT;
-
 #define DEBUG ((bool)false)
 
 #define PTRNULLCHECK(ptr) ((ptr.use_count() == 0))

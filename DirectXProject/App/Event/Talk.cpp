@@ -46,7 +46,7 @@ void Talk::Uninit()
 void Talk::Update()
 {
 	m_pMSWindow.lock()->Bind(m_Infos[m_nStep].vTitle, m_Infos[m_nStep].vMain, 32, m_nShowNum);
-	m_fSpeed += Clocker::GetInstance().GetFrameTime();
+	m_fSpeed += Clocker::GetInstance().DeltaTime();
 	if (m_nShowNum < m_Infos[m_nStep].vMain.size())
 	{
 		if (m_fSpeed >= m_fShowTime)

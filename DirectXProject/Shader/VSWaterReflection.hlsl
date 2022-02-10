@@ -13,7 +13,7 @@ struct VS_OUT
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
     float4 worldPos : TEXCOORD2;
-    float4 lightPos : TEXCOORD3;
+    float4 camPos : TEXCOORD3;
     float4 reflectionCam : TEXCOORD4;
     float3 texSpaceLight : TEXCOORD5;
 };
@@ -59,21 +59,15 @@ VS_OUT main(VS_IN vin)
 
     vout.pos = float4(vin.pos, 1);
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.pos = mul(vout.pos, g_lightVP[0].view);
-    vout.pos = mul(vout.pos, g_lightVP[0].proj);
-    vout.lightPos = vout.pos;
+    vout.worldPos = vout.pos;
     
-    vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.pos = mul(vout.pos, g_cameraVP[1].view);
+    vout.pos = mul(vout.worldPos, g_cameraVP[1].view);
     vout.pos = mul(vout.pos, g_cameraVP[1].proj);
     vout.reflectionCam = vout.pos;
     
-    vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.worldPos = vout.pos;
-    vout.pos = mul(vout.pos, g_cameraVP[0].view);
+    vout.pos = mul(vout.worldPos, g_cameraVP[0].view);
     vout.pos = mul(vout.pos, g_cameraVP[0].proj);
+    vout.camPos = vout.pos;
     
     vout.uv = vin.uv;
     

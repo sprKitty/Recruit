@@ -42,7 +42,7 @@ public:
 
 	void Draw(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP, const std::weak_ptr<ViewPoint> pWaterRefVP);
 	
-	void DrawEffect(const std::weak_ptr<Camera> pCamera);
+	void DrawUI(const std::weak_ptr<Camera> pCamera);
 
 	/*************************************************
 	* @brief レンダーパイプラインにオブジェクトを追加

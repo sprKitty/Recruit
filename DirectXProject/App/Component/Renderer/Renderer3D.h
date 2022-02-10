@@ -28,9 +28,9 @@ public:
 	void SetMainImage(const std::string str);
 	void SetBumpImage(const std::string str);
 
+	inline void SetEmissiveColor(const Vector4& color) { m_vEmissive = color; }
 	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
 	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
-	
 	inline void DisableWrite(const WriteType::kind type) { m_isWriteType[type] = false; }
 	inline void DisableDraw(const DrawType::kind type) { m_isDrawType[type] = false; }
 
@@ -42,4 +42,5 @@ private:
 	std::weak_ptr<Instancing> m_pInstancing;
 	std::shared_ptr<Image> m_pMainImage;
 	std::shared_ptr<Image> m_pBumpImage;
+	Vector4 m_vEmissive;
 };

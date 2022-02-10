@@ -6,8 +6,8 @@ void Clocker::Initialize()
 {
 	m_lStart = 0;
 	m_lEnd = 0;
-	m_dFrameTime = 0.0f;
-	m_dGameTime = 0.0f;
+	m_dDeltaTime = 0.0;
+	m_dGameTime = 0.0;
 }
 
 void Clocker::Finalize()
@@ -27,7 +27,7 @@ void Clocker::EndFrame(long end)
 void Clocker::CalcFrameTime()
 {
 	long lFrame = m_lEnd - m_lStart;
-	m_dFrameTime = static_cast<double>(lFrame) / 1000.0f;
+	m_dDeltaTime = static_cast<double>(lFrame) / 1000.0f;
 	AddTime();
 }
 
@@ -53,5 +53,5 @@ const double& Clocker::GetGameTime()
 
 void Clocker::AddTime()
 {
-	m_dGameTime += m_dFrameTime;
+	m_dGameTime += m_dDeltaTime;
 }

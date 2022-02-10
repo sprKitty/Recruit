@@ -125,6 +125,12 @@ void ShaderBuffer::InitParam()
 		DirectX::XMStoreFloat4x4(&m_lightVP.info[i].view, DirectX::XMMatrixIdentity());
 	}
 
+	for (int i = 0; i < ShaderResource::KAWASEBLOOM; ++i)
+	{
+		m_postEffect.kawaseBloom[i] = Vector4(0.f, 0.f, 0.f, 0.f);
+	}
+	m_postEffect.emissive = Vector4(0.f, 0.f, 0.f, 1.f);
+
 	m_texSetting.tiling = DirectX::XMFLOAT2(1, 1);
 	m_texSetting.offset = DirectX::XMFLOAT2(0, 0);
 	m_texSetting.color = DirectX::XMFLOAT4(1, 1, 1, 1);
@@ -291,8 +297,17 @@ void ShaderBuffer::SetCameraInfo(const ShaderResource::CameraInfo & camera)
 	Write(CB_TYPE::CAMERA_INFO);
 }
 
-void ShaderBuffer::SetPostEffectInfo(const ShaderResource::PostEffect & post)
+void ShaderBuffer::SetKawaseBloom(const Vector4* pBloom)
 {
-	m_postEffect = post;
+	for (int i = 0; i < ShaderResource::KAWASEBLOOM; ++i)
+	{
+		m_postEffect.kawaseBloom[i] = pBloom[i];
+	}
+	Write(CB_TYPE::POSTEFFECT);
+}
+
+void ShaderBuffer::SetEmissiveColor(const Vector4 & emissive)
+{
+	m_postEffect.emissive = emissive;
 	Write(CB_TYPE::POSTEFFECT);
 }

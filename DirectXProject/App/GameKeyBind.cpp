@@ -54,11 +54,29 @@ void GameKeyBind::Update()
 				{
 					isInput = itr.pState->Execute();
 				}
-			}
-			if (isInput)
-			{
-				itr.pAction->Execute();
+				else
+				{
+					isInput = !isInput;
+				}
+
+				if (isInput)
+				{
+					itr.pAction->Execute();
+				}
 			}
 		}
+	}
+}
+
+void GameKeyBind::SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, INT8 key, const std::shared_ptr<DelegateBase<void>>& pAction, const std::shared_ptr<DelegateBase<const bool>> pState)
+{
+	if (bind >= m_Info.size())return;
+
+	m_Info[bind].type = type;
+	m_Info[bind].nKey = key;
+	m_Info[bind].pAction = pAction;
+	if (pState)
+	{
+		m_Info[bind].pState = pState;
 	}
 }

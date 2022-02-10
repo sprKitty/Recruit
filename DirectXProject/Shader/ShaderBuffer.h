@@ -67,6 +67,7 @@ namespace CB_TYPE
 namespace ShaderResource
 {
 	static constexpr int VPBUFFER_SIZE = 2;
+	static constexpr int KAWASEBLOOM = 8;
 
 	// テクスチャのサンプラー設定
 	enum class SAMLER_TYPE
@@ -131,15 +132,6 @@ namespace ShaderResource
 		DirectX::XMFLOAT4X4 bone[250];
 	};
 
-	struct MappingData
-	{
-		DirectX::XMFLOAT4 color;
-		int nBlur;
-		int nWidth;
-		int nHeight;
-		int nDummy;
-	};
-
 	// テクスチャの設定
 	struct TexSetting
 	{
@@ -154,7 +146,8 @@ namespace ShaderResource
 
 	struct PostEffect
 	{
-		Vector4 blur[8];
+		Vector4 kawaseBloom[KAWASEBLOOM];
+		Vector4 emissive;
 	};
 
 };
@@ -212,8 +205,9 @@ public:
 	
 	void SetCameraInfo(const ShaderResource::CameraInfo& camera);
 	
-	void SetPostEffectInfo(const ShaderResource::PostEffect& post);
+	void SetKawaseBloom(const Vector4* pBloom);
 
+	void SetEmissiveColor(const Vector4& emissive);
 
 private:
 	static const int INSTANCING_MAX = 1024;

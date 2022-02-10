@@ -5,7 +5,7 @@
 #include <System/RenderTarget.h>
 #include <System/Input.h>
 #include <System/ClassDesign/Delegate.h>
-#include <App/Fade.h>
+#include <App/Fade/FadeBase.h>
 #include <Shader/ShaderBuffer.h>
 #include <Defines.h>
 
@@ -27,7 +27,8 @@ public:
 	SceneBase() 
 	{
 		std::unique_ptr<RenderTarget> pRT(new RenderTarget());
-		pRT->Create(SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+		pRT->Create(SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R32G32B32A32_FLOAT, 0);
+		//pRT->Create(SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 		m_pMainScreen.reset(new Camera());
 		m_pMainScreen->Init();
 		m_pMainScreen->SetRenderTarget(pRT);
@@ -58,10 +59,10 @@ public:
 
 	inline void SetShaderBuffer(const std::weak_ptr<ShaderBuffer> ptr) { m_pShaderBuffer = ptr; }
 	inline ID3D11ShaderResourceView* GetMainScreenTex() { return m_pMainScreen->GetRenderingTexture(0); }
-	inline void SetFadeFunction(const std::shared_ptr<Fade>& pFade) 
+	inline void SetFadeFunction(const std::shared_ptr<FadeBase>& pFade)
 	{
-		m_pFadeInFunction = Delegate<Fade, void>::CreateDelegator(pFade, &Fade::StartFadeIn);
-		m_pFadeOutFunction = Delegate<Fade, void>::CreateDelegator(pFade, &Fade::StartFadeOut);
+		m_pFadeInFunction = Delegate<FadeBase, void>::CreateDelegator(pFade, &FadeBase::StartFadeIn);
+		m_pFadeOutFunction = Delegate<FadeBase, void>::CreateDelegator(pFade, &FadeBase::StartFadeOut);
 	}
 
 protected:

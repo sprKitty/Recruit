@@ -38,7 +38,7 @@ void MagicBullet::Update()
 	}
 
 
-	m_fSurviveTime += Clocker::GetInstance().GetFrameTime();
+	m_fSurviveTime += Clocker::GetInstance().DeltaTime();
 	if (m_fSurviveTime >= MAX_SURVIVETIME)
 	{
 		m_pOwner.lock()->DisableActive();
@@ -46,7 +46,7 @@ void MagicBullet::Update()
 
 	if (!m_pTransform.expired())
 	{
-		m_pTransform.lock()->localpos += m_vMoveDirection * MOVE_SPEED * Clocker::GetInstance().GetFrameTime();
+		m_pTransform.lock()->localpos += m_vMoveDirection * MOVE_SPEED * Clocker::GetInstance().DeltaTime();
 	}
 }
 

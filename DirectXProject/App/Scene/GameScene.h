@@ -25,7 +25,6 @@ private:
 	std::shared_ptr<GameKeyBind> m_pKeyBind;
 	std::shared_ptr<MessageWindow> m_pMessageWindow;
 	std::shared_ptr<Camera> m_pCamera;
-	std::shared_ptr<Camera> m_pCameraDepth;
 	std::shared_ptr<Camera> m_pReflectionCamera;
 	std::shared_ptr<Camera> m_pKawaseBloom;
 	std::shared_ptr<Camera> m_pBlurXCamera;
@@ -34,9 +33,8 @@ private:
 	std::shared_ptr<Camera> m_pBlurYCameraHalf;
 	std::shared_ptr<Camera> m_pBlurXCameraHalfHalf;
 	std::shared_ptr<Camera> m_pBlurYCameraHalfHalf;
-	//std::shared_ptr<Camera> m_pBlurXCameraHalfHalfHalf;
-	//std::shared_ptr<Camera> m_pBlurYCameraHalfHalfHalf;
-	std::shared_ptr<Camera> m_pEffectCamera;
+	std::shared_ptr<Camera> m_pBlurXCameraHalfHalfHalf;
+	std::shared_ptr<Camera> m_pBlurYCameraHalfHalfHalf;
 
 	std::shared_ptr<Light> m_pLight;
 

@@ -3,7 +3,7 @@ struct PS_IN
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float4 wPos : TEXCOORD2;
+    float4 worldPos : TEXCOORD2;
     float4 lightPos : TEXCOORD3;
     float4 camPos : TEXCOORD4;
 };
@@ -11,7 +11,8 @@ struct PS_IN
 struct PS_OUT
 {
     float4 main : SV_Target0;
-    float4 dof : SV_Target1;
+    float4 emissive : SV_Target1;
+    float4 depth : SV_Target2;
 };
 
 struct LightInfo
@@ -38,6 +39,12 @@ struct TexSetting
     float fDummy;
 };
 
+struct PostEffect
+{
+    float4 blur[8];
+    float4 emissive;
+};
+
 cbuffer ConstantBuffer0 : register(b0)
 {
     CameraInfo g_cameraInfo;
@@ -51,6 +58,11 @@ cbuffer ConstantBuffer1 : register(b1)
 cbuffer ConstantBuffer2 : register(b2)
 {
     TexSetting g_texSetting;
+}
+
+cbuffer ConstantBuffer3 : register(b3)
+{
+    PostEffect g_postEffect;
 }
 
 Texture2D TEX_MAIN : register(t0);
@@ -79,19 +91,10 @@ SamplerState MIRROR : register(s4);
 PS_OUT main(PS_IN pin)
 {
     PS_OUT pout;
-    float4 color = { 0, 0, 0, 1 };
-    float depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
-    color = float4(0, 0, 0, 1);
-    color.r = pow(pin.camPos.z / pin.camPos.w, 30);
+    pout.main = float4(0.f, 0.f, 0.f, 1.0f);
+    //pout.main = 1.f;
+    pout.emissive = g_postEffect.emissive;
+    pout.depth = pin.camPos.z / pin.camPos.w;
     
-    color.g = 2.0f * (1.3f - depth);
-    color.g = max(0, color.g);
-    color.g = min(1, color.g);
-    
-    color.b = 2.0f * (depth + 0.1f);
-    color.b = max(0, color.b);
-    color.b = min(1, color.b);
-    pout.main = float4(255.0f / 255.0f, 165.0f / 255.0f, 100.0f / 255.0f, 1.0f);
-    pout.dof = color;
     return pout;
 }

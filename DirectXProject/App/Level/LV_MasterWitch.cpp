@@ -16,6 +16,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 		if (!pET.expired())
 		{
 			pET.lock()->type.set(Event_Type::Kind::TALK_1);
+			pET.lock()->Cause();
 		}
 		if (!pTransform.expired())
 		{
@@ -42,7 +43,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 		pOpeningTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
 		pOpeningTalk->SetMessageWindow(pMW);
 
-		pDieTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/lastTalk.csv"));
+		pDieTalk = std::move(FactoryMethod::GetInstance().CreateTalkEvent("Assets/csv/dieTalk.csv"));
 		pDieTalk->SetMessageWindow(pMW);
 	}
 

@@ -5,6 +5,7 @@
 #include <App/Component/Event/EventTrigger.h>
 #include <App/Component/Event/Event.h>
 #include <App/Component/Renderer/Renderer3D.h>
+#include <App/Component/Renderer/Renderer2D.h>
 #include <App/Component/Renderer/BillBoardRenderer.h>
 #include <App/Component/Mesh.h>
 #include <App/Component/Character/Player.h>
@@ -60,6 +61,8 @@ public:
 	Object::WORKER_OBJ CreateBoss1Object();
 
 	Object::WORKER_OBJ CreateEventObject();
+
+	Object::WORKER_OBJ CreateMagicUI();
 
 	std::shared_ptr<Talk> CreateTalkEvent(const char* pPath);
 

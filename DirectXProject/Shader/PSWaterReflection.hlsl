@@ -4,9 +4,16 @@ struct PS_IN
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
     float4 worldPos : TEXCOORD2;
-    float4 lightPos : TEXCOORD3;
+    float4 camPos : TEXCOORD3;
     float4 reflectionCam : TEXCOORD4;
     float3 texSpaceLight : TEXCOORD5;
+};
+
+struct PS_OUT
+{
+    float4 main : SV_Target0;
+    float4 emissive : SV_Target1;
+    float4 depth : SV_Target2;
 };
 
 struct LightInfo
@@ -36,8 +43,10 @@ struct TexSetting
 
 struct PostEffect
 {
-    int4 blur;
+    float4 blur[8];
+    float4 emissive;
 };
+
 cbuffer ConstantBuffer0 : register(b0)
 {
     CameraInfo g_cameraInfo;
@@ -57,6 +66,7 @@ cbuffer ConstantBuffer3 : register(b3)
 {
     PostEffect g_postEffect;
 }
+
 
 Texture2D TEX_MAIN : register(t0);
 Texture2D TEX_WATER : register(t1);
@@ -81,33 +91,47 @@ SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
 
-float4 main(PS_IN pin) : SV_Target
+PS_OUT main(PS_IN pin)
 {
-    float4 color = 1;
+    PS_OUT pout;
     
-    float3 EyeVec = normalize(pin.worldPos.xyz - g_cameraInfo.pos.xyz);
-    float3 LightVec = normalize(pin.worldPos.xyz - g_lightInfo.pos.xyz); //光線ベクトル
+    pout.emissive = g_postEffect.emissive;
+    
+    float4 color = 1.f;
+    //float4 color = float4(0.8f, 0.8f, 0.8f, 1.f);
+    
+    float3 N[2];
     float height = TEX_WATERHEIGHT.Sample(WRAP, pin.uv).r;
-    float2 texUV = pin.uv + .2f * height * EyeVec.xy + g_texSetting.fGameStartCnt * 0.1f;
-    float3 bumpTex = TEX_WATERBUMP.Sample(WRAP, texUV).rgb * 2.0f - 1.0f;
-    float3 N = (dot(bumpTex, pin.texSpaceLight) + 1.0f) * 0.5f;
-    float3 R = reflect(EyeVec, N);
-    float3 RL = max(dot(R, LightVec),0.f);
-    float3 lightColor = g_lightInfo.color.rgb;
-    float waterTopAddPower = 1.0f;
-    float waterTopAddColor = lightColor * pow(1.f - abs(dot(EyeVec, N)), 10.f) * waterTopAddPower;
+    float3 L = pin.texSpaceLight * float3(-1, 1, -1);
+    float3 V = normalize(pin.worldPos.xyz - g_cameraInfo.pos.xyz);
+    float2 texUV = pin.uv + .05f * height * V.xy;
+    N[0] = normalize(TEX_WATERBUMP.Sample(WRAP, texUV + float2(-g_texSetting.fGameStartCnt * 0.0f, g_texSetting.fGameStartCnt * 0.5f)).rgb * 2.0f - 1.0f);
+    N[1] = normalize(TEX_WATERBUMP.Sample(WRAP, texUV + float2(g_texSetting.fGameStartCnt * 0.0f, g_texSetting.fGameStartCnt * 0.2f)).rgb * 2.0f - 1.0f);
+    float D = 1.f;
+    for (int i = 0; i < 2; ++i)
+    {
+        float3 R = normalize(reflect(L, N[i]));
+    
+        float S = dot(V, R) * 0.5f + 0.5f;
+        color.rgb *= pow(S, 64);
 
-    float3 spe = { 2.0f, 1.8f, 1.2f }; // 反射色
+        float calcD = dot(N[i], L);
+        calcD = (calcD + 1.0f) * 0.5f;
+        D *= calcD;
+    }
     
     float2 mapUV;
     mapUV.x = (1.0f + pin.reflectionCam.x / pin.reflectionCam.w) * 0.5f;
     mapUV.y = (1.0f - pin.reflectionCam.y / pin.reflectionCam.w) * 0.5f;
     float3 mapColor = TEX_WATER.Sample(CRAMP, mapUV).rgb;
-    color.rgb = mapColor;
-    color.rgb += (waterTopAddColor * TEX_WATERHEIGHT.Sample(WRAP, texUV).r);
-    color.rgb += (spe * pow(RL, 64));
-    color.rgb *= N;
-    color.a = 0.85f;
+    D = 1.f - D;
+    pout.emissive = color;
+    color.rgb += (float4(0.0f / 255.f, 100.f / 255.f, 150.f / 205.f, 1) * D);
+    color.rgb += (mapColor);
     
-    return color;
+    
+    pout.main = color;
+    pout.depth = pin.camPos.z / pin.camPos.w;
+    
+    return pout;
 }

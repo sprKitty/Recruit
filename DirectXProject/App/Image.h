@@ -10,8 +10,17 @@ public:
 
 	void Init();
 	void Uninit();
+
+	/*
+	* @brief テクスチャに関するものすべてをBindする
+	*/
 	void Bind(const std::weak_ptr<ShaderBuffer>& pBuf);
-	
+
+	/*
+	* @brief テクスチャのみをBindする
+	*/
+	void BindTex(const std::weak_ptr<ShaderBuffer>& pBuf);
+
 	void SetTexture(const std::string str);
 	/*
 	*	ShaderResource::

@@ -58,14 +58,13 @@ VS_OUT main(VS_IN vin)
 
     vout.pos = float4(vin.pos, 1);
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.pos = mul(vout.pos, g_lightVP[0].view);
+    vout.wPos = vout.pos;
+    
+    vout.pos = mul(vout.wPos, g_lightVP[0].view);
     vout.pos = mul(vout.pos, g_lightVP[0].proj);
     vout.lightPos = vout.pos;
     
-    vout.pos = float4(vin.pos, 1);
-    vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.wPos = vout.pos;
-    vout.pos = mul(vout.pos, g_cameraVP[0].view);
+    vout.pos = mul(vout.wPos, g_cameraVP[0].view);
     vout.pos = mul(vout.pos, g_cameraVP[0].proj);
     vout.camPos = vout.pos;
     

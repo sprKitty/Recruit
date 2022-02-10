@@ -1,11 +1,12 @@
 #pragma once
 #include "Renderer.h"
-#include <App/Component/Image.h>
+#include <App/Image.h>
 
 class Camera;
 class TexAnimation;
 class Mesh;
 class Transform;
+class FadeBase;
 
 class BillBoardRenderer : public Renderer
 {
@@ -60,6 +61,7 @@ public:
 	inline void SetImage(const std::string& str) { m_Image.SetTexture(str); }
 	inline void SetMainTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pMainTexAnim = std::move(pImage); }
 	inline void SetBumpTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pBumpTexAnim = std::move(pImage); }
+	inline void SetFadeAnimation(const std::weak_ptr<FadeBase> pFade) { m_pFadeAnimation = std::move(pFade); }
 
 	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
 	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
@@ -82,6 +84,7 @@ private:
 	std::weak_ptr<Transform> m_pTransform;
 	std::weak_ptr<TexAnimation> m_pMainTexAnim;
 	std::weak_ptr<TexAnimation> m_pBumpTexAnim;
+	std::weak_ptr<FadeBase> m_pFadeAnimation;
 	std::weak_ptr<Mesh> m_pMesh;
 	Image m_Image;
 };

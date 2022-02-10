@@ -1,5 +1,5 @@
 #include "TexAnimation.h"
-#include <App/Component/Image.h>
+#include <App/Image.h>
 #include <System/LoadFiles.h>
 #include <System/Clocker.h>
 #include <System/DebugLog.h>
@@ -135,7 +135,7 @@ void TexAnimation::Update(const int nType)
 	{
 		if (m_fTime < m_fAnimSpeed)
 		{
-			m_fTime += Clocker::GetInstance().GetFrameTime();
+			m_fTime += Clocker::GetInstance().DeltaTime();
 		}
 		else
 		{
@@ -164,7 +164,7 @@ void TexAnimation::Update(const int nType)
 	{
 		if (m_fTime < m_fAnimSpeed)
 		{
-			m_fTime += Clocker::GetInstance().GetFrameTime();
+			m_fTime += Clocker::GetInstance().DeltaTime();
 		}
 		else
 		{

@@ -1,6 +1,7 @@
 #pragma once
 #include <App/Component/Character/Character.h>
 #include <App/Component/Object.h>
+#include <App/Fade/MagicUI_Fade.h>
 #include<System/ClassDesign/StateBase.h>
 
 
@@ -8,6 +9,7 @@ class MagicBullet;
 class MagicBall;
 class MagicRazer;
 class EventTrigger;
+class Renderer2D;
 
 namespace Witch_State
 {
@@ -23,6 +25,7 @@ namespace Witch_State
 		enum Kind
 		{
 			WAIT = 0,
+			//DIE,
 			MAX
 		};
 	};
@@ -35,7 +38,6 @@ namespace Witch_State
 			ATTACK1 = 1,
 			ATTACK2 = 2,
 			ATTACK3 = 3,
-			//ROTATERAZER = 4,
 			MAX,
 		};
 	}
@@ -83,7 +85,6 @@ private:
 	const bool CalcTarget();
 
 	const bool Wait();
-	
 	const bool Attack1();
 	const bool Attack2();
 	const bool Attack3();
@@ -93,9 +94,9 @@ private:
 	const bool ChargeRotateRazer();
 	const bool AttackRotateRazer();
 
-	const int MasterFromBoss();
-	const int ChangeBossState();
-	const int ResetBossState();
+	const UINT8 MasterFromBoss();
+	const UINT8 ChangeBossState();
+	const UINT8 ResetBossState();
 
 private:
 	static float WAIT_TIME;
@@ -107,6 +108,8 @@ private:
 	Witch_State::Boss::Kind m_bossState;
 	Witch_State::Kind m_state;
 	Object::WORKER_OBJECTLIST m_pAttackObject;
+	std::shared_ptr<MagicUI_Fade> m_pHPGaugeUIFade;
+	std::weak_ptr<Renderer2D> m_pHPGauge;
 	std::vector<std::weak_ptr<MagicBullet> > m_pAttackList1;
 	std::vector<std::weak_ptr<MagicBullet> > m_pAttackList2;
 	std::vector<std::weak_ptr<MagicBall> > m_pAttackList3;

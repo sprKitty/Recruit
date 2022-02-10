@@ -23,8 +23,8 @@ namespace KeyBind
 	{
 		MOVE,
 		ATTACK,
-		//SKILLATTACK1,
-		//SKILLATTACK2,
+		HEAL,
+		TELEPORT,
 
 		MAX,
 	};
@@ -36,7 +36,7 @@ private:
 	struct Info
 	{
 		KeyType::Kind type;
-		int nKey;
+		INT8 nKey;
 		std::shared_ptr<DelegateBase<const bool> > pState;
 		std::shared_ptr<DelegateBase<void> > pAction;
 	};
@@ -49,18 +49,7 @@ public:
 	void Finalize();
 	void Update();
 
-	inline void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, int key, const std::shared_ptr<DelegateBase<void> >&  pAction, const std::shared_ptr<DelegateBase<const bool> > pState = nullptr)
-	{
-		if (bind >= m_Info.size())return;
-
-		m_Info[bind].type = type;
-		m_Info[bind].nKey = key;
-		m_Info[bind].pAction = pAction;
-		if (pState)
-		{
-			m_Info[bind].pState = pState;
-		}
-	}
+	void SetKeyInfo(KeyBind::Kind bind, KeyType::Kind type, INT8 key, const std::shared_ptr<DelegateBase<void> >&  pAction, const std::shared_ptr<DelegateBase<const bool> > pState = nullptr);
 
 private:
 	std::vector<Info> m_Info;

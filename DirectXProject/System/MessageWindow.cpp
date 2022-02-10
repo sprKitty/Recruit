@@ -13,17 +13,19 @@ void MessageWindow::Initialize()
 
 	m_pWindow = m_pObject->AddComponent<Renderer2D>();
 	Renderer2D::RectTransform rect;
-	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.35f, 10);
+	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.35f, 5);
 	rect.scale = Vector2(static_cast<float>(SCREEN_WIDTH) * 0.7f, static_cast<float>(SCREEN_HEIGHT) * 0.25f);
 	m_pWindow.lock()->SetRectTransform(rect);
 	m_pWindow.lock()->m_Image.SetTexture("textframe.png");
+	m_pWindow.lock()->EnableDraw(DrawType::UI_NORMAL);
 
 	m_pHiragana = m_pObject->AddComponent<Renderer2D>();
-	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.4f, 9);
+	rect.pos = Vector3(static_cast<float>(0), static_cast<float>(SCREEN_HEIGHT) * 0.4f, 4);
 	rect.scale = Vector2(static_cast<float>(SCREEN_WIDTH) * 0.7f, static_cast<float>(SCREEN_HEIGHT) * 0.15f);
 	m_pHiragana.lock()->SetRectTransform(rect);
 	m_pHiragana.lock()->m_Image.m_vTiling = 0.1f;
 	m_pHiragana.lock()->m_Image.SetTexture("hiragana.png");
+	m_pHiragana.lock()->EnableDraw(DrawType::UI_NORMAL);
 	
 	LoadFiles lf;
 	STRINGMAP sm = lf.CSV("Assets/csv/message.csv");
@@ -68,7 +70,7 @@ void MessageWindow::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 		{
 			if (!m_pWindow.expired())
 			{
-				m_pWindow.lock()->Draw(pBuf);
+				m_pWindow.lock()->Draw(pBuf, DrawType::UI_NORMAL);
 			}
 
 			Renderer2D::RectTransform rect = m_pHiragana.lock()->GetRectTransform();
@@ -81,7 +83,7 @@ void MessageWindow::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 				rect.pos.y = static_cast<float>(SCREEN_HEIGHT) * 0.25f;
 				m_pHiragana.lock()->SetRectTransform(rect);
 				m_pHiragana.lock()->m_Image.m_vOffset = m_StackMsgInfo.vTitleOffsets[i];
-				m_pHiragana.lock()->Draw(pBuf);
+				m_pHiragana.lock()->Draw(pBuf, DrawType::UI_NORMAL);
 			}
 
 			fSize = static_cast<float>(m_StackMsgInfo.nMainFontSize) / static_cast<float>(SCREEN_HEIGHT) * 500.0f;
@@ -93,7 +95,7 @@ void MessageWindow::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 				rect.pos.y = static_cast<float>(SCREEN_HEIGHT) * 0.35f;
 				m_pHiragana.lock()->SetRectTransform(rect);
 				m_pHiragana.lock()->m_Image.m_vOffset = m_StackMsgInfo.vMainOffsets[i];
-				m_pHiragana.lock()->Draw(pBuf);
+				m_pHiragana.lock()->Draw(pBuf, DrawType::UI_NORMAL);
 			}
 		}
 		m_StackMsgInfo.vTitleOffsets.clear();

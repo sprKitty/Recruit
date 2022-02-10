@@ -54,6 +54,9 @@
     <Filter Include="C++ファイル\App\Level">
       <UniqueIdentifier>{266fa714-8b11-4d50-8786-49de55fe2021}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C++ファイル\App\Fade">
+      <UniqueIdentifier>{a69071db-f70e-4089-bb1c-5b38607867ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader\ShaderBuffer.cpp">
@@ -155,9 +158,6 @@
     <ClCompile Include="System\DebugLog.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
-    <ClCompile Include="App\Component\Image.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\Component\Mesh.cpp">
       <Filter>C++ファイル\App\Component</Filter>
     </ClCompile>
@@ -209,9 +209,6 @@
     <ClCompile Include="App\Scene\SceneBase.cpp">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="App\Fade.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\Component\RootMotion.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
@@ -234,6 +231,21 @@
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
     <ClCompile Include="App\ViewPoint\RotationCamera.cpp" />
+    <ClCompile Include="App\Image.cpp">
+      <Filter>C++ファイル\App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Fade\FadeBase.cpp">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Fade\Scene_Level_Fade.cpp">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Fade\Character_Fade.cpp">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Fade\MagicUI_Fade.cpp">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
@@ -365,9 +377,6 @@
     <ClInclude Include="System\DebugLog.h">
       <Filter>C++ファイル\System</Filter>
     </ClInclude>
-    <ClInclude Include="App\Component\Image.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
     <ClInclude Include="System\ClassDesign\StateBase.h">
       <Filter>C++ファイル\System\ClassDesign</Filter>
     </ClInclude>
@@ -425,9 +434,6 @@
     <ClInclude Include="App\Component\RootMotion.h">
       <Filter>C++ファイル\App\Component</Filter>
     </ClInclude>
-    <ClInclude Include="App\Fade.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
     <ClInclude Include="App\Scene\TitleScene.h">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClInclude>
@@ -448,6 +454,21 @@
     </ClInclude>
     <ClInclude Include="App\ViewPoint\RotationCamera.h">
       <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Image.h">
+      <Filter>C++ファイル\App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Fade\Scene_Level_Fade.h">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Fade\FadeBase.h">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Fade\Character_Fade.h">
+      <Filter>C++ファイル\App\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Fade\MagicUI_Fade.h">
+      <Filter>C++ファイル\App\Fade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

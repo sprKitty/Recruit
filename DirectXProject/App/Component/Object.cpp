@@ -23,6 +23,7 @@ void Object::Init()
 	AddComponent<Transform>();
 	m_isDelete = false;
 	m_isActive = true;
+	m_type = ObjectType::NONE;
 	for (const auto& itr : m_pComponentList)
 	{
 		itr->Init();

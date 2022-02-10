@@ -2,9 +2,9 @@
 #include <App/Component/Object.h>
 #include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
-#include <App/Component/Image.h>
 #include <App/Component/Instancing.h>
 #include <App/RenderPipeline.h>
+#include <App/Image.h>
 #include <System/Input.h>
 #include <System/Geometory.h>
 
@@ -25,7 +25,7 @@ void Renderer3D::Init()
 		itr = false;
 	}
 	m_isWriteType[WriteType::DEPTH_OF_FIELD] = true;
-
+	m_vEmissive = Vector4(0.f, 0.f, 0.f, 1.f);
 }
 
 void Renderer3D::Uninit()
@@ -75,7 +75,7 @@ void Renderer3D::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType:
 
 void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
-	if (type == DrawType::UI)return;
+	if ((type == DrawType::UI_NORMAL) || (type == DrawType::UI_MAGIC))return;
 	if (m_frustumType == FrustumType::OUTSIDE)return;
 	if (type != DrawType::MAX)
 	{
@@ -121,6 +121,8 @@ void Renderer3D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::k
 	{
 		m_pBumpImage->Bind(pBuf);
 	}
+
+	pBuf.lock()->SetEmissiveColor(m_vEmissive);
 
 	if (m_pInstancing.expired())
 	{

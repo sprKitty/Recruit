@@ -17,7 +17,8 @@ public:
 	const std::string GetDateTimeStr();
 
 	const double& GetGameTime();
-	inline const float GetFrameTime() { return static_cast<float>(m_dFrameTime); }
+	inline const float DeltaTime() { return static_cast<float>(m_dDeltaTime); }
+
 protected:
 	Clocker() {}
 	virtual ~Clocker() {}
@@ -28,7 +29,7 @@ private:
 private:
 	long  m_lStart;
 	long  m_lEnd;
-	double m_dFrameTime;
+	double m_dDeltaTime;
 	double m_dGameTime;
 
 };

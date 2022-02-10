@@ -2,6 +2,7 @@
 #include <App/Scene/TitleScene.h>
 #include <App/Scene/GameScene.h>
 #include <App/RenderPipeline.h>
+#include <App/Fade/Scene_Level_Fade.h>
 #include <App/MeshData.h>
 #include <App/TextureData.h>
 #include <App/Collision.h>
@@ -43,21 +44,28 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	TextureData::GetInstance().Load("terrainBump.png");
 	TextureData::GetInstance().Load("terrainGrass.png");
 	TextureData::GetInstance().Load("terrainGrassBump.png");
+	TextureData::GetInstance().Load("fence.png");
+	TextureData::GetInstance().Load("fenceBump.png");
 	TextureData::GetInstance().Load("tree.png");
 	TextureData::GetInstance().Load("grass.png");
 	TextureData::GetInstance().Load("pushEnter.png");
 	TextureData::GetInstance().Load("gameLogo.png");
+	TextureData::GetInstance().Load("teleport.png");
+	TextureData::GetInstance().Load("hp.png");
 	TextureData::GetInstance().Load("titleCharacter.png");
 	TextureData::GetInstance().Load("noise.png", "GrayScale/");
 	TextureData::GetInstance().Load("noiseBump.png", "GrayScale/");
 	TextureData::GetInstance().Load("001.png", "GrayScale/");
+	TextureData::GetInstance().Load("a.png", "GrayScale/");
+	TextureData::GetInstance().Load("magicFade.png", "GrayScale/");
+	TextureData::GetInstance().Load("hpbar.png", "GrayScale/");
 	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noise.png"), ShaderResource::TEX_TYPE::WATER_HEIGHT);
 	m_pShaderBuffer->SetTexturePS(TextureData::GetInstance().Get("noiseBump.png"), ShaderResource::TEX_TYPE::WATER_BUMP);
 	Collision::GetInstance().Initialize();
 	EventMgr::GetInstance().Initialize();
 	srand(timeGetTime());
 
-	m_pFade.reset(new Fade());
+	m_pFade.reset(new Scene_Level_Fade());
 	m_pFade->Init();
 
 	m_pSceneList.resize(Scene_Type::MAX);
@@ -143,6 +151,6 @@ void SceneMgr::Draw()
 	m_pShaderBuffer->SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();
 
-	m_pFade->Draw(m_pShaderBuffer);
+	m_pFade->Bind(m_pShaderBuffer);
 	DirectX11::GetInstance().EndDraw();
 }

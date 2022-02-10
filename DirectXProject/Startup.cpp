@@ -11,6 +11,7 @@
 //--- プロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+static VOID funcSetClientSize(HWND hWnd, LONG sx, LONG sy);
 
 // エントリポイント
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -58,6 +59,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
+	funcSetClientSize(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT);
 	// 初期化処理
 	if (FAILED(SceneMgr::GetInstance().Init(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT)))
 	{
@@ -95,14 +97,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (nowTime - countStartTime >= 1000.0f)
 			{
 				char fpsText[20];
-				sprintf(fpsText, "FPS:%d", fpsCount);
+				sprintf(fpsText, "Witch", fpsCount);
 				SetWindowText(hWnd, fpsText);
 				// 次の１秒間の計測準備
 				countStartTime = nowTime;
 				fpsCount = 0;
 			}
 
-			if (nowTime - preExecTime >= 1000.0f / 60.0f)
+			if (nowTime - preExecTime >= 1000.0f / 144.0f)
 			{
 				Clocker::GetInstance().EndFrame(timeGetTime());
 				Clocker::GetInstance().CalcFrameTime();
@@ -148,4 +150,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+static VOID funcSetClientSize(HWND hWnd, LONG sx, LONG sy)
+{
+	RECT rc1;
+	RECT rc2;
+
+	GetWindowRect(hWnd, &rc1);
+	GetClientRect(hWnd, &rc2);
+	sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
+	sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
+	SetWindowPos(hWnd, NULL, 0, 0, sx, sy, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));
 }

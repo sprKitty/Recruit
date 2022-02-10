@@ -55,32 +55,31 @@ void RenderPipeline::PlayGaussianBlurX(const std::weak_ptr<Camera> pCamera, cons
 	pCamera.lock()->Bind2D(m_pShaderBuffer);
 
 	m_pShaderBuffer.lock()->SetTexturePS(pVP.lock()->GetRenderingTexture(number), ShaderResource::TEX_TYPE::EFFECT);
-	m_pShaderBuffer.lock()->SetTexturePS(pVP.lock()->GetRenderingTexture(1), ShaderResource::TEX_TYPE::DEPTH_OF_FIELD);
 	m_pShaderBuffer.lock()->BindVS(VS_TYPE::GAUSSIANBLUR);
 	m_pShaderBuffer.lock()->BindPS(PS_TYPE::GAUSSIANBLUR);
 	ShaderResource::PostEffect post;
 	float deviation = fDeviation;
-	float tu = 2.0f / vp.x;
-	float tv = 2.0f / vp.y;
+	float tu = 1.0f / vp.x;
+	float tv = 1.0f / vp.y;
 	Vector2 dir = { 1,0 };
-	post.blur[0].x = 0;
-	post.blur[0].y = 0;
-	post.blur[0].z = MyMath::GaussianDistribution(Vector2(0, 0), deviation);
-	float totalweight = post.blur[0].z;
+	post.kawaseBloom[0].x = 0;
+	post.kawaseBloom[0].y = 0;
+	post.kawaseBloom[0].z = MyMath::GaussianDistribution(Vector2(0, 0), deviation);
+	float totalweight = post.kawaseBloom[0].z;
 	for (int i = 1; i < 8; ++i)
 	{
-		post.blur[i].x = dir.x * i * tu;
-		post.blur[i].y = dir.y * i * tv;
-		post.blur[i].z = MyMath::GaussianDistribution(dir * i, deviation);
-		totalweight += post.blur[i].z * 2.0f;
+		post.kawaseBloom[i].x = dir.x * i * tu;
+		post.kawaseBloom[i].y = dir.y * i * tv;
+		post.kawaseBloom[i].z = MyMath::GaussianDistribution(dir * static_cast<float>(i), deviation);
+		totalweight += post.kawaseBloom[i].z * 2.0f;
 	}
 
 	for (int i = 0; i < 8; ++i)
 	{
-		post.blur[i].z /= totalweight;
+		post.kawaseBloom[i].z /= totalweight;
 	}
 
-	m_pShaderBuffer.lock()->SetPostEffectInfo(post);
+	m_pShaderBuffer.lock()->SetKawaseBloom(post.kawaseBloom);
 	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(vp.x, vp.y, 10), Vector3(0, 0, 0), Vector3(vp.x * 0.5f, vp.y * 0.5f, 0));
 	m_pShaderBuffer.lock()->SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();
@@ -96,32 +95,31 @@ void RenderPipeline::PlayGaussianBlurY(const std::weak_ptr<Camera> pCamera, cons
 	pCamera.lock()->Bind2D(m_pShaderBuffer);
 	
 	m_pShaderBuffer.lock()->SetTexturePS(pVP.lock()->GetRenderingTexture(number), ShaderResource::TEX_TYPE::EFFECT);
-	m_pShaderBuffer.lock()->SetTexturePS(pVP.lock()->GetRenderingTexture(1), ShaderResource::TEX_TYPE::DEPTH_OF_FIELD);
 	m_pShaderBuffer.lock()->BindVS(VS_TYPE::GAUSSIANBLUR);
 	m_pShaderBuffer.lock()->BindPS(PS_TYPE::GAUSSIANBLUR);
 	ShaderResource::PostEffect post;
 	float deviation = fDeviation;
-	float tu = 2.0f / vp.x;
-	float tv = 2.0f / vp.y;
+	float tu = 1.0f / vp.x;
+	float tv = 1.0f / vp.y;
 	Vector2 dir = { 0,1 };
-	post.blur[0].x = 0;
-	post.blur[0].y = 0;
-	post.blur[0].z = MyMath::GaussianDistribution(Vector2(0, 0), deviation);
-	float totalweight = post.blur[0].z;
+	post.kawaseBloom[0].x = 0;
+	post.kawaseBloom[0].y = 0;
+	post.kawaseBloom[0].z = MyMath::GaussianDistribution(Vector2(0, 0), deviation);
+	float totalweight = post.kawaseBloom[0].z;
 	for (int i = 1; i < 8; ++i)
 	{
-		post.blur[i].x = dir.x * i * tu;
-		post.blur[i].y = dir.y * i * tv;
-		post.blur[i].z = MyMath::GaussianDistribution(dir * i, deviation);
-		totalweight += post.blur[i].z * 2.0f;
+		post.kawaseBloom[i].x = dir.x * i * tu;
+		post.kawaseBloom[i].y = dir.y * i * tv;
+		post.kawaseBloom[i].z = MyMath::GaussianDistribution(dir * i, deviation);
+		totalweight += post.kawaseBloom[i].z * 2.0f;
 	}
 
 	for (int i = 0; i < 8; ++i)
 	{
-		post.blur[i].z /= totalweight;
+		post.kawaseBloom[i].z /= totalweight;
 	}
 
-	m_pShaderBuffer.lock()->SetPostEffectInfo(post);
+	m_pShaderBuffer.lock()->SetKawaseBloom(post.kawaseBloom);
 	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(vp.x, vp.y, 10), Vector3(0, 0, 0), Vector3(vp.x * 0.5f, vp.y * 0.5f, 0));
 	m_pShaderBuffer.lock()->SetWorld(mtx);
 	Geometory::GetInstance().DrawPolygon();
@@ -148,7 +146,7 @@ void RenderPipeline::PlayKawaseBloom(const std::weak_ptr<Camera> pCamera, KAWASE
 
 	if (!pVPList[0].expired())
 	{
-		m_pShaderBuffer.lock()->SetTexturePS(pVPList[0].lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::MAIN);
+		m_pShaderBuffer.lock()->SetTexturePS(pVPList[0].lock()->GetRenderingTexture(1), ShaderResource::TEX_TYPE::MAIN);
 	}
 	if (!pVPList[1].expired())
 	{
@@ -242,18 +240,15 @@ void RenderPipeline::Draw(const std::weak_ptr<Camera> pCamera, const std::weak_p
 	m_pShaderBuffer.lock()->SetTexturePS(pWaterRefVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::WATER);
 
 	CallDraw(DrawType::WORLD_OF_CHARACTER, pCamera);
+	CallDraw(DrawType::WORLD_OF_EFFECT, pCamera);
 	CallDraw(DrawType::WORLD_OF_TRIPLANAR, pCamera);
 	CallDraw(DrawType::WORLD_OF_GRASS, pCamera);
 	CallDraw(DrawType::WORLD_OF_WATER, pCamera);
 }
 
-void RenderPipeline::DrawEffect(const std::weak_ptr<Camera> pCamera)
+void RenderPipeline::DrawUI(const std::weak_ptr<Camera> pCamera)
 {
-	if (pCamera.expired())return;
-	pCamera.lock()->BindRenderTarget();
-	pCamera.lock()->Bind3D(m_pShaderBuffer);
-
-	CallDraw(DrawType::WORLD_OF_EFFECT, pCamera);
+	CallDraw(DrawType::UI_MAGIC, pCamera);
 }
 
 void RenderPipeline::AddRenderer(const std::weak_ptr<Component>& pComponent)
@@ -267,7 +262,7 @@ void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pComponent)
 {
 	if (pComponent.expired())return;
 
-	for (weak_ptr_list<Renderer>::iterator itr = m_pDrawList.begin(); itr != m_pDrawList.end();)
+	for (weak_ptr_list<Renderer>::iterator itr = m_pDrawList.begin(); itr != m_pDrawList.end(); ++itr)
 	{
 		if (itr->expired())continue;
 
@@ -277,8 +272,6 @@ void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pComponent)
 		}
 
 		if (itr == m_pDrawList.end())break;
-
-		++itr;
 	}
 }
 

@@ -26,7 +26,7 @@ void RotationCamera::Init()
 	CreateViewFrustum();
 	UpdateViewFrustum();
 	m_fDisatance = 1.5f;
-	m_fDegeree = 0.0f;
+	m_fDegeree = 180.0f;
 	m_vNormal = 0.0f;
 }
 
@@ -74,7 +74,7 @@ void RotationCamera::Update()
 
 void RotationCamera::UpdateRotation()
 {
-	m_fDegeree -= 0.01f;
+	m_fDegeree -= 0.1f;
 	if (m_fDegeree > 180.0f)
 	{
 		m_fDegeree = -180.0f;
@@ -84,6 +84,6 @@ void RotationCamera::UpdateRotation()
 		m_fDegeree = 180.0f;
 	}
 
-	m_vNormal = { sinf(m_fDegeree),0.6f,cosf(m_fDegeree) };
+	m_vNormal = { sinf(DirectX::XMConvertToRadians(m_fDegeree)),0.6f,cosf(DirectX::XMConvertToRadians(m_fDegeree)) };
 	m_vPos = m_vLook + m_vNormal * m_fDisatance;
 }

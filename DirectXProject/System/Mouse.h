@@ -33,8 +33,8 @@ public:
 	inline const std::weak_ptr<Camera>& GetCamera() { return m_pCamera; }
 	inline void SetScreenPos(int x, int y)
 	{
-		m_vScreenPos.x = static_cast<float>(x) + DEVISIONX * x;
-		m_vScreenPos.y = static_cast<float>(y) + DEVISIONY * y;
+		m_vScreenPos.x = static_cast<float>(x);
+		m_vScreenPos.y = static_cast<float>(y);
 	}
 	inline void SetCamera(const std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 

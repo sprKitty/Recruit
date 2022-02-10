@@ -53,7 +53,6 @@ VS_OUT main(VS_IN vin)
     VS_OUT vout;
 
     vout.pos = float4(vin.pos, 1);
-    
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
     vout.pos = mul(vout.pos, g_cameraVP.view);
     vout.pos = mul(vout.pos, g_cameraVP.proj);

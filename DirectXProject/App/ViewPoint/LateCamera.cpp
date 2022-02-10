@@ -45,8 +45,8 @@ void LateCamera::Update()
 		m_vPos = m_vLook + vDistance;
 		Vector3 moveLook = m_vLook - m_vLateLook;
 		Vector3 movePos = m_vPos - m_vLatePos;
-		moveLook *= Clocker::GetInstance().GetFrameTime() * 2.0f;
-		movePos *= Clocker::GetInstance().GetFrameTime() * 2.0f;
+		moveLook *= Clocker::GetInstance().DeltaTime() * 2.0f;
+		movePos *= Clocker::GetInstance().DeltaTime() * 2.0f;
 		m_vLateLook = moveLook + m_vLateLook;
 		m_vLatePos = movePos + m_vLatePos;
 	}

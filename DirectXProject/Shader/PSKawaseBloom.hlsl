@@ -88,6 +88,8 @@ float4 main(PS_IN pin) : SV_Target0
     color += TEX_KAWASE1.Sample(CRAMP, pin.uv);
     color += TEX_KAWASE2.Sample(CRAMP, pin.uv);
     color += TEX_KAWASE3.Sample(CRAMP, pin.uv);
-    //color += TEX_KAWASE4.Sample(CRAMP, pin.uv);
+    color += TEX_KAWASE4.Sample(CRAMP, pin.uv);
+    color.a = 1.f;
+    
     return color;
 }

@@ -1,5 +1,5 @@
 #include "FactoryMethod.h"
-
+#include <App/RenderPipeline.h>
 
 Object::WORKER_OBJ FactoryMethod::CreateObject()
 {
@@ -73,6 +73,8 @@ Object::WORKER_OBJ FactoryMethod::CreateTerrain()
 	}
 	if (!pRenderer3D.expired())
 	{
+		pRenderer3D.lock()->SetMainImage("terrain");
+		pRenderer3D.lock()->SetBumpImage("terrainBump");
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
 
@@ -128,7 +130,8 @@ Object::WORKER_OBJ FactoryMethod::CreateFence()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->SetMainImage("terrainGrass");
+		pRenderer3D.lock()->SetMainImage("fence");
+		pRenderer3D.lock()->SetBumpImage("fenceBump");
 		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
@@ -209,6 +212,8 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 	{
 		pGKB.lock()->SetKeyInfo(KeyBind::MOVE, KeyType::PRESS, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableChangeDestination), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsNotHitObject));
 		pGKB.lock()->SetKeyInfo(KeyBind::ATTACK, KeyType::TRIGGER, VK_RBUTTON, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableAttack), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsHitAnyObject));
+		pGKB.lock()->SetKeyInfo(KeyBind::HEAL, KeyType::RELEASE, VK_Q, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableHeal), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsNotHitObject));
+		pGKB.lock()->SetKeyInfo(KeyBind::TELEPORT, KeyType::RELEASE, VK_E, Delegate<Player, void>::CreateDelegator(pPlayer, &Player::EnableTeleport), Delegate<Mouse, const bool>::CreateDelegator(m_pMouse, &Mouse::IsNotHitObject));
 	}
 	return pObj;
 }
@@ -226,7 +231,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localscale = 0.2f;
+		pTransform.lock()->localscale = 0.1f;
 	}
 	if (!pMesh.expired())
 	{
@@ -234,8 +239,8 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
+		pRenderer3D.lock()->SetEmissiveColor(Vector4(35.f / 255.f, 105.f / 255.f, 180.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
 	{
@@ -258,6 +263,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	pObj->AddComponent<Event>().lock()->type.set(Event_Type::TALK_1);
 	pObj->AddComponent<Event>().lock()->type.set(Event_Type::TALK_2);
 	pObj->AddComponent<EventTrigger>().lock()->type.set(Event_Type::TALK_1);
+	pObj->GetComponent<EventTrigger>().lock()->Cause();
 	pObj->AddComponent<EventTrigger>().lock()->type.set(Event_Type::TALK_2);
 	if (!pCollider.expired())
 	{
@@ -297,7 +303,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localscale = 0.2f;
+		pTransform.lock()->localscale = 0.1f;
 	}
 	if (!pMesh.expired())
 	{
@@ -305,8 +311,8 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
+		pRenderer3D.lock()->SetEmissiveColor(Vector4(210.f / 255.f, 165.f / 255.f, 100.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
 	{
@@ -330,7 +336,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	std::weak_ptr<Collider> pCollider = pObj->AddComponent<Collider>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localscale = 0.3f;
+		pTransform.lock()->localscale = 0.2f;
 	}
 	if (!pMesh.expired())
 	{
@@ -338,8 +344,8 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
+		pRenderer3D.lock()->SetEmissiveColor(Vector4(210.f / 255.f, 165.f / 255.f, 100.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
 	{
@@ -389,6 +395,15 @@ Object::WORKER_OBJ FactoryMethod::CreateEventObject()
 	Object::OWNER_OBJ pObj(new Object());
 	m_pObjectList.emplace_back(pObj);
 	pObj->AddComponent<Event>();
+	return pObj;
+}
+
+Object::WORKER_OBJ FactoryMethod::CreateMagicUI()
+{
+	Object::OWNER_OBJ pObj(new Object());
+	m_pObjectList.emplace_back(pObj);
+	RenderPipeline::GetInstance().AddRenderer(pObj->AddComponent<Renderer2D>());
+	pObj->GetComponent<Renderer2D>().lock()->EnableDraw(DrawType::UI_MAGIC);
 	return pObj;
 }
 

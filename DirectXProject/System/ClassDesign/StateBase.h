@@ -13,10 +13,10 @@ public:
 
 private:
 	using ACTION_DELEGATE = std::shared_ptr<DelegateBase<const bool> >;
-	using TRANS_DELEGATE = std::shared_ptr<DelegateBase<const int> >;
+	using TRANS_DELEGATE = std::shared_ptr<DelegateBase<const UINT8> >;
 
 	using ActionFunc = const bool(T::*)();
-	using TransFunc = const int(T::*)();
+	using TransFunc = const UINT8(T::*)();
 public:
 	State() {}
 	~State() {}
@@ -61,11 +61,11 @@ public:
 	/*
 	* @brief ステート遷移
 	* @param[pT] weakptr<T>のアドレス
-	* @param[func] TransFunc 戻り値const sint,引数なし型の関数を設定してね						
+	* @param[func] TransFunc 戻り値const short int,引数なし型の関数を設定してね						
 	*/
 	void SetTransitionFunc(const std::weak_ptr<T>& pT, const TransFunc func)
 	{
-		m_pTransFunc = Delegate<T, const int>::CreateDelegator(pT, func);
+		m_pTransFunc = Delegate<T, const UINT8>::CreateDelegator(pT, func);
 	}
 
 private:

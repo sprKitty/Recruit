@@ -22,7 +22,7 @@ void TitleScene::Init()
 	m_pCamera->SetRenderTarget(pRT);
 
 	pRT.reset(new RenderTarget());
-	pRT->Create(SCREEN_WIDTH * 1.0f, SCREEN_HEIGHT * 1.0f, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
+	pRT->Create(SCREEN_WIDTH * 1.0f, SCREEN_HEIGHT * 1.0f, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 	pRT->CreateDepthStencil(DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pReflectionCamera.reset(new Camera());
 	m_pReflectionCamera->Init();
@@ -52,7 +52,7 @@ void TitleScene::Init()
 	m_pLight->Init();
 	m_pLight->SetRenderTarget(pRT);
 	m_pLight->parallelScale.set(400);
-	m_pLight->position.set(Vector3(3, 4, -4));
+	m_pLight->position.set(Vector3(3, 4, 4));
 	m_pLight->fov.set(60.0f);
 	m_pLight->color.set(Vector4(255.0f / 255.0f, 161.0f / 255.0f, 3.0f / 255.0f, 1.0f));
 	m_pLight->perspective.set(false);
@@ -78,41 +78,41 @@ void TitleScene::Init()
 	if (!pTransform.expired())
 	{
 		pTransform.lock()->localscale = 0.3f;
-		pTransform.lock()->localrot.y = 180.0f;
-		pTransform.lock()->localpos = { 0.0f,0.13f,-0.35f };
+		pTransform.lock()->localrot.y = 90.f;
+		pTransform.lock()->localpos = { 0.35f,0.13f,0.0f };
 	}
 	if (!pR3D.expired())
 	{
 		pR3D.lock()->SetMainImage("gameLogo");
 	}
 
-	Object::WORKER_OBJ pPushEnter = FactoryMethod::GetInstance().CreateObject();
-	pTransform = pPushEnter.lock()->GetComponent<Transform>();
-	pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
-	if (!pTransform.expired())
-	{
-		pTransform.lock()->localscale = 0.3f;
-		pTransform.lock()->localrot.y = 90.0f;
-		pTransform.lock()->localpos = { 0.35f,0.13f,0.0f };
-	}
-	if (!pR3D.expired())
-	{
-		pR3D.lock()->SetMainImage("pushEnter");
-	}
+	//Object::WORKER_OBJ pPushEnter = FactoryMethod::GetInstance().CreateObject();
+	//pTransform = pPushEnter.lock()->GetComponent<Transform>();
+	//pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
+	//if (!pTransform.expired())
+	//{
+	//	pTransform.lock()->localscale = 0.3f;
+	//	pTransform.lock()->localrot.y = 90.0f;
+	//	pTransform.lock()->localpos = { 0.35f,0.13f,0.0f };
+	//}
+	//if (!pR3D.expired())
+	//{
+	//	pR3D.lock()->SetMainImage("pushEnter");
+	//}
 
-	pPushEnter = FactoryMethod::GetInstance().CreateObject();
-	pTransform = pPushEnter.lock()->GetComponent<Transform>();
-	pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
-	if (!pTransform.expired())
-	{
-		pTransform.lock()->localscale = 0.3f;
-		pTransform.lock()->localrot.y = -90.0f;
-		pTransform.lock()->localpos = { -0.35f,0.13f,0.0f };
-	}
-	if (!pR3D.expired())
-	{
-		pR3D.lock()->SetMainImage("pushEnter");
-	}
+	//pPushEnter = FactoryMethod::GetInstance().CreateObject();
+	//pTransform = pPushEnter.lock()->GetComponent<Transform>();
+	//pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
+	//if (!pTransform.expired())
+	//{
+	//	pTransform.lock()->localscale = 0.3f;
+	//	pTransform.lock()->localrot.y = -90.0f;
+	//	pTransform.lock()->localpos = { -0.35f,0.13f,0.0f };
+	//}
+	//if (!pR3D.expired())
+	//{
+	//	pR3D.lock()->SetMainImage("pushEnter");
+	//}
 
 	Object::WORKER_OBJ pFence = FactoryMethod::GetInstance().CreateFence();
 

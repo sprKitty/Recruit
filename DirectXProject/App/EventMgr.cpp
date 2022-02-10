@@ -1,7 +1,7 @@
 #include "EventMgr.h"
+#include <App/Component/Object.h>
 #include <App/Component/Event/Event.h>
 #include <Defines.h>
-#include <App/Component/Object.h>
 
 EventMgr::EventMgr()
 {

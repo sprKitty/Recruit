@@ -28,13 +28,14 @@ const char* g_pWitchAnimPath[Witch_State::Boss::MAX] =
 void MasterWitch::Init()
 {
 	m_pTransform = m_pOwner.lock()->GetComponent<Transform>();
-	m_pTransform.lock()->localpos = { 0.0f,0.5f,1.0f };
+	m_pTransform.lock()->localpos = { 0.0f,0.4f,1.0f };
 	m_pTransform.lock()->localscale = 1;
 	m_Direction = Chara_Direction::DOWN;
 	m_masterState = Witch_State::Master::WAIT;
 	m_bossState = Witch_State::Boss::WAIT;
 	m_state = Witch_State::MASTER;
 	m_fWaitTime = 0.0f;
+	m_nHP = 5;
 	for (int i = 0; i < Witch_State::Boss::MAX; ++i)
 	{
 		std::shared_ptr<TexAnimation> pTexAnim(new TexAnimation());
@@ -96,6 +97,26 @@ void MasterWitch::Init()
 		m_pAttackObject.emplace_back(pObj);
 	}
 
+
+	m_pHPGaugeUIFade.reset(new MagicUI_Fade);
+	m_pHPGaugeUIFade->Init();
+	m_pHPGaugeUIFade->inOutSpeed.set(m_nHP);
+
+	std::weak_ptr<Object> pObject;
+	pObject = FactoryMethod::GetInstance().CreateMagicUI();
+	m_pHPGauge = pObject.lock()->GetComponent<Renderer2D>();
+	if (!m_pHPGauge.expired())
+	{
+		m_pHPGauge.lock()->m_Image.SetTexture("hp.png");
+		Renderer2D::RectTransform rect;
+		rect.pos = Vector3(SCREEN_WIDTH * 0.0f, -SCREEN_HEIGHT * 0.4f, 8);
+		rect.scale = Vector2(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.02f);
+		m_pHPGauge.lock()->SetRectTransform(rect);
+		m_pHPGauge.lock()->SetFadeAnimation(m_pHPGaugeUIFade);
+		m_pHPGauge.lock()->m_pOwner.lock()->DisableActive();
+	}
+
+
 	std::weak_ptr<MasterWitch> pMW = std::dynamic_pointer_cast<MasterWitch>(weak_from_this().lock());
 	if (!pMW.expired())
 	{
@@ -126,12 +147,6 @@ void MasterWitch::Init()
 		m_pBossStateList[Witch_State::Boss::ATTACK3]->AddActionFunc(pMW, &MasterWitch::CalcTarget);
 		m_pBossStateList[Witch_State::Boss::ATTACK3]->AddActionFunc(pMW, &MasterWitch::Attack3);
 		m_pBossStateList[Witch_State::Boss::ATTACK3]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
-
-		//m_pBossStateList[Witch_State::Boss::ROTATERAZER]->AddActionFunc(pMW, &MasterWitch::ChargeRotateRazer);
-		//m_pBossStateList[Witch_State::Boss::ROTATERAZER]->AddActionFunc(pMW, &MasterWitch::IrradiationRazer);
-		//m_pBossStateList[Witch_State::Boss::ROTATERAZER]->AddActionFunc(pMW, &MasterWitch::AttackRotateRazer);
-		//m_pBossStateList[Witch_State::Boss::ROTATERAZER]->AddActionFunc(pMW, &MasterWitch::VanishRazer);
-		//m_pBossStateList[Witch_State::Boss::ROTATERAZER]->SetTransitionFunc(pMW, &MasterWitch::ChangeBossState);
 	}
 	else
 	{
@@ -156,21 +171,6 @@ void MasterWitch::Update()
 {
 	SetNeedComponent();
 
-	if (HitUpdate())
-	{
-		weak_ptr_list<EventTrigger> pETList = m_pOwner.lock()->GetComponentList<EventTrigger>();
-		for (const auto& itr : pETList)
-		{
-			if (itr.expired())continue;
-
-			if (itr.lock()->type.get() == Event_Type::TALK_2)
-			{
-				itr.lock()->Cause();
-			}
-		}
-		return;
-	}
-
 	switch (m_state)
 	{
 	case Witch_State::MASTER:
@@ -192,6 +192,32 @@ void MasterWitch::Update()
 		break;
 	
 	case Witch_State::BOSS:
+
+		if (!PTRNULLCHECK(m_pHPGaugeUIFade))
+		{
+			m_pHPGauge.lock()->m_pOwner.lock()->EnableActive();
+			m_pHPGaugeUIFade->time.set(m_nHP);
+		}
+
+		// 体力切れか
+		if (HitUpdate())
+		{
+			// イベントを引き起こすコンポーネントをもってくる
+			weak_ptr_list<EventTrigger> pETList = m_pOwner.lock()->GetComponentList<EventTrigger>();
+			
+			for (const auto& itr : pETList)
+			{
+				if (itr.expired())continue;
+				
+				// イベントトリガーリストの中で体力切れの時に有効になるイベントトリガーが登録されているか
+				if (itr.lock()->type.get() == Event_Type::TALK_2)
+				{
+					itr.lock()->Cause();
+				}
+			}
+			return;
+		}
+
 		if (m_pBossStateList[m_bossState]->Action())
 		{
 			m_bossState = static_cast<Witch_State::Boss::Kind>(m_pBossStateList[m_bossState]->Next());
@@ -219,14 +245,20 @@ const bool MasterWitch::HitUpdate()
 {
 	Collider::HitInfo hitInfoBC = m_pCollider.lock()->GetHitInfo(CollisionType::BC);
 
+	// すでに体力がないか
+	if (CheckDie())return true;
+
+	// バウンディングスフィアで当たり判定がおこったか
 	if (hitInfoBC.isFlg)
 	{
+		// 当たったオブジェクトの情報が格納されているか
 		if (!hitInfoBC.pObj.expired())
 		{
+			// 当たったオブジェクトのタイプがプレイヤーの攻撃か
 			if (hitInfoBC.pObj.lock()->GetType() == ObjectType::PLAYERATTACK)
 			{
 				--m_nHP;
-				return CheckDie();
+				return CheckDie(); // 体力がなくなったか
 			}
 		}
 	}
@@ -284,7 +316,7 @@ const bool MasterWitch::Wait()
 {
 	if (m_fWaitTime >= WAIT_TIME)return true;
 
-	m_fWaitTime += Clocker::GetInstance().GetFrameTime();
+	m_fWaitTime += Clocker::GetInstance().DeltaTime();
 	return false;
 }
 
@@ -339,7 +371,7 @@ const bool MasterWitch::Attack2()
 		return true;
 	}
 
-	m_rotatebullet.fMainLineNowAngle -= DirectX::XMConvertToDegrees(Clocker::GetInstance().GetFrameTime());
+	m_rotatebullet.fMainLineNowAngle -= DirectX::XMConvertToDegrees(Clocker::GetInstance().DeltaTime());
 	float fDis = fabsf(m_rotatebullet.fMainLineNowAngle) - fabsf(m_rotatebullet.fMainLineOldAngle);
 	float flg = fabsf(fDis) - m_rotatebullet.nRate;
 	if (flg >= 0 
@@ -407,7 +439,7 @@ const bool MasterWitch::IrradiationRazer()
 {
 	if (m_razer.fIrradiationTime >= 1.0f)return true;
 
-	m_razer.fIrradiationTime += Clocker::GetInstance().GetFrameTime() / 0.3f;
+	m_razer.fIrradiationTime += Clocker::GetInstance().DeltaTime() / 0.3f;
 	if (m_razer.fIrradiationTime > 1.0f)
 	{
 		m_razer.fIrradiationTime = 1.0f;
@@ -433,7 +465,7 @@ const bool MasterWitch::VanishRazer()
 {
 	if (m_razer.fVanishTime >= 1.0f)return true;
 
-	m_razer.fVanishTime += Clocker::GetInstance().GetFrameTime() / 0.3f;
+	m_razer.fVanishTime += Clocker::GetInstance().DeltaTime() / 0.3f;
 	if (m_razer.fVanishTime > 1.0f)
 	{
 		m_razer.fVanishTime = 1.0f;
@@ -459,7 +491,7 @@ const bool MasterWitch::ChargeRotateRazer()
 {
 	if (m_razer.fChargeTime >= CHARGE_RAZER_TIME)return true;
 
-	m_razer.fChargeTime += Clocker::GetInstance().GetFrameTime();	
+	m_razer.fChargeTime += Clocker::GetInstance().DeltaTime();	
 	Vector3 vDir;
 	int i = 0;
 	for (const auto& itr : m_pRotateRazerList)
@@ -481,7 +513,7 @@ const bool MasterWitch::AttackRotateRazer()
 {
 	if (m_razer.fMainAngle <= 0.0f)return true;
 
-	m_razer.fMainAngle -= (DirectX::XMConvertToDegrees(Clocker::GetInstance().GetFrameTime()) / 0.5f);
+	m_razer.fMainAngle -= (DirectX::XMConvertToDegrees(Clocker::GetInstance().DeltaTime()) / 0.5f);
 	Vector3 vDir;
 	int i = 0;
 	for (const auto& itr : m_pRotateRazerList)
@@ -499,7 +531,7 @@ const bool MasterWitch::AttackRotateRazer()
 	return false;
 }
 
-const int MasterWitch::MasterFromBoss()
+const UINT8 MasterWitch::MasterFromBoss()
 {
 	std::weak_ptr<Event> pEvent = m_pOwner.lock()->GetComponent<Event>();
 	if (!pEvent.expired())
@@ -521,7 +553,7 @@ const int MasterWitch::MasterFromBoss()
 
 }
 
-const int MasterWitch::ChangeBossState()
+const UINT8 MasterWitch::ChangeBossState()
 {
 	if (m_bossState == Witch_State::Boss::WAIT)
 	{
@@ -545,7 +577,7 @@ const int MasterWitch::ChangeBossState()
 	return Witch_State::Boss::WAIT;
 }
 
-const int MasterWitch::ResetBossState()
+const UINT8 MasterWitch::ResetBossState()
 {
 	return Witch_State::Boss::WAIT;
 }

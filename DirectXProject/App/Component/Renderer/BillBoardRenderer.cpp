@@ -2,6 +2,7 @@
 #include <App/Component/Object.h>
 #include <App/Component/Mesh.h>
 #include <App/Component/Transform.h>
+#include <App/Fade/FadeBase.h>
 #include <App/TexAnimation.h>
 #include <App/ViewPoint/Camera.h>
 #include <App/RenderPipeline.h>
@@ -57,6 +58,11 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const Wri
 		m_Image.Bind(pBuf);
 	}
 
+	//if (!m_pFadeAnimation.expired())
+	//{
+	//	m_pFadeAnimation.lock()->Bind(pBuf);
+	//}
+
 	if (!m_pTransform.expired())
 	{
 		pBuf.lock()->SetWorld(m_pTransform.lock()->GetWorldMatrix());
@@ -70,7 +76,7 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const Wri
 
 void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
-	if (type == DrawType::UI)return;
+	if ((type == DrawType::UI_NORMAL) || (type == DrawType::UI_MAGIC))return;
 	if (m_frustumType == FrustumType::OUTSIDE)return;
 	if (type != DrawType::MAX)
 	{
@@ -100,7 +106,24 @@ void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const Draw
 	default:
 		break;
 	}
-	
+
+	if (!m_pFadeAnimation.expired())
+	{
+		m_pFadeAnimation.lock()->Bind(pBuf);
+	}
+	else
+	{
+		pBuf.lock()->SetTexturePS(nullptr, ShaderResource::TEX_TYPE::GRAYSCALE);
+	}
+
+	if (!m_pBumpTexAnim.expired())
+	{
+		m_pBumpTexAnim.lock()->Bind(pBuf);
+	}
+	else
+	{
+		pBuf.lock()->SetTexturePS(nullptr, ShaderResource::TEX_TYPE::BUMP);
+	}
 
 	if (!m_pMainTexAnim.expired())
 	{
@@ -109,11 +132,6 @@ void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const Draw
 	else
 	{
 		m_Image.Bind(pBuf);
-	}
-	
-	if (!m_pBumpTexAnim.expired())
-	{
-		m_pBumpTexAnim.lock()->Bind(pBuf);
 	}
 
 	if (!m_pTransform.expired())

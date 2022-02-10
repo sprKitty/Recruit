@@ -64,13 +64,13 @@ const bool MagicBall::MoveShotPos()
 {
 	if (m_move.fTime >= MOVE_SPEED)return true;
 
-	m_move.fTime += Clocker::GetInstance().GetFrameTime();
+	m_move.fTime += Clocker::GetInstance().DeltaTime();
 	float fLerpCnt = m_move.fTime / MOVE_SPEED;
 	if (fLerpCnt >= 1.0f)fLerpCnt = 1.0f;
 	Vector3 vPos;
 	vPos.Lerp(m_move.vStart, m_move.vEnd, MyMath::EaseInOutCubic(fLerpCnt));
 	vPos += m_move.vStart;
-	vPos.y = 0.5f;
+	vPos.y = 0.4f;
 	m_pTransform.lock()->localpos = vPos;
 	return false;
 }
@@ -79,7 +79,7 @@ const bool MagicBall::PlayShot()
 {
 	if (m_shot.nNum >= m_shot.nMaxNum)return true;
 
-	m_shot.fTime += Clocker::GetInstance().GetFrameTime();
+	m_shot.fTime += Clocker::GetInstance().DeltaTime();
 
 	if (m_shot.fTime >= m_shot.fMaxTime)
 	{

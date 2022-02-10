@@ -1,6 +1,8 @@
 #pragma once
-#include <App/Component/Image.h>
-#include <App/Component/Renderer/Renderer.h>
+#include "Renderer.h"
+#include <App/Image.h>
+
+class FadeBase;
 
 class Renderer2D : public Renderer
 {
@@ -24,16 +26,23 @@ public:
 	void Update()override;
 	
 	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)override {}
-	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type = DrawType::UI)override;
+	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)override;
 
 	bool MouseCollision();
 	
+	inline void SetFadeAnimation(const std::weak_ptr<FadeBase> pFade) { m_pFadeAnimation = std::move(pFade); }
+
 	inline const RectTransform& GetRectTransform() { return m_RectTransform; }
 	inline void SetRectTransform(const RectTransform& rect) { m_RectTransform = rect; }
+	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
+	inline void DisableDraw(const DrawType::kind type) { m_isDrawType[type] = false; }
+
 
 	Image m_Image;
 
 private:
+	std::vector<bool> m_isDrawType;
+	std::weak_ptr<FadeBase> m_pFadeAnimation;
 	RectTransform m_RectTransform;
 	bool m_isActive;
 };

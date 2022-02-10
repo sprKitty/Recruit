@@ -8,6 +8,12 @@ struct PS_IN
     float4 camPos : TEXCOORD4;
 };
 
+struct PS_OUT
+{
+    float4 main : SV_Target0;
+    float4 emissive : SV_Target1;
+};
+
 struct LightInfo
 {
     float4 pos;
@@ -32,6 +38,12 @@ struct TexSetting
     float fDummy;
 };
 
+struct PostEffect
+{
+    float4 blur[8];
+    float4 emissive;
+};
+
 cbuffer ConstantBuffer0 : register(b0)
 {
     CameraInfo g_cameraInfo;
@@ -45,6 +57,11 @@ cbuffer ConstantBuffer1 : register(b1)
 cbuffer ConstantBuffer2 : register(b2)
 {
     TexSetting g_texSetting;
+}
+
+cbuffer ConstantBuffer3 : register(b3)
+{
+    PostEffect g_postEffect;
 }
 
 Texture2D TEX_MAIN : register(t0);
@@ -69,11 +86,10 @@ SamplerState BORDER : register(s2);
 SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
-
-
-float4 main(PS_IN pin) : SV_Target0
+PS_OUT main(PS_IN pin)
 {
-    float4 color = TEX_MAIN.Sample(WRAP, pin.uv);
-    clip(color.a - 0.1f);
-    return color;
+    PS_OUT pout;
+    pout.main = TEX_MAIN.Sample(WRAP, pin.uv);
+    pout.emissive = g_postEffect.emissive;
+    return pout;
 }

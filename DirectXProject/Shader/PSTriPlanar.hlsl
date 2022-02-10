@@ -3,7 +3,7 @@ struct PS_IN
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float4 wPos : TEXCOORD2;
+    float4 worldPos : TEXCOORD2;
     float4 lightPos : TEXCOORD3;
     float4 camPos : TEXCOORD4;
     float3 texSpaceLight : TEXCOORD5;
@@ -12,7 +12,8 @@ struct PS_IN
 struct PS_OUT
 {
     float4 main : SV_Target0;
-    float4 dof : SV_Target1;
+    float4 emissive : SV_Target1;
+    float4 depth : SV_Target2;
 };
 
 struct LightInfo
@@ -39,6 +40,12 @@ struct TexSetting
     float fDummy;
 };
 
+struct PostEffect
+{
+    float4 blur[8];
+    float4 emissive;
+};
+
 cbuffer ConstantBuffer0 : register(b0)
 {
     CameraInfo g_cameraInfo;
@@ -53,6 +60,12 @@ cbuffer ConstantBuffer2 : register(b2)
 {
     TexSetting g_texSetting;
 }
+
+cbuffer ConstantBuffer3 : register(b3)
+{
+    PostEffect g_postEffect;
+}
+
 
 Texture2D TEX_MAIN : register(t0);
 Texture2D TEX_WATER : register(t1);
@@ -88,15 +101,15 @@ PS_OUT main(PS_IN pin)
     float b = blending.x + blending.y + blending.z;
     blending /= b;
     
-    float3 xaxis = TEX_MAIN.Sample(WRAP, pin.wPos.zy * 0.2f).rgb;
-    float3 yaxis = TEX_MAIN.Sample(WRAP, pin.wPos.xz * 0.2f).rgb;
-    float3 zaxis = TEX_MAIN.Sample(WRAP, pin.wPos.xy * 0.2f).rgb;
+    float3 xaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.zy * 0.2f).rgb;
+    float3 yaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.xz * 0.2f).rgb;
+    float3 zaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.xy * 0.2f).rgb;
     
     color.rgb = xaxis * blending.x + yaxis * blending.y + zaxis * blending.z;
 
-    float3 xN = TEX_BUMP.Sample(WRAP, pin.wPos.zy * 0.2f).rgb * 2.0f - 1.0f;
-    float3 yN = TEX_BUMP.Sample(WRAP, pin.wPos.xz * 0.2f).rgb * 2.0f - 1.0f;
-    float3 zN = TEX_BUMP.Sample(WRAP, pin.wPos.xy * 0.2f).rgb * 2.0f - 1.0f;
+    float3 xN = TEX_BUMP.Sample(WRAP, pin.worldPos.zy * 0.2f).rgb * 2.0f - 1.0f;
+    float3 yN = TEX_BUMP.Sample(WRAP, pin.worldPos.xz * 0.2f).rgb * 2.0f - 1.0f;
+    float3 zN = TEX_BUMP.Sample(WRAP, pin.worldPos.xy * 0.2f).rgb * 2.0f - 1.0f;
     
     xN = (dot(xN, pin.texSpaceLight) + 1.0f) * 0.5f;
     yN = (dot(yN, pin.texSpaceLight) + 1.0f) * 0.5f;
@@ -122,22 +135,11 @@ PS_OUT main(PS_IN pin)
     depth += mapColor.g / 256.0f;
     depth += mapColor.b / 256.0f / 256.0f;
     
-    inLVP -= 0.00005f;
-    color.rgb = (inLVP > depth + 0.00005f) ? color.rgb * 0.5f : color.rgb;
+    //inLVP -= 0.00005f;
+    color.rgb = (inLVP > depth + 0.00015f) ? color.rgb * 0.5f : color.rgb;
     pout.main = color;
-    
-    //depth = (pin.camPos.y + pin.camPos.z) / 80.0f;
-    //color = float4(0, 0, 0, 1);
-    //color.r = pow(pin.camPos.z / pin.camPos.w, 30);
-    
-    //color.g = 2.0f * (1.3f - depth);
-    //color.g = max(0, color.g);
-    //color.g = min(1, color.g);
-    
-    //color.b = 2.0f * (depth + 0.1f);
-    //color.b = max(0, color.b);
-    //color.b = min(1, color.b);
-    //pout.dof = color;
+    pout.emissive = g_postEffect.emissive;
+    pout.depth = pin.camPos.z / pin.camPos.w;
     
     return pout;
 }

@@ -8,6 +8,9 @@ public:
 	DelegateBase() {}
 	virtual ~DelegateBase() {}
 
+	/*
+	* @brief 設定されている関数を実行する
+	*/
 	virtual X Execute(Y...) = 0;
 
 private:
@@ -21,28 +24,42 @@ private:
 * @template Y 引数
 */
 template<class T, typename X, typename... Y>
-class Delegate : public DelegateBase<X, Y...>
+class Delegate final : public DelegateBase<X, Y...>
 {
+private:
+	using EventFunc = X(T::*)(Y...);
+
 public:
 	Delegate() {}
 	~Delegate() {}
 
-	typedef X(T::*EventFunc)(Y...);
 
-	static std::shared_ptr<DelegateBase<X, Y...> > CreateDelegator(const std::weak_ptr<T>& pObj, const EventFunc Event)
+	/*
+	* @brief 関数を設定する
+	* @param pObj 設定するクラスのウィークポインタ
+	* @param func templateの引数XとYに該当する関数を設定する
+	* @return 作成したデリゲート関数
+	*/
+	inline static std::shared_ptr<DelegateBase<X, Y...> > CreateDelegator(const std::weak_ptr<T>& pObj, const EventFunc func)
 	{
 		std::shared_ptr<Delegate> pDG(new Delegate());
-		pDG->Set(pObj, Event);
+		pDG->Set(pObj, func);
 		return pDG;
 	}
 
-
-	X Execute(Y... value)override
+	
+	inline X Execute(Y... value)override
 	{
 		return (m_pObj.lock().get()->*m_func)(value...);
 	}
 
-	void Set(const std::weak_ptr<T>& pObj, const EventFunc func)
+private:
+
+	/*
+	* @param pObj 設定するクラスのウィークポインタ
+	* @param func templateの引数XとYに該当する関数を設定する
+	*/
+	inline void Set(const std::weak_ptr<T>& pObj, const EventFunc func)
 	{
 		m_pObj = pObj;
 		m_func = func;

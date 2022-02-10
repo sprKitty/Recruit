@@ -75,21 +75,7 @@ const float3 g_Luminance = float3(0.299f, 0.587f, 0.114f);
 float4 main(PS_IN pin) : SV_Target
 {
     float4 mainTex = TEX_MAIN.Sample(WRAP, pin.uv);
-    float camMain = TEX_DOF.Sample(WRAP, pin.uv).r;
-    float camEffect = TEX_DOS.Sample(WRAP, pin.uv).r;
-    float4 color = 1;
-    
-    if (camEffect < camMain + 0.01f)
-    {
-        float4 effectTex = TEX_EFFECT.Sample(WRAP, pin.uv);
-        color.r = (mainTex.r > effectTex.r) ? mainTex.r : effectTex.r;
-        color.g = (mainTex.g > effectTex.g) ? mainTex.g : effectTex.g;
-        color.b = (mainTex.b > effectTex.b) ? mainTex.b : effectTex.b;
-    }
-    else
-    {
-        color.rgb = mainTex;
-    }
-    
-    return color;
+    mainTex += TEX_EFFECT.Sample(WRAP, pin.uv);
+    mainTex.a = 1.f;
+    return mainTex;
 }

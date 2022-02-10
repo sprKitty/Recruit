@@ -28,7 +28,7 @@ public:
 	*/
 	inline void Cause() { m_isCaused = true; }
 
-	inline const bool Check() { return true; }
+	inline const bool Check() { return m_isCaused; }
 
 public:
 	Property<Event_Type::Kind> type;

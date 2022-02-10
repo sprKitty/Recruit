@@ -46,13 +46,19 @@ void Collision::Finalize()
 
 void Collision::Update()
 {
+	// 四分木にオブジェクトを登録
 	SetQuadTree();
 	for (int i = 0; i < CHIELD_NUM; ++i)
 	{
 		std::vector<NODE*> pNodeList;
 		pNodeList.emplace_back(m_pNode[i]);
+
+		// 四分木の中身の当たり判定を実行する 
 		Excute(pNodeList);
+
+		// 一番大きい親同士の当たり判定
 		SameListJudge(m_pNode[i]->pList);
+
 		ClearNodeColliderList(0, m_pNode[i]);
 	}
 }
@@ -604,7 +610,7 @@ void Collision::SetQuadTree()
 			{ w._41 - w._11,w._43 - w._33 },
 			{ w._41 + w._11,w._43 - w._33 },
 		};
-		NODE* pNode;
+		NODE* pNode = nullptr;
 
 		if (vPos[0].x >= m_pNode[0]->min.x
 			&& vPos[0].x < m_pNode[0]->max.x

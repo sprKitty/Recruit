@@ -2,7 +2,7 @@
 #include <System/ClassDesign/Singleton.h>
 #include <System/DirectX.h>
 #include <App/Scene/SceneBase.h>
-#include <App/Fade.h>
+#include <App/Fade/FadeBase.h>
 #include <App/ViewPoint/ViewPoint.h>
 
 class ShaderBuffer;
@@ -26,7 +26,7 @@ protected:
 private:
 	std::vector<std::shared_ptr<SceneBase> > m_pSceneList;
 	std::shared_ptr<ShaderBuffer> m_pShaderBuffer;
-	std::shared_ptr<Fade> m_pFade;
+	std::shared_ptr<FadeBase> m_pFade;
 	Scene_Type::kind m_NowScene;
 	Scene_Type::kind m_OldScene;
 };
