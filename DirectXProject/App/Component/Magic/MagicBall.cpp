@@ -83,7 +83,7 @@ const bool MagicBall::PlayShot()
 
 	if (m_shot.fTime >= m_shot.fMaxTime)
 	{
-		float fCenter = rand() % 360;
+		float fCenter = static_cast<float>(rand() % 360);
 		fCenter -= 180.0f;
 		fCenter = DirectX::XMConvertToRadians(fCenter);
 		const int nAttackNum = 3;

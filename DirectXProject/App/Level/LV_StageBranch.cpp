@@ -234,7 +234,6 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	pOutSideArea.lock()->SetType(ObjectType::STAGE);
 	pOutSideArea.lock()->RemoveComponent<Instancing>();
 	pOutSideArea.lock()->RemoveComponent<Renderer3D>();
-	//pOutSideArea.lock()->GetComponent<Renderer3D>().lock()->SetMainImage("terrainGrassBump");
 	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
 	if (!pTransform.expired())
 	{
@@ -247,7 +246,6 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	pOutSideArea = FactoryMethod::GetInstance().CreateOutsideArea();
 	pOutSideArea.lock()->RemoveComponent<Instancing>();
 	pOutSideArea.lock()->RemoveComponent<Renderer3D>();
-	//pOutSideArea.lock()->GetComponent<Renderer3D>().lock()->SetMainImage("terrainGrassBump");
 	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
 	if (!pTransform.expired())
 	{
@@ -256,6 +254,9 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
 
+
+	//--- レベル遷移させるオブジェクトを生成
+	//--- 魔女のステージに遷移させるオブジェクト
 	pOutSideArea = FactoryMethod::GetInstance().CreateTransitionLevel();
 	pOutSideArea.lock()->SetType(ObjectType::OUTSIDE_NORTH);
 	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
@@ -264,6 +265,50 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	{
 		pTransform.lock()->localpos = { 0.0f,0.0f,50.0f };
 		pTransform.lock()->localscale = { 10.0f,10.0f,30.0f };
+		if (!pInstancing.expired())
+		{
+			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
+			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
+			vMin.y = vMax.y = pTransform.lock()->localpos.y;
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(15, 1, 15), Vector3(0.6f, 0, 0.6f));
+			pInstancing.lock()->scale.set(1.0f);
+		}
+	}
+	m_pObjectList.emplace_back(pOutSideArea);
+	pScene.lock()->MoveObject_FactoytoScene();
+
+
+	//--- 牛のステージに遷移させるオブジェクト
+	pOutSideArea = FactoryMethod::GetInstance().CreateTransitionLevel();
+	pOutSideArea.lock()->SetType(ObjectType::OUTSIDE_EAST);
+	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
+	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localpos = { 50.0f,0.0f,0.0f };
+		pTransform.lock()->localscale = { 30.0f,10.0f,10.0f };
+		if (!pInstancing.expired())
+		{
+			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
+			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
+			vMin.y = vMax.y = pTransform.lock()->localpos.y;
+			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(15, 1, 15), Vector3(0.6f, 0, 0.6f));
+			pInstancing.lock()->scale.set(1.0f);
+		}
+	}
+	m_pObjectList.emplace_back(pOutSideArea);
+	pScene.lock()->MoveObject_FactoytoScene();
+
+
+	//--- 火牛のステージに遷移させるオブジェクト
+	pOutSideArea = FactoryMethod::GetInstance().CreateTransitionLevel();
+	pOutSideArea.lock()->SetType(ObjectType::OUTSIDE_EAST);
+	pTransform = pOutSideArea.lock()->GetComponent<Transform>();
+	pInstancing = pOutSideArea.lock()->GetComponent<Instancing>();
+	if (!pTransform.expired())
+	{
+		pTransform.lock()->localpos = { -50.0f,0.0f,0.0f };
+		pTransform.lock()->localscale = { 30.0f,10.0f,10.0f };
 		if (!pInstancing.expired())
 		{
 			Vector3 vMin = pTransform.lock()->localpos - pTransform.lock()->localscale * 0.5f;
@@ -296,6 +341,12 @@ const Level_Type::Kind LV_StageBranch::Transition(const Object::WORKER_OBJ pObje
 					case ObjectType::OUTSIDE_NORTH:
 						return Level_Type::MASTERWITCH;
 
+					case ObjectType::OUTSIDE_EAST:
+						break;
+
+					case ObjectType::OUTSIDE_WEST:
+						break;
+
 					case ObjectType::NONE:
 					case ObjectType::PLAYER:
 					case ObjectType::PLAYERATTACK:
@@ -304,8 +355,6 @@ const Level_Type::Kind LV_StageBranch::Transition(const Object::WORKER_OBJ pObje
 					case ObjectType::BOSSATTACK2:
 					case ObjectType::STAGE:
 					case ObjectType::OUTSIDE:
-					case ObjectType::OUTSIDE_EAST:
-					case ObjectType::OUTSIDE_WEST:
 					case ObjectType::OUTSIDE_SOUTH:
 					case ObjectType::MAX:
 					default:

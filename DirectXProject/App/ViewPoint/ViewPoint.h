@@ -37,9 +37,9 @@ public:
 	void Restore();
 	void BindRenderTarget();
 	
-	const FrustumType::kind CollisionViewFrustum(const DirectX::XMFLOAT3& pos, const float fRadius);
+	//const FrustumType::kind CollisionViewFrustum(const DirectX::XMFLOAT3& pos, const float fRadius);
 
-	inline const float GetAspect() { return m_vScreenSize.x / m_vScreenSize.y; }
+	inline const float GetAspect() { return vpSize.get().x / vpSize.get().y; }
 
 	inline void SetRenderTarget(std::unique_ptr<RenderTarget>& pRT) { m_pRenderTarget = std::move(pRT); }
 	ID3D11ShaderResourceView* GetRenderingTexture(int num);
@@ -66,31 +66,31 @@ protected:
 	void CalcView(const float fUp = 1.0f);
 	void CalcProjection();
 	void CalcWorldMatrix();
-	void CreateViewFrustum();
-	void UpdateViewFrustum();
+	//void CreateViewFrustum();
+	//void UpdateViewFrustum();
 
 protected:
 	const int FRUSTUM_SIZE = 6;
 	
 	std::unique_ptr<RenderTarget>	m_pRenderTarget;
-	std::weak_ptr<Transform>		m_pTargetTransform;	// 
-	DirectX::XMMATRIX				m_mView;			//  
-	DirectX::XMMATRIX				m_mProjection;		// 
-	DirectX::XMFLOAT4X4				m_mWorldMatrix;		//
-	std::vector<DirectX::XMFLOAT4>	m_frustum;			// 視錐台
-	std::vector<DirectX::XMFLOAT4>	m_frustumWorld;			// 視錐台
-	Vector4							m_vColor;			// 色
-	Vector3							m_vPos;				// 座標
-	Vector3							m_vLook;			// 注視点
-	Vector3							m_vUp;				// 上ベクトル
-	Vector3							m_vSide;			// 横ベクトル
-	Vector3							m_vFront;			// 正面ベクトル
-	Vector2							m_vScreenSize;		// スクリーンサイズ
-	Vector2							m_vParallelScale;	// 平行投影拡縮
-	float							m_fNearClip;		// ニアクリップ
-	float							m_fFarClip;			// ファクリップ
-	float							m_fFov;				// 視野角
-	bool							m_isPerspective;	// 投影方法
+	//std::weak_ptr<Transform>		m_pTargetTransform;	// 
+	//DirectX::XMMATRIX				m_mView;			//  
+	//DirectX::XMMATRIX				m_mProjection;		// 
+	//DirectX::XMFLOAT4X4				m_mWorldMatrix;		//
+	//std::vector<DirectX::XMFLOAT4>	m_frustum;			// 視錐台
+	//std::vector<DirectX::XMFLOAT4>	m_frustumWorld;			// 視錐台
+	//Vector4							m_vColor;			// 色
+	//Vector3							m_vPos;				// 座標
+	//Vector3							m_vLook;			// 注視点
+	//Vector3							m_vUp;				// 上ベクトル
+	//Vector3							m_vSide;			// 横ベクトル
+	//Vector3							m_vFront;			// 正面ベクトル
+	//Vector2							m_vScreenSize;		// スクリーンサイズ
+	//Vector2							m_vParallelScale;	// 平行投影拡縮
+	//float							m_fNearClip;		// ニアクリップ
+	//float							m_fFarClip;			// ファクリップ
+	//float							m_fFov;				// 視野角
+	//bool							m_isPerspective;	// 投影方法
 
 private:
 	Vector3							m_vKeepPos;	// 一時保存用

@@ -74,9 +74,6 @@
     <ClCompile Include="App\EventMgr.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
-    <ClCompile Include="App\MMDModel.cpp">
-      <Filter>C++ファイル\App</Filter>
-    </ClCompile>
     <ClCompile Include="App\OBJModel.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
     <ClCompile Include="System\Input.cpp">
-      <Filter>C++ファイル\System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\MMDParser.cpp">
       <Filter>C++ファイル\System</Filter>
     </ClCompile>
     <ClCompile Include="System\Mouse.cpp">
@@ -230,7 +224,6 @@
     <ClCompile Include="App\Scene\TitleScene.cpp">
       <Filter>C++ファイル\App\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="App\ViewPoint\RotationCamera.cpp" />
     <ClCompile Include="App\Image.cpp">
       <Filter>C++ファイル\App</Filter>
     </ClCompile>
@@ -245,6 +238,12 @@
     </ClCompile>
     <ClCompile Include="App\Fade\MagicUI_Fade.cpp">
       <Filter>C++ファイル\App\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ViewPoint\RotationCamera.cpp">
+      <Filter>C++ファイル\App\ViewPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Level\LV_Cow.cpp">
+      <Filter>C++ファイル\App\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,16 +277,10 @@
     <ClInclude Include="App\OBJModel.h">
       <Filter>C++ファイル\App</Filter>
     </ClInclude>
-    <ClInclude Include="App\MMDModel.h">
-      <Filter>C++ファイル\App</Filter>
-    </ClInclude>
     <ClInclude Include="System\RenderTarget.h">
       <Filter>C++ファイル\System</Filter>
     </ClInclude>
     <ClInclude Include="System\OBJParser.h">
-      <Filter>C++ファイル\System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\MMDParser.h">
       <Filter>C++ファイル\System</Filter>
     </ClInclude>
     <ClInclude Include="System\Sound\Sound.h">
@@ -469,6 +462,9 @@
     </ClInclude>
     <ClInclude Include="App\Fade\MagicUI_Fade.h">
       <Filter>C++ファイル\App\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Level\LV_Cow.h">
+      <Filter>C++ファイル\App\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

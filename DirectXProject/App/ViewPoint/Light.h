@@ -16,4 +16,8 @@ public:
 	void Update()override;
 
 	void Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum = 0)override;
+
+public:
+	Property<float> jaggiesReduction;
+
 };

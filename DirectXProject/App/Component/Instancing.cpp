@@ -9,8 +9,8 @@
 
 void Instancing::Init()
 {
-	m_vScale = 1.0f;
-	m_vAngle = 0.0f;
+	scale.set(1.0f);
+	angle.set(0.0f);
 }
 
 void Instancing::Uninit()
@@ -25,7 +25,7 @@ void Instancing::Bind(const std::weak_ptr<ShaderBuffer>& pBuf)
 {
 	if (m_pDrawBuffer.expired())return;
 	if (pBuf.expired())return;
-	pBuf.lock()->SetInstancingWorld(m_vScale, m_vAngle, m_vPosList);
+	pBuf.lock()->SetInstancingWorld(scale.get(), angle.get(), m_vPosList);
 	switch (m_primitiveType)
 	{
 	case PrimitiveType::TRIANGLELIST:

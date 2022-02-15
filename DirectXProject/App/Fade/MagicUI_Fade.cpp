@@ -8,8 +8,8 @@ void MagicUI_Fade::Init()
 	m_pImage->SetTexType(ShaderResource::TEX_TYPE::GRAYSCALE);
 	m_isIn = true;
 	m_isOut = false;
-	m_fInOutSpeed = 0.5f;
-	m_fTime = 0.f;
+	inOutSpeed.set(0.5f);
+	time.set(0.f);
 }
 
 void MagicUI_Fade::Uninit()
@@ -22,7 +22,7 @@ void MagicUI_Fade::Bind(const std::weak_ptr<ShaderBuffer> pSB)
 	if (!m_isIn && !m_isOut)return;	// フェードインもフェードアウトも実行される状態ではなければスキップ
 	if (pSB.expired())return;
 
-	m_fInOut = m_fTime / m_fInOutSpeed;
+	m_fInOut = time.get() / inOutSpeed.get();
 	pSB.lock()->SetTime(1.f - m_fInOut);
 	m_pImage->BindTex(pSB);
 }

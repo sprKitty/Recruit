@@ -17,6 +17,7 @@ public:
 	Vector2() = default;
 	Vector2(float x, float y) :x(x), y(y) {}
 	Vector2(float v) :x(v), y(v) {}
+	Vector2(const DirectX::XMFLOAT2& val) :x(val.x), y(val.y) {}
 	~Vector2(){}
 
 	const Vector2& operator =(const Vector2 &v)
@@ -237,6 +238,7 @@ class Vector3
 public:
 	Vector3() = default;
 	Vector3(float x, float y, float z) :x(x), y(y), z(z){}
+	Vector3(const DirectX::XMFLOAT3& val) :x(val.x), y(val.y), z(val.z) {}
 	Vector3(float v) :x(v), y(v), z(v) {}
 	~Vector3() {}
 
@@ -485,6 +487,7 @@ class Vector4
 public:
 	Vector4() = default;
 	Vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {}
+	Vector4(const DirectX::XMFLOAT4& val) :x(val.x), y(val.y), z(val.z), w(val.w) {}
 	Vector4(float v) :x(v), y(v), z(v), w(v) {}
 	~Vector4() {}
 	

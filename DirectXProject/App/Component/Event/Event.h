@@ -43,5 +43,4 @@ private:
 	bool m_isFinishAll;
 	std::vector<std::shared_ptr<EventBase> > m_pActionEvents;
 	int m_nArray;
-	Event_Type::Kind m_type;
 };

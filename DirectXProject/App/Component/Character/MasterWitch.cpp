@@ -100,7 +100,7 @@ void MasterWitch::Init()
 
 	m_pHPGaugeUIFade.reset(new MagicUI_Fade);
 	m_pHPGaugeUIFade->Init();
-	m_pHPGaugeUIFade->inOutSpeed.set(m_nHP);
+	m_pHPGaugeUIFade->inOutSpeed.set(static_cast<float>(m_nHP));
 
 	std::weak_ptr<Object> pObject;
 	pObject = FactoryMethod::GetInstance().CreateMagicUI();
@@ -196,7 +196,7 @@ void MasterWitch::Update()
 		if (!PTRNULLCHECK(m_pHPGaugeUIFade))
 		{
 			m_pHPGauge.lock()->m_pOwner.lock()->EnableActive();
-			m_pHPGaugeUIFade->time.set(m_nHP);
+			m_pHPGaugeUIFade->time.set(static_cast<float>(m_nHP));
 		}
 
 		// �̗͐؂ꂩ

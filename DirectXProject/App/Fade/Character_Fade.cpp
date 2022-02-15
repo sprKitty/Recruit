@@ -8,8 +8,8 @@ void Character_Fade::Init()
 	m_pImage->SetTexType(ShaderResource::TEX_TYPE::GRAYSCALE);
 	m_isIn = false;
 	m_isOut = false;
-	m_fInOutSpeed = 0.5f;
-	m_fTime = 0.f;
+	inOutSpeed.set(0.5f);
+	time.set(0.f);
 }
 
 void Character_Fade::Uninit()

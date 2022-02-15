@@ -17,8 +17,8 @@ void Scene_Level_Fade::Init()
 
 	m_isIn = false;
 	m_isOut = false;
-	m_fInOutSpeed = 0.5f;
-	m_fTime = 0.0f;
+	inOutSpeed.set(0.5f);
+	time.set(0.0f);
 	m_pRenderer2D.lock()->SetRectTransform(rectTransform);
 	m_pRenderer2D.lock()->m_Image.SetTexType(ShaderResource::TEX_TYPE::GRAYSCALE);
 	strMap = loadFiles.CSV(g_pFadeInfoFile);
@@ -30,7 +30,7 @@ void Scene_Level_Fade::Init()
 		}
 		else if (itr.first == "2フェードインアウトスピード")
 		{
-			m_fInOutSpeed = std::stof(itr.second[0].c_str());
+			inOutSpeed.set(std::stof(itr.second[0].c_str()));
 		}
 	}
 }

@@ -29,7 +29,5 @@ protected:
 protected:
 	bool m_isIn;
 	bool m_isOut;
-	float m_fInOutSpeed;
-	float m_fTime;
 	float m_fInOut;
 };

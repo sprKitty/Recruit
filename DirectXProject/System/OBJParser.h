@@ -2,7 +2,43 @@
 
 #include "Texture.h"
 #include <vector>
+#include <map>
 #include <MyMath.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+class NewOBJParser
+{
+private:
+	struct Material
+	{
+		float Ns;
+		Vector3 Ka;
+		Vector3 Kd;
+		Vector3 Ks;
+		Vector3 Ke;
+		float Ni;
+		float d;
+		UINT8 illum;
+	};
+
+public:
+	NewOBJParser() {}
+	~NewOBJParser() {}
+
+	const bool Load(const std::string& path, const std::string& name);
+
+private:
+	const bool LoadMaterial(const std::string& str);
+
+private:
+	std::vector<int> m_vtxIndexList;
+	std::vector<int> m_uvIndexList;
+	std::vector<int> m_normalIndexList;
+	
+	std::map<std::string, Material> m_materialList;
+};
 
 class OBJParser
 {

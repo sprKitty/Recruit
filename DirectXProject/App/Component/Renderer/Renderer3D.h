@@ -1,6 +1,5 @@
 #pragma once
 #include "Renderer.h"
-#include <App/MMDModel.h>
 #include <App/OBJModel.h>
 #include <System/DrawBuffer.h>
 

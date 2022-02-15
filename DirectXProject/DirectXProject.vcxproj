@@ -193,10 +193,10 @@
     <ClCompile Include="App\Fade\Scene_Level_Fade.cpp" />
     <ClCompile Include="App\GameKeyBind.cpp" />
     <ClCompile Include="App\Image.cpp" />
+    <ClCompile Include="App\Level\LV_Cow.cpp" />
     <ClCompile Include="App\Level\LV_MasterWitch.cpp" />
     <ClCompile Include="App\Level\LV_StageBranch.cpp" />
     <ClCompile Include="App\MeshData.cpp" />
-    <ClCompile Include="App\MMDModel.cpp" />
     <ClCompile Include="App\OBJModel.cpp" />
     <ClCompile Include="App\RenderPipeline.cpp" />
     <ClCompile Include="App\Scene\GameScene.cpp" />
@@ -220,7 +220,6 @@
     <ClCompile Include="System\Geometory.cpp" />
     <ClCompile Include="System\Input.cpp" />
     <ClCompile Include="System\LoadFiles.cpp" />
-    <ClCompile Include="System\MMDParser.cpp" />
     <ClCompile Include="System\Mouse.cpp" />
     <ClCompile Include="System\OBJParser.cpp" />
     <ClCompile Include="System\RenderTarget.cpp" />
@@ -263,10 +262,10 @@
     <ClInclude Include="App\GameKeyBind.h" />
     <ClInclude Include="App\Image.h" />
     <ClInclude Include="App\Level\LevelBase.h" />
+    <ClInclude Include="App\Level\LV_Cow.h" />
     <ClInclude Include="App\Level\LV_MasterWitch.h" />
     <ClInclude Include="App\Level\LV_StageBranch.h" />
     <ClInclude Include="App\MeshData.h" />
-    <ClInclude Include="App\MMDModel.h" />
     <ClInclude Include="App\OBJModel.h" />
     <ClInclude Include="App\RenderPipeline.h" />
     <ClInclude Include="App\Scene\GameScene.h" />
@@ -295,7 +294,6 @@
     <ClInclude Include="System\Geometory.h" />
     <ClInclude Include="System\Input.h" />
     <ClInclude Include="System\LoadFiles.h" />
-    <ClInclude Include="System\MMDParser.h" />
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\OBJParser.h" />
     <ClInclude Include="System\RenderTarget.h" />

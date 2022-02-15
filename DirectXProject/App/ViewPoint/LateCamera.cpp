@@ -10,21 +10,24 @@
 
 void LateCamera::Init()
 {
-	m_vPos = m_vLatePos = CameraInitPos;
-	m_vLook = m_vLateLook = CameraInitLook;
-	m_vUp = { 0.0f,1.0f,0.0f };
-	m_vFront = m_vLook - m_vPos;
-	m_vFront.Normalize();
-	m_vSide = { 1.0f,0.0f,0.0f };
-	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_fNearClip = 1.0f;
-	m_fFarClip = 500.0f;
-	m_fFov = FOV;
+	m_vLatePos = CameraInitPos;
+	m_vLatePos = CameraInitLook;
+	position.set(CameraInitPos);
+	look.set(CameraInitLook);
+	up.set({ 0.0f,1.0f,0.0f });
+	Vector3 vFront = CameraInitLook - CameraInitPos;
+	vFront.Normalize();
+	front.set(vFront);
+	side.set({ 1.0f,0.0f,0.0f });
+	vpSize.set(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	nearclip.set(1.f);
+	farclip.set(500.f);
+	fov.set(FOV);
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 
@@ -38,13 +41,13 @@ void LateCamera::Update()
 	float mouseMoveX = static_cast<float>(GetMouseMoveX());
 	float mouseMoveY = static_cast<float>(GetMouseMoveY());
 
-	if (!m_pTargetTransform.expired())
+	if (!targetTransform.get().expired())
 	{
-		Vector3 vDistance = m_vPos - m_vLook;
-		m_vLook = m_pTargetTransform.lock()->localpos + CameraInitLook;
-		m_vPos = m_vLook + vDistance;
-		Vector3 moveLook = m_vLook - m_vLateLook;
-		Vector3 movePos = m_vPos - m_vLatePos;
+		Vector3 vDistance = position.get() - look.get();
+		look.set(targetTransform.get().lock()->localpos + CameraInitLook);
+		position.set(look.get() + vDistance);
+		Vector3 moveLook = look.get() - m_vLateLook;
+		Vector3 movePos = position.get() - m_vLatePos;
 		moveLook *= Clocker::GetInstance().DeltaTime() * 2.0f;
 		movePos *= Clocker::GetInstance().DeltaTime() * 2.0f;
 		m_vLateLook = moveLook + m_vLateLook;
@@ -55,7 +58,7 @@ void LateCamera::Update()
 	vPos = DirectX::XMLoadFloat3(&m_vLatePos.Convert());
 	vLook = DirectX::XMLoadFloat3(&m_vLateLook.Convert());
 	DirectX::XMVECTOR vFront = DirectX::XMVectorSubtract(vLook, vPos);
-	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&m_vUp.Convert());
+	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&Vector3(up.get()).Convert());
 
 	DirectX::XMVECTOR vSide;
 	float focus = 0.0f;
@@ -74,20 +77,20 @@ void LateCamera::Update()
 
 	DirectX::XMFLOAT3 value;
 	DirectX::XMStoreFloat3(&value, vPos);
-	m_vLatePos.Convert(value);
+	m_vLatePos = value;
 	DirectX::XMStoreFloat3(&value, vLook);
-	m_vLateLook.Convert(value);
+	m_vLateLook = value;
 	DirectX::XMStoreFloat3(&value, vUp);
-	m_vUp.Convert(value);
+	up.set(value);
 	DirectX::XMStoreFloat3(&value, vSide);
-	m_vSide.Convert(value);
+	side.set(value);
 	DirectX::XMStoreFloat3(&value, vFront);
-	m_vFront.Convert(value);
+	front.set(value);
 
 
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }

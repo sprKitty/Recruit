@@ -160,7 +160,7 @@ void BillBoardRenderer::CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)
 		fRadius = (w._11 > fRadius) ? w._11 : fRadius;
 		fRadius = (w._22 > fRadius) ? w._22 : fRadius;
 		fRadius = (w._33 > fRadius) ? w._33 : fRadius;
-		m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
+		//m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
 	}
 }
 

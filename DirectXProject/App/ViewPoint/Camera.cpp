@@ -14,21 +14,22 @@ const float Camera::FOV = 30.0f;
 
 void Camera::Init()
 {
-	m_vPos =  CameraInitPos;
-	m_vLook = CameraInitLook;
-	m_vUp = { 0.0f,1.0f,0.0f };
-	m_vFront = m_vLook - m_vPos;
-	m_vFront.Normalize();
-	m_vSide = { 1.0f,0.0f,0.0f };
-	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_fNearClip = 1.0f;
-	m_fFarClip = 500.0f;
-	m_fFov = FOV;
+	position.set(CameraInitPos);
+	look.set(CameraInitLook);
+	up.set({ 0.0f,1.0f,0.0f });
+	Vector3 vFront = CameraInitLook - CameraInitPos;
+	vFront.Normalize();
+	front.set(vFront);
+	side.set({ 1.0f,0.0f,0.0f });
+	vpSize.set(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	nearclip.set(1.f);
+	farclip.set(500.f);
+	fov.set(FOV);
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 
@@ -42,19 +43,19 @@ void Camera::Update()
 	float mouseMoveX = static_cast<float>(GetMouseMoveX());
 	float mouseMoveY = static_cast<float>(GetMouseMoveY());
 
-	if (!m_pTargetTransform.expired())
+	if (!targetTransform.get().expired())
 	{
-		Vector3 vDistance = m_vPos - m_vLook;
-		m_vLook = m_pTargetTransform.lock()->localpos + CameraInitLook;
-		m_vPos = m_vLook + vDistance;
+		Vector3 vDistance = position.get() - look.get();
+		look.set(targetTransform.get().lock()->localpos + CameraInitLook);
+		position.set(look.get() + vDistance);
 	}
 
 	DirectX::XMVECTOR vPos, vLook;
-	vPos = DirectX::XMLoadFloat3(&m_vPos.Convert());
-	vLook = DirectX::XMLoadFloat3(&m_vLook.Convert());
+	vPos = DirectX::XMLoadFloat3(&Vector3(position.get()).Convert());
+	vLook = DirectX::XMLoadFloat3(&Vector3(look.get()).Convert());
 
 	DirectX::XMVECTOR vFront = DirectX::XMVectorSubtract(vLook, vPos);
-	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&m_vUp.Convert());
+	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&Vector3(up.get()).Convert());
 
 	DirectX::XMVECTOR vSide;
 	float focus = 0.0f;
@@ -73,41 +74,48 @@ void Camera::Update()
 
 	DirectX::XMFLOAT3 value;
 	DirectX::XMStoreFloat3(&value, vPos);
-	m_vPos.Convert(value);
+	position.set(value);
 	DirectX::XMStoreFloat3(&value, vLook);
-	m_vLook.Convert(value);
+	look.set(value);
 	DirectX::XMStoreFloat3(&value, vUp);
-	m_vUp.Convert(value);
+	up.set(value);
 	DirectX::XMStoreFloat3(&value, vSide);
-	m_vSide.Convert(value);
+	side.set(value);
 	DirectX::XMStoreFloat3(&value, vFront);
-	m_vFront.Convert(value);
+	front.set(value);
 
 
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 void Camera::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)
 {
+	Vector3 vPos = position.get();
+	Vector4 vColor = color.get();
+	Vector3 vFront = front.get();
+
 	ShaderResource::CameraInfo cam;
-	cam.pos = { m_vPos.x, m_vPos.y, m_vPos.z, 0.0f };
-	pBuf.lock()->SetCameraVP(m_mView, m_mProjection, nBufferNum);
+	cam.pos = { vPos.x, vPos.y, vPos.z, 0.0f };
+	pBuf.lock()->SetCameraVP(view.get(), projection.get(), nBufferNum);
 	pBuf.lock()->SetCameraInfo(cam);
 	DirectX11::GetInstance().SetCulling(CullingMode::CULL_BACK);
 }
 
 void Camera::Bind2D(const std::weak_ptr<ShaderBuffer> pBuf)
 {
+	Vector3 vPos = position.get();
+	Vector2 vp = vpSize.get();
+
 	DirectX::XMMATRIX mView, mProj;
 	ShaderResource::CameraInfo cam;
-	cam.pos = { m_vPos.x, m_vPos.y, m_vPos.z, 0.0f };
-	cam.vp = { m_vScreenSize.x,m_vScreenSize.y,0,0 };
+	cam.pos = { vPos.x, vPos.y, vPos.z, 0.0f };
+	cam.vp = { vp.x,vp.y,0,0 };
 	mView = DirectX::XMMatrixIdentity();
-	mProj = DirectX::XMMatrixOrthographicOffCenterLH(0, m_vScreenSize.x, m_vScreenSize.y, 0, m_fNearClip, m_fFarClip);
+	mProj = DirectX::XMMatrixOrthographicOffCenterLH(0, vp.x, vp.y, 0, nearclip.get(), farclip.get());
 	pBuf.lock()->SetCameraVP(mView, mProj, 0);
 	pBuf.lock()->SetCameraInfo(cam);
 	DirectX11::GetInstance().SetCulling(CullingMode::CULL_NONE);

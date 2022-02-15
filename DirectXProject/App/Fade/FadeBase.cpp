@@ -2,8 +2,8 @@
 
 FadeBase::FadeBase()
 {
-	inOutSpeed = Property<float>(&m_fInOutSpeed);
-	time = Property<float>(&m_fTime);
+	//inOutSpeed = Property<float>(&m_fInOutSpeed);
+	//time = Property<float>(&m_fTime);
 }
 
 FadeBase::~FadeBase()
@@ -12,12 +12,15 @@ FadeBase::~FadeBase()
 
 const bool FadeBase::Update()
 {
+	float fInOutSpeed = inOutSpeed.get();
+	float fTime = time.get();
 	if (m_isIn)
 	{
-		if (m_fTime >= m_fInOutSpeed)
+		if (fTime >= fInOutSpeed)
 		{
 			m_isIn = false;
-			m_fTime = m_fInOutSpeed;
+			fTime = fInOutSpeed;
+			time.set(fTime);
 			return false;
 		}
 		InUpdate();
@@ -25,15 +28,17 @@ const bool FadeBase::Update()
 	}
 	else if (m_isOut)
 	{
-		if (m_fTime <= 0.0f)
+		if (fTime <= 0.0f)
 		{
 			m_isOut = false;
-			m_fTime = 0.0f;
+			fTime = 0.0f;
+			time.set(fTime);
 			return false;
 		}
 		OutUpdate();
 		return true;
 	}
+
 	return false;
 }
 
@@ -51,12 +56,12 @@ void FadeBase::StartFadeOut()
 
 void FadeBase::InUpdate()
 {
-	m_fTime += Clocker::GetInstance().DeltaTime();
-	m_fInOut = m_fTime / m_fInOutSpeed;
+	time.set(time.get() + Clocker::GetInstance().DeltaTime());
+	m_fInOut = time.get() / inOutSpeed.get();
 }
 
 void FadeBase::OutUpdate()
 {
-	m_fTime -= Clocker::GetInstance().DeltaTime();
-	m_fInOut = m_fTime / m_fInOutSpeed;
+	time.set(time.get() - Clocker::GetInstance().DeltaTime());
+	m_fInOut = time.get() / inOutSpeed.get();
 }

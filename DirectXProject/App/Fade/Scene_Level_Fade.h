@@ -3,6 +3,9 @@
 #include <App/Component/Object.h>
 #include <App/Component/Renderer/Renderer2D.h>
 
+/*
+* @brief シーン間及びレベル遷移用フェードアニメーションクラス
+*/
 class Scene_Level_Fade final : public FadeBase
 {
 public:

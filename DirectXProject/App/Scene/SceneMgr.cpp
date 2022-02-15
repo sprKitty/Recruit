@@ -15,6 +15,8 @@
 #include <random>
 #include <time.h>
 
+#include <System/OBJParser.h>
+
 HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 {
 	// ƒVƒXƒeƒ€‚Ì‰Šú‰»
@@ -26,11 +28,14 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	m_pShaderBuffer->Initialize();
 	RenderPipeline::GetInstance().Initialize();
 	RenderPipeline::GetInstance().SetShaderBuffer(m_pShaderBuffer);
+	NewOBJParser obj;
+	obj.Load("Assets/OBJ/", "tree.obj");
+
 	MessageWindow::CreateOffsetMap();
 	MeshData::GetInstance().Initialize();
 	MeshData::GetInstance().Load("field2.obj");
 	MeshData::GetInstance().Load("sphere.obj");
-	MeshData::GetInstance().Load("tree2.obj");
+	MeshData::GetInstance().Load("tree.obj");
 	MeshData::GetInstance().Load("grass.obj");
 	MeshData::GetInstance().Load("branchField.obj");
 	MeshData::GetInstance().Load("fence.obj");
@@ -46,7 +51,7 @@ HRESULT SceneMgr::Init(HWND hWnd, UINT width, UINT height)
 	TextureData::GetInstance().Load("terrainGrassBump.png");
 	TextureData::GetInstance().Load("fence.png");
 	TextureData::GetInstance().Load("fenceBump.png");
-	TextureData::GetInstance().Load("tree.png");
+	//TextureData::GetInstance().Load("tree.png");
 	TextureData::GetInstance().Load("grass.png");
 	TextureData::GetInstance().Load("pushEnter.png");
 	TextureData::GetInstance().Load("gameLogo.png");

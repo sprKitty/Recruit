@@ -34,6 +34,5 @@ public:
 	Property<Event_Type::Kind> type;
 
 private:
-	Event_Type::Kind m_type;
 	bool m_isCaused; // trigger‚ª—LŒø‚©
 };

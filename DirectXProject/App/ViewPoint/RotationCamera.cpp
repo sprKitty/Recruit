@@ -10,21 +10,22 @@
 
 void RotationCamera::Init()
 {
-	m_vPos = CameraInitPos;
-	m_vLook = CameraInitLook;
-	m_vUp = { 0.0f,1.0f,0.0f };
-	m_vFront = m_vLook - m_vPos;
-	m_vFront.Normalize();
-	m_vSide = { 1.0f,0.0f,0.0f };
-	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_fNearClip = 1.0f;
-	m_fFarClip = 500.0f;
-	m_fFov = FOV;
+	position.set(CameraInitPos);
+	look.set(CameraInitLook);
+	up.set({ 0.0f,1.0f,0.0f });
+	Vector3 vFront = CameraInitLook - CameraInitPos;
+	vFront.Normalize();
+	front.set(vFront);
+	side.set({ 1.0f,0.0f,0.0f });
+	vpSize.set(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	nearclip.set(1.f);
+	farclip.set(500.f);
+	fov.set(FOV);
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 	m_fDisatance = 1.5f;
 	m_fDegeree = 180.0f;
 	m_vNormal = 0.0f;
@@ -39,11 +40,11 @@ void RotationCamera::Update()
 	UpdateRotation();
 
 	DirectX::XMVECTOR vPos, vLook;
-	vPos = DirectX::XMLoadFloat3(&m_vPos.Convert());
-	vLook = DirectX::XMLoadFloat3(&m_vLook.Convert());
+	vPos = DirectX::XMLoadFloat3(&Vector3(position.get()).Convert());
+	vLook = DirectX::XMLoadFloat3(&Vector3(look.get()).Convert());
 
 	DirectX::XMVECTOR vFront = DirectX::XMVectorSubtract(vLook, vPos);
-	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&m_vUp.Convert());
+	DirectX::XMVECTOR vUp = DirectX::XMLoadFloat3(&Vector3(up.get()).Convert());
 
 	DirectX::XMVECTOR vSide;
 	float focus = 0.0f;
@@ -55,21 +56,21 @@ void RotationCamera::Update()
 
 	DirectX::XMFLOAT3 value;
 	DirectX::XMStoreFloat3(&value, vPos);
-	m_vPos.Convert(value);
+	position.set(value);
 	DirectX::XMStoreFloat3(&value, vLook);
-	m_vLook.Convert(value);
+	look.set(value);
 	DirectX::XMStoreFloat3(&value, vUp);
-	m_vUp.Convert(value);
+	up.set(value);
 	DirectX::XMStoreFloat3(&value, vSide);
-	m_vSide.Convert(value);
+	side.set(value);
 	DirectX::XMStoreFloat3(&value, vFront);
-	m_vFront.Convert(value);
+	front.set(value);
 
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 void RotationCamera::UpdateRotation()
@@ -85,5 +86,5 @@ void RotationCamera::UpdateRotation()
 	}
 
 	m_vNormal = { sinf(DirectX::XMConvertToRadians(m_fDegeree)),0.6f,cosf(DirectX::XMConvertToRadians(m_fDegeree)) };
-	m_vPos = m_vLook + m_vNormal * m_fDisatance;
+	position.set(look.get() + m_vNormal * m_fDisatance);
 }

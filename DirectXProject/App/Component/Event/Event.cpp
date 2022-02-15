@@ -4,7 +4,6 @@
 
 Event::Event()
 {
-	type = Property<Event_Type::Kind>(&m_type);
 }
 
 Event::~Event()
@@ -17,7 +16,7 @@ void Event::Init()
 	m_isPlay = false;
 	m_isFinishAll = false;
 	m_nArray = 0;
-	m_type = Event_Type::MAX;
+	type.set(Event_Type::MAX);
 	for (const auto& itr : m_pActionEvents)
 	{
 		itr->Init();

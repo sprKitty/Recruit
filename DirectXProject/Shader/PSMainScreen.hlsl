@@ -70,7 +70,7 @@ SamplerState BORDER : register(s2);
 SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
-const float3 g_Luminance = float3(0.299f, 0.587f, 0.114f);
+static const float3 g_Luminance = float3(0.299f, 0.587f, 0.114f);
 
 float4 main(PS_IN pin) : SV_Target
 {

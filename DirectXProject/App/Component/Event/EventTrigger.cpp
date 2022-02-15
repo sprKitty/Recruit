@@ -3,7 +3,6 @@
 
 EventTrigger::EventTrigger()
 {
-	type = Property<Event_Type::Kind>(&m_type);
 }
 
 EventTrigger::~EventTrigger()

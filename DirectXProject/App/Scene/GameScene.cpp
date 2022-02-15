@@ -104,6 +104,7 @@ void GameScene::Init()
 	m_pLight->fov.set(60.0f);
 	m_pLight->color.set(Vector4(255.0f / 255.0f, 161.0f / 255.0f, 3.0f / 255.0f, 1.0f));
 	m_pLight->perspective.set(false);
+	m_pLight->jaggiesReduction.set(0.001f);
 
 	m_pMessageWindow.reset(new MessageWindow());
 	m_pMessageWindow->Initialize();

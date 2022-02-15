@@ -135,8 +135,7 @@ PS_OUT main(PS_IN pin)
     depth += mapColor.g / 256.0f;
     depth += mapColor.b / 256.0f / 256.0f;
     
-    //inLVP -= 0.00005f;
-    color.rgb = (inLVP > depth + 0.00015f) ? color.rgb * 0.5f : color.rgb;
+    color.rgb = (inLVP > depth + g_lightInfo.pos.w) ? color.rgb * 0.5f : color.rgb;
     pout.main = color;
     pout.emissive = g_postEffect.emissive;
     pout.depth = pin.camPos.z / pin.camPos.w;

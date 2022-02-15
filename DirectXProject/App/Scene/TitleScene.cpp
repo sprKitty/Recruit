@@ -56,6 +56,7 @@ void TitleScene::Init()
 	m_pLight->fov.set(60.0f);
 	m_pLight->color.set(Vector4(255.0f / 255.0f, 161.0f / 255.0f, 3.0f / 255.0f, 1.0f));
 	m_pLight->perspective.set(false);
+	m_pLight->jaggiesReduction.set(0.00005f);
 
 	m_pMouse.reset(new Mouse());
 	m_pMouse->Initialize();
@@ -86,34 +87,6 @@ void TitleScene::Init()
 		pR3D.lock()->SetMainImage("gameLogo");
 	}
 
-	//Object::WORKER_OBJ pPushEnter = FactoryMethod::GetInstance().CreateObject();
-	//pTransform = pPushEnter.lock()->GetComponent<Transform>();
-	//pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
-	//if (!pTransform.expired())
-	//{
-	//	pTransform.lock()->localscale = 0.3f;
-	//	pTransform.lock()->localrot.y = 90.0f;
-	//	pTransform.lock()->localpos = { 0.35f,0.13f,0.0f };
-	//}
-	//if (!pR3D.expired())
-	//{
-	//	pR3D.lock()->SetMainImage("pushEnter");
-	//}
-
-	//pPushEnter = FactoryMethod::GetInstance().CreateObject();
-	//pTransform = pPushEnter.lock()->GetComponent<Transform>();
-	//pR3D = pPushEnter.lock()->GetComponent<Renderer3D>();
-	//if (!pTransform.expired())
-	//{
-	//	pTransform.lock()->localscale = 0.3f;
-	//	pTransform.lock()->localrot.y = -90.0f;
-	//	pTransform.lock()->localpos = { -0.35f,0.13f,0.0f };
-	//}
-	//if (!pR3D.expired())
-	//{
-	//	pR3D.lock()->SetMainImage("pushEnter");
-	//}
-
 	Object::WORKER_OBJ pFence = FactoryMethod::GetInstance().CreateFence();
 
 	Object::WORKER_OBJ pTerrain = FactoryMethod::GetInstance().CreateTerrain();
@@ -121,7 +94,7 @@ void TitleScene::Init()
 	if (!pTransform.expired())
 	{
 		pTransform.lock()->localscale = { 10.0f,1.0f,10.0f };
-		pTransform.lock()->localpos.y = -0.02f;
+		pTransform.lock()->localpos.y = 0.0f;
 	}
 
 	Object::WORKER_OBJ pWater = FactoryMethod::GetInstance().CreateWater();
@@ -129,7 +102,7 @@ void TitleScene::Init()
 	if (!pTransform.expired())
 	{
 		pTransform.lock()->localscale = { 0.25f,1.0f,0.25f };
-		pTransform.lock()->localpos.y = 0.0f;
+		pTransform.lock()->localpos.y = 0.01f;
 	}
 }
 

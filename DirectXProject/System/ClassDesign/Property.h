@@ -1,17 +1,18 @@
 #pragma once
 
+/*
+* @brief ゲットセットが用意してある変数クラス
+*/
 template<class T>
 class Property
 {
 public:
 	Property() {}
-	Property(T* p) { ptr = p; }
 	~Property() {}
 
-	inline const T& get() { return *ptr; }
-	inline void set(const T& param) { *ptr = param; }
+	inline void set(const T& val) { m_val = val; }
+	inline const T& get() { return m_val; }
 
 private:
-	T* ptr;
-
+	T m_val;
 };

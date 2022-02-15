@@ -15,18 +15,18 @@ namespace ObjectType
 {
 	enum Kind
 	{
-		NONE,
-		PLAYER,
-		PLAYERATTACK,
-		BOSSWITCH,
-		BOSSATTACK1,
-		BOSSATTACK2,
-		STAGE,
-		OUTSIDE,
-		OUTSIDE_NORTH,
-		OUTSIDE_EAST,
-		OUTSIDE_WEST,
-		OUTSIDE_SOUTH,
+		NONE,				
+		PLAYER,				// プレイヤー
+		PLAYERATTACK,		// プレイヤーの攻撃
+		BOSSWITCH,			// 魔女
+		BOSSATTACK1,		// 魔女の攻撃1
+		BOSSATTACK2,		// 魔女の攻撃1
+		STAGE,				// ステージ
+		OUTSIDE,			// エリア外
+		OUTSIDE_NORTH,		// エリア外北
+		OUTSIDE_EAST,		// エリア外東
+		OUTSIDE_WEST,		// エリア外西
+		OUTSIDE_SOUTH,		// エリア外南
 
 		MAX
 	};

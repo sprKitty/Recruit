@@ -111,7 +111,7 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	}
 	if (!pInst.expired())
 	{
-		pInst.lock()->Set("tree2");
+		pInst.lock()->Set("tree");
 	}
 	return pObj;
 }

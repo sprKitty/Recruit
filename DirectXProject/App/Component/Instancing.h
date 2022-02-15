@@ -13,8 +13,6 @@ class Instancing : public Component
 public:
 	Instancing() 
 	{
-		scale = Property<Vector3>(&m_vScale);
-		angle = Property<Vector3>(&m_vAngle);
 	}
 	~Instancing()override {}
 	void Init()override;
@@ -31,8 +29,6 @@ public:
 	Property<Vector3> angle;
 
 private:
-	Vector3 m_vScale;
-	Vector3 m_vAngle;
 	std::vector<Vector3> m_vPosList;
 	std::weak_ptr<DrawBuffer> m_pDrawBuffer;
 	PrimitiveType::Kind m_primitiveType;

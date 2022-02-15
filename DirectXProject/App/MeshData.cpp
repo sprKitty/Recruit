@@ -5,6 +5,7 @@
 
 void MeshData::Initialize()
 {
+	// プログラム内でポリゴンを作成
 	std::string path;
 	path = "board";
 	m_ModelMap[path] = Geometory::CreateBoardPolygon();
@@ -33,7 +34,7 @@ void MeshData::Load(std::string str)
 
 const MeshData::Info* MeshData::Get(std::string str)
 {
-	const int dot = str.find(".");
+	const size_t dot = str.find(".");
 	if (dot != -1) //.objなどの拡張子がついていたとき削除
 	{
 		str.resize(dot);

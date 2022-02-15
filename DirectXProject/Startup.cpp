@@ -97,7 +97,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (nowTime - countStartTime >= 1000.0f)
 			{
 				char fpsText[20];
-				sprintf(fpsText, "Witch", fpsCount);
+				sprintf(fpsText, "FPS:%d", fpsCount);
 				SetWindowText(hWnd, fpsText);
 				// Ÿ‚Ì‚P•bŠÔ‚ÌŒv‘ª€”õ
 				countStartTime = nowTime;

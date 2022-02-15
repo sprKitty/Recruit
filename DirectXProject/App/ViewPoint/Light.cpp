@@ -13,19 +13,21 @@ const float FOV = 45.0f;
 
 void Light::Init()
 {
-	m_vPos = LightInitPos;
-	m_vLook = LightInitLook;
-	m_vUp = { 0.0f,1.0f,0.0f };
-	m_vFront = m_vLook - m_vPos;
-	m_vFront.Normalize();
-	m_vSide = { 1.0f,0.0f,0.0f };
-	m_vScreenSize = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_vParallelScale = 1;
-	m_fNearClip = 1.0f;
-	m_fFarClip = 500.0f;
-	m_fFov = FOV;
-	m_isPerspective = true;
-	m_vColor = 1;
+	position.set(LightInitPos);
+	look.set(LightInitLook);
+	up.set({ 0.0f,1.0f,0.0f });
+	Vector3 vFront = LightInitLook - LightInitPos;
+	vFront.Normalize();
+	front.set(vFront);
+	side.set({ 1.0f,0.0f,0.0f });
+	vpSize.set(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	parallelScale.set(1.f);
+	nearclip.set(1.f);
+	farclip.set(500.f);
+	fov.set(FOV);
+	perspective.set(true);
+	color.set(1.f);
+	jaggiesReduction.set(0.f);
 	CalcView();
 	CalcProjection();
 }
@@ -41,16 +43,20 @@ void Light::Update()
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 void Light::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)
 {
+	Vector3 vPos = position.get();
+	Vector4 vColor = color.get();
+	Vector3 vFront = front.get();
+
 	ShaderResource::LightInfo info;
-	info.pos = { m_vPos.x, m_vPos.y, m_vPos.z, 0.0f };
-	info.color = m_vColor.Convert();
-	info.direction = { m_vFront.x,m_vFront.y,m_vFront.z,0.0f };
-	pBuf.lock()->SetLightVP(m_mView, m_mProjection, nBufferNum);
+	info.pos = { vPos.x, vPos.y, vPos.z, jaggiesReduction.get() };
+	info.color = vColor.Convert();
+	info.direction = { vFront.x, vFront.y, vFront.z, 0.f };
+	pBuf.lock()->SetLightVP(view.get(), projection.get(), nBufferNum);
 	pBuf.lock()->SetLightInfo(info);
 }
