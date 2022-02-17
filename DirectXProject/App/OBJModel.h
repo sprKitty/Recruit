@@ -6,19 +6,24 @@
 
 class OBJModel
 {
+private:
+	struct VertexBuffer
+	{
+		MyMath::Vertex vtx;
+		Vector3 ambient;
+		Vector3 diffuse;
+		Vector3 specular;
+		UINT16 specularIndex;
+	};
+
 public:
 	OBJModel();
 	~OBJModel();
 
-	static const MeshData::Info Load(const char* pPath);
-	bool Create(const char* fileName);
+	static const MeshData::Info Load(const std::string& path, const std::string& name);
 	void Draw();
 
-	inline int GetVtxNum() { return m_nVtxNum; }
-	inline MyMath::Vertex* GetVtxList() { return m_pVtxList; }
 private:
 	DrawBuffer* m_pBuffer;
 
-	int m_nVtxNum;
-	MyMath::Vertex* m_pVtxList;
 };

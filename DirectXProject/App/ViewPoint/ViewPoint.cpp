@@ -2,24 +2,6 @@
 
 ViewPoint::ViewPoint()
 {
-	//targetTransform = Property<std::weak_ptr<Transform> >(&m_pTargetTransform);
-	//view = Property<DirectX::XMMATRIX>(&m_mView);
-	//projection = Property<DirectX::XMMATRIX>(&m_mProjection);
-	//worldMatrix = Property<DirectX::XMFLOAT4X4>(&m_mWorldMatrix);
-	//color = Property<Vector4>(&m_vColor);
-	//position = Property<Vector3>(&m_vPos);
-	//look = Property<Vector3>(&m_vLook);
-	//up = Property<Vector3>(&m_vUp);
-	//side = Property<Vector3>(&m_vSide);
-	//front = Property<Vector3>(&m_vFront);
-	//vpSize = Property<Vector2>(&m_vScreenSize);
-	//parallelScale = Property<Vector2>(&m_vParallelScale);
-	//nearclip = Property<float>(&m_fNearClip);
-	//farclip = Property<float>(&m_fFarClip);
-	//fov = Property<float>(&m_fFov);
-	//perspective = Property<bool>(&m_isPerspective);
-	//m_frustum.resize(FRUSTUM_SIZE);
-	//m_frustumWorld.resize(FRUSTUM_SIZE);
 }
 
 void ViewPoint::CopyParameter(const std::weak_ptr<ViewPoint> pVP)
@@ -40,20 +22,7 @@ void ViewPoint::CopyParameter(const std::weak_ptr<ViewPoint> pVP)
 	farclip.set(pVP.lock()->farclip.get());
 	fov.set(pVP.lock()->fov.get());
 	perspective.set(pVP.lock()->perspective.get());
-
-	//m_mView = pVP.lock()->view.get();
-	//m_mProjection = pVP.lock()->projection.get();
-	//m_vColor = pVP.lock()->color.get();
-	//m_vPos = pVP.lock()->position.get();
-	//m_vLook = pVP.lock()->look.get();
-	//m_vUp = pVP.lock()->up.get();
-	//m_vSide = pVP.lock()->side.get();
-	//m_vFront = pVP.lock()->front.get();
-	//m_vParallelScale = pVP.lock()->parallelScale.get();
-	//m_fNearClip = pVP.lock()->nearclip.get();
-	//m_fFarClip = pVP.lock()->farclip.get();
-	//m_fFov = pVP.lock()->fov.get();
-	//m_isPerspective = pVP.lock()->perspective.get();
+	Update();
 }
 
 void ViewPoint::CalcReflect(const Vector3* pPoint, const Vector3* pNormal)
@@ -121,28 +90,6 @@ void ViewPoint::BindRenderTarget()
 	}
 }
 
-//const FrustumType::kind ViewPoint::CollisionViewFrustum(const DirectX::XMFLOAT3& pos, const float fRadius)
-//{
-//	bool isHit = false;
-//	DirectX::XMVECTOR vFrusW, vCenter, vDot;
-//	float fDot;
-//	vCenter = DirectX::XMLoadFloat3(&pos);
-//
-//	for (auto& itr : m_frustumWorld)
-//	{
-//		vFrusW = DirectX::XMLoadFloat4(&itr);
-//		vDot = DirectX::XMPlaneDotCoord(vFrusW, vCenter);
-//		DirectX::XMStoreFloat(&fDot, vDot);
-//		if (fDot < -fRadius)
-//			return FrustumType::OUTSIDE;	// 完全に外側
-//		if (fDot <= fRadius)
-//			isHit = true;
-//	}
-//	if (isHit)
-//		return FrustumType::PARTLYINSIDE;	// 部分的に内側
-//	return FrustumType::INSIDE;	// 完全に内側
-//}
-
 ID3D11ShaderResourceView * ViewPoint::GetRenderingTexture(int num)
 {
 	if (!m_pRenderTarget.get())nullptr;
@@ -150,7 +97,6 @@ ID3D11ShaderResourceView * ViewPoint::GetRenderingTexture(int num)
 	
 	return m_pRenderTarget->GetSRV()[num];
 }
-
 
 void ViewPoint::CalcView(const float fUp)
 {
@@ -208,32 +154,56 @@ void ViewPoint::CalcWorldMatrix()
 	world._42 = vPos.y;
 	world._43 = vPos.z;
 	world._44 = 1.0f;
+
+	m_mWorld = world;
 }
 
-//void ViewPoint::CreateViewFrustum()
-//{
-//	float fTan = tanf(DirectX::XMConvertToRadians(m_fFov) * 0.5f);
-//	m_frustum[0] = DirectX::XMFLOAT4(0.0f, -1.0f, fTan, 0.0f);
-//	m_frustum[1] = DirectX::XMFLOAT4(0.0f, 1.0f, fTan, 0.0f);
-//	fTan *= GetAspect();
-//	m_frustum[2] = DirectX::XMFLOAT4(1.0f, 0.0f, fTan, 0.0f);
-//	m_frustum[3] = DirectX::XMFLOAT4(-1.0f, 0.0f, fTan, 0.0f);
-//	m_frustum[4] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, -m_fNearClip);
-//	m_frustum[5] = DirectX::XMFLOAT4(0.0f, 0.0f, -1.0f, m_fFarClip);
-//	
-//	for (int i = 0; i < 4; ++i)
-//	{
-//		DirectX::XMStoreFloat4(&m_frustum[i], DirectX::XMPlaneNormalize(DirectX::XMLoadFloat4(&m_frustum[i])));
-//	}
-//}
-//
-//void ViewPoint::UpdateViewFrustum()
-//{
-//	DirectX::XMMATRIX mtx = DirectX::XMLoadFloat4x4(&m_mWorldMatrix);
-//	mtx = DirectX::XMMatrixInverse(nullptr, mtx);
-//	mtx = DirectX::XMMatrixTranspose(mtx);
-//	for (int i = 0; i < 6; ++i)
-//	{
-//		DirectX::XMStoreFloat4(&m_frustumWorld[i], DirectX::XMPlaneTransform(DirectX::XMLoadFloat4(&m_frustum[i]), mtx));
-//	}
-//}
+const FrustumType::kind ViewPoint::CollisionFrustum(const DirectX::XMFLOAT3& pos, const float fRadius)
+{
+	bool isHit = false;
+	DirectX::XMVECTOR vFrusW, vCenter, vDot;
+	float fDot;
+	vCenter = DirectX::XMLoadFloat3(&pos);
+
+	for (auto& itr : m_frustumWorld)
+	{
+		vFrusW = DirectX::XMLoadFloat4(&itr);
+		vDot = DirectX::XMPlaneDotCoord(vFrusW, vCenter);
+		DirectX::XMStoreFloat(&fDot, vDot);
+		if (fDot < -fRadius)
+			return FrustumType::OUTSIDE;	// 完全に外側
+		if (fDot <= fRadius)
+			isHit = true;
+	}
+	if (isHit)
+		return FrustumType::PARTLYINSIDE;	// 部分的に内側
+	return FrustumType::INSIDE;	// 完全に内側
+}
+
+void ViewPoint::CreateViewFrustum()
+{
+	float fTan = tanf(DirectX::XMConvertToRadians(fov.get()) * 0.5f);
+	m_frustum[0] = DirectX::XMFLOAT4(0.0f, -1.0f, fTan, 0.0f);
+	m_frustum[1] = DirectX::XMFLOAT4(0.0f, 1.0f, fTan, 0.0f);
+	fTan *= GetAspect();
+	m_frustum[2] = DirectX::XMFLOAT4(1.0f, 0.0f, fTan, 0.0f);
+	m_frustum[3] = DirectX::XMFLOAT4(-1.0f, 0.0f, fTan, 0.0f);
+	m_frustum[4] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, -nearclip.get());
+	m_frustum[5] = DirectX::XMFLOAT4(0.0f, 0.0f, -1.0f, farclip.get());
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		DirectX::XMStoreFloat4(&m_frustum[i], DirectX::XMPlaneNormalize(DirectX::XMLoadFloat4(&m_frustum[i])));
+	}
+}
+
+void ViewPoint::UpdateViewFrustum()
+{
+	DirectX::XMMATRIX mtx = DirectX::XMLoadFloat4x4(&m_mWorld);
+	mtx = DirectX::XMMatrixInverse(nullptr, mtx);
+	mtx = DirectX::XMMatrixTranspose(mtx);
+	for (int i = 0; i < 6; ++i)
+	{
+		DirectX::XMStoreFloat4(&m_frustumWorld[i], DirectX::XMPlaneTransform(DirectX::XMLoadFloat4(&m_frustum[i]), mtx));
+	}
+}

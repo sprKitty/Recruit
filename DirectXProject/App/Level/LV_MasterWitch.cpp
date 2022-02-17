@@ -58,7 +58,9 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 		pTransform.lock()->localscale.x = 500.0f;
 		pTransform.lock()->localscale.z = 500.0f;
 		pMesh.lock()->Set("field2.obj");
-		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
+		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
+		pRenderer3D.lock()->SetVS(VS_TYPE::TRIPLANAR);
+		pRenderer3D.lock()->SetPS(PS_TYPE::TRIPLANAR);
 		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->SetBumpImage("terrainBump");
 	}
@@ -80,6 +82,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6, 1, 9), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -97,6 +100,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(6 , 1, 9), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -114,6 +118,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(18, 1, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -131,6 +136,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 1, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -148,6 +154,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(9, 1, 6), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -166,7 +173,7 @@ void LV_MasterWitch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(15, 1, 15), Vector3(0.6f, 0, 0.6f));
-			pInstancing.lock()->scale.set(1.0f);
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);

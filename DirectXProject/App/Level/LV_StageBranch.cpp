@@ -20,7 +20,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 		pTransform.lock()->localscale.y = 20.0f;
 		pTransform.lock()->localscale.z = 20.0f;
 		pMesh.lock()->Set("branchField.obj");
-		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
+		//pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->SetBumpImage("terrainBump");
 	}
@@ -42,6 +42,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 15), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -59,6 +60,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 15), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -76,6 +78,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 15), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -93,6 +96,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 15), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -110,6 +114,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 3), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -127,6 +132,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 3), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -144,6 +150,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 3), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -161,6 +168,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 			Vector3 vMax = pTransform.lock()->localpos + pTransform.lock()->localscale * 0.5f;
 			vMin.y = vMax.y = pTransform.lock()->localpos.y;
 			pInstancing.lock()->SetRandomXYZ(vMin, vMax, VectorInt3(12, 1, 3), Vector3(0.2f, 0, 0.2f));
+			pInstancing.lock()->scale.set(Vector3(2.f, 1.f, 2.f));
 		}
 	}
 	m_pObjectList.emplace_back(pOutSideArea);
@@ -169,7 +177,7 @@ void LV_StageBranch::Initialize(const std::weak_ptr<SceneBase> pScene, const Obj
 	pTransform = pWater.lock()->GetComponent<Transform>();
 	if (!pTransform.expired())
 	{
-		pTransform.lock()->localscale = { 10,1,10 };
+		pTransform.lock()->localscale = { 100,1,100 };
 		pTransform.lock()->localpos.y = -0.2f;
 	}
 	m_pObjectList.emplace_back(pWater);

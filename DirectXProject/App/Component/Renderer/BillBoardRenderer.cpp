@@ -15,18 +15,6 @@ void BillBoardRenderer::Init()
 	m_isXaxisLock = false;
 	m_isYaxisLock = false;
 	m_isZaxisLock = true;
-	m_isWriteType.resize(WriteType::MAX);
-	for (bool itr : m_isWriteType)
-	{
-		itr = false;
-	}
-
-	m_isDrawType.resize(DrawType::MAX);
-	for (bool itr : m_isDrawType)
-	{
-		itr = false;
-	}
-	m_isWriteType[WriteType::DEPTH_OF_FIELD] = true;
 	RenderPipeline::GetInstance().AddRenderer(weak_from_this());
 }
 
@@ -44,10 +32,10 @@ void BillBoardRenderer::Update()
 	CalcBillBoard();
 }
 
-void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)
+void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteStep::kind type)
 {
-	if (!m_isWriteType[type])return;
-	if (m_frustumType == FrustumType::OUTSIDE)return;
+	if (!m_pOwner.lock()->IsActive())return;
+	if (!m_isWriteStepList[type])return;
 
 	if (!m_pMainTexAnim.expired())
 	{
@@ -57,11 +45,6 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const Wri
 	{
 		m_Image.Bind(pBuf);
 	}
-
-	//if (!m_pFadeAnimation.expired())
-	//{
-	//	m_pFadeAnimation.lock()->Bind(pBuf);
-	//}
 
 	if (!m_pTransform.expired())
 	{
@@ -74,39 +57,17 @@ void BillBoardRenderer::Write(const std::weak_ptr<ShaderBuffer>& pBuf, const Wri
 	}
 }
 
-void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
+void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawStep::kind type)
 {
-	if ((type == DrawType::UI_NORMAL) || (type == DrawType::UI_MAGIC))return;
-	if (m_frustumType == FrustumType::OUTSIDE)return;
-	if (type != DrawType::MAX)
-	{
-		if (!m_isDrawType[type])return;
-	}
+	if (!m_isDrawStepList[type])return;
+	if (!m_pOwner.lock()->IsActive())return;
 
 	CalcBillBoard();
 
-	switch (type)
-	{
-	case DrawType::WORLD_OF_NORMAL:
-		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
-		pBuf.lock()->BindPS(PS_TYPE::NORMAL);
-		break;
-	case DrawType::WORLD_OF_TRIPLANAR:
-		pBuf.lock()->BindVS(VS_TYPE::TRIPLANAR);
-		pBuf.lock()->BindPS(PS_TYPE::TRIPLANAR);
-		break;
-	case DrawType::WORLD_OF_CHARACTER:
-		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
-		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
-		break;
-	case DrawType::WORLD_OF_EFFECT:
-		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
-		pBuf.lock()->BindPS(PS_TYPE::EFFECT);
-		break;
-	default:
-		break;
-	}
+	pBuf.lock()->BindVS(m_vsType);
+	pBuf.lock()->BindPS(m_psType);
 
+	//pBuf.lock()->SetEmissiveColor(1);
 	if (!m_pFadeAnimation.expired())
 	{
 		m_pFadeAnimation.lock()->Bind(pBuf);
@@ -145,23 +106,24 @@ void BillBoardRenderer::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const Draw
 	}
 }
 
-void BillBoardRenderer::CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)
+const bool BillBoardRenderer::CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)
 {
-	if (pVP.expired())return;
+	return true;
+	//if (pVP.expired())return;
 
-	CalcBillBoard();
-	
-	if (!m_pTransform.expired())
-	{
-		float fRadius = 0;
-		DirectX::XMMATRIX mtx = m_pTransform.lock()->GetWorldMatrix();
-		DirectX::XMFLOAT4X4 w;
-		DirectX::XMStoreFloat4x4(&w, mtx);
-		fRadius = (w._11 > fRadius) ? w._11 : fRadius;
-		fRadius = (w._22 > fRadius) ? w._22 : fRadius;
-		fRadius = (w._33 > fRadius) ? w._33 : fRadius;
-		//m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
-	}
+	//CalcBillBoard();
+	//
+	//if (!m_pTransform.expired())
+	//{
+	//	float fRadius = 0;
+	//	DirectX::XMMATRIX mtx = m_pTransform.lock()->GetWorldMatrix();
+	//	DirectX::XMFLOAT4X4 w;
+	//	DirectX::XMStoreFloat4x4(&w, mtx);
+	//	fRadius = (w._11 > fRadius) ? w._11 : fRadius;
+	//	fRadius = (w._22 > fRadius) ? w._22 : fRadius;
+	//	fRadius = (w._33 > fRadius) ? w._33 : fRadius;
+	//	//m_frustumType = pVP.lock()->CollisionViewFrustum(DirectX::XMFLOAT3(w._41, w._42, w._43), fRadius);
+	//}
 }
 
 void BillBoardRenderer::CalcBillBoard()
@@ -195,6 +157,7 @@ void BillBoardRenderer::CalcBillBoard()
 		vW._33 = 1.0f;
 	}
 
+	
 	mInvCam = DirectX::XMLoadFloat4x4(&vW);
 	if (!m_pTransform.expired())
 	{

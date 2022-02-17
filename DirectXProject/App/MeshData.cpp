@@ -24,10 +24,10 @@ void MeshData::Load(std::string str)
 	if (strstr(str.c_str(), ".obj"))
 	{
 		const std::string staticPath = "Assets/OBJ/";
-		std::string path = staticPath + str;
-		size_t size = str.find(".");
-		str.resize(size);
-		m_ModelMap[str] = OBJModel::Load(path.c_str());
+		std::string path = str;
+		size_t size = path.find(".");
+		path.resize(size);
+		m_ModelMap[path] = OBJModel::Load(staticPath, str);
 		return;
 	}
 }

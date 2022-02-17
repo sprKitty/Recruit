@@ -480,17 +480,8 @@
     <FxCompile Include="Shader\PSLightDepth.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PSPixelColor.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\PSCharacter.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSTriPlanar.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\VSTriPlanar.hlsl">
-      <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PSEffect.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
@@ -502,9 +493,6 @@
       <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PSGaussianBlur.hlsl">
-      <Filter>リソース ファイル\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PSMixTexture.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\VSCameraDepth.hlsl">
@@ -530,6 +518,12 @@
     </FxCompile>
     <FxCompile Include="Shader\PSFade.hlsl">
       <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PSObjModel.hlsl">
+      <Filter>リソース ファイル\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VSObjModel.hlsl">
+      <Filter>リソース ファイル\VertexShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

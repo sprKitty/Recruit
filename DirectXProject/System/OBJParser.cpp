@@ -8,7 +8,8 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 {
 	// ファイル読み込み
 	std::ifstream readfile;
-	readfile.open(path + name, std::ios::in);
+	std::string filePath = path + name;
+	readfile.open(filePath, std::ios::in);
 
 	if (!readfile.is_open())
 	{
@@ -17,9 +18,6 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 	}
 
 	std::string line;
-	std::vector<Vector3> vtxList;
-	std::vector<Vector2> uvList;
-	std::vector<Vector3> normalList;
 
 	while (std::getline(readfile, line))
 	{
@@ -30,14 +28,14 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 		{
 			if (word.empty())continue; // 空白ならスキップ
 
-			if (word == "mtllib")
+			if (word == "mtllib") // マテリアルを読み込む
 			{
 				if (std::getline(i_stream, word, ' '))
 				{
 					LoadMaterial(path + word);
 				}
 			}
-			else if (word == "v")
+			else if (word == "v") // 頂点を読み込む
 			{
 				Vector3 vertex;
 				if (std::getline(i_stream, word, ' '))
@@ -52,9 +50,9 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 				{
 					vertex.z = std::stof(word);
 				}
-				vtxList.emplace_back(vertex);
+				m_vtxList.emplace_back(vertex);
 			}
-			else if (word == "vt")
+			else if (word == "vt") // texture(uv)を読み込む
 			{
 				Vector2 uv;
 				if (std::getline(i_stream, word, ' '))
@@ -64,10 +62,11 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 				if (std::getline(i_stream, word, ' '))
 				{
 					uv.y = std::stof(word);
+					uv.y = 1 - uv.y;
 				}
-				uvList.emplace_back(uv);
+				m_uvList.emplace_back(uv);
 			}
-			else if (word == "vn")
+			else if (word == "vn") // 法線を読み込む
 			{
 				Vector3 normal;
 				if (std::getline(i_stream, word, ' '))
@@ -82,18 +81,45 @@ const bool NewOBJParser::Load(const std::string& path, const std::string& name)
 				{
 					normal.z = std::stof(word);
 				}
-				normalList.emplace_back(normal);
+				m_normalList.emplace_back(normal);
 			}
-			else if (word == "usemtl")
+			else if (word == "usemtl") // インデックスを読み込む
 			{
 				std::string name;
 				if (std::getline(i_stream, name, ' '))
 				{
+					while (std::getline(readfile, line))
+					{
+						std::istringstream i_streamIndex(line);
 
+						if (std::getline(i_streamIndex, word, ' '))
+						{
+							if (word == "usemtl") // 新しいマテリアルが設定されていたらループを抜ける
+							{
+								if (std::getline(i_streamIndex, name, ' '))
+								{
+									int fs = 0;
+								}
+								else
+								{
+									break;
+								}
+							}
+							else if (word == "f") // インデックスを読み込む
+							{
+								for (UINT8 i = 0; i < 3; ++i)
+								{
+									if (std::getline(i_streamIndex, word, ' '))
+									{
+										LoadIndex(name, word);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
-
 	}
 
 	return true;
@@ -228,7 +254,7 @@ const bool NewOBJParser::LoadMaterial(const std::string& str)
 						break;
 					}
 				}
-				m_materialList[matName] = mat;
+				m_materialMap[matName] = mat;
 			}
 			else
 			{
@@ -236,6 +262,26 @@ const bool NewOBJParser::LoadMaterial(const std::string& str)
 			}
 		}
 	}
+	return true;
+}
+
+const bool NewOBJParser::LoadIndex(const std::string & str, const std::string & data)
+{
+	std::istringstream i_stream(data);
+	std::string word;
+	VectorInt3 val;
+
+	if (std::getline(i_stream, word, '/')) val.x = std::stoi(word); // 頂点インデックスが欠けていれば(モデルに問題がある)falseを返す
+	else return false;
+
+	if (std::getline(i_stream, word, '/')) val.y = std::stoi(word); // texture情報はモデルに設定されていない場合もあるのでreturnでfalseは返さない
+
+	if (std::getline(i_stream, word, '/')) val.z = std::stoi(word); // 法線インデックスが欠けていれば(モデルに問題がある)falseを返す
+	else return false;
+
+	m_indexMap[str].emplace_back(val);
+
+	return true;
 }
 
 OBJParser::OBJParser()
