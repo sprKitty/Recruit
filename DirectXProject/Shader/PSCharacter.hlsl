@@ -100,7 +100,7 @@ PS_OUT main(PS_IN pin)
     clip(color.a - 0.1f);
     color *= g_texSetting.multipray;
     pout.main = color;
-    pout.emissive = g_postEffect.emissive;
+    pout.emissive = float4(0, 0, 0, 1);
     pout.depth = pin.camPos.z / pin.camPos.w;
     
     float4 grayScale = TEX_GRAYSCALE.Sample(CRAMP, pin.uv);

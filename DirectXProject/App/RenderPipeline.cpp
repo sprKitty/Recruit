@@ -25,24 +25,39 @@ void RenderPipeline::DrawShadowMap(const std::weak_ptr<Light> pLight)
 	}
 	m_pShaderBuffer.lock()->BindVS(VS_TYPE::LIGHTDEPTH);
 	m_pShaderBuffer.lock()->BindPS(PS_TYPE::LIGHTDEPTH);
-	CallWrite(WriteType::DEPTH_OF_SHADOW, pLight);
-
+	CallWrite(WriteStep::LIGHT_DEPTH, pLight);
 }
 
-void RenderPipeline::DrawCameraDepth(const std::weak_ptr<Camera> pCamera)
+void RenderPipeline::DrawWaterReflection(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP)
 {
-	if (pCamera.expired())
-	{
-		return;
-	}
-	else
-	{
-		pCamera.lock()->BindRenderTarget();
-		pCamera.lock()->Bind3D(m_pShaderBuffer);
-	}
-	m_pShaderBuffer.lock()->BindVS(VS_TYPE::CAMERADEPTH);
-	m_pShaderBuffer.lock()->BindPS(PS_TYPE::CAMERADEPTH);
-	CallWrite(WriteType::DEPTH_OF_FIELD, pCamera);
+	if (pCamera.expired())return;
+	if (pLight.expired())return;
+	if (pDOSVP.expired())return;
+
+	pLight.lock()->Bind3D(m_pShaderBuffer);
+	pCamera.lock()->BindRenderTarget();
+	pCamera.lock()->Bind3D(m_pShaderBuffer);
+	m_pShaderBuffer.lock()->SetTexturePS(pDOSVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::DEPTH_OF_SAHDOW);
+
+	CallDraw(DrawStep::WATERRELECTION, pCamera);
+}
+
+void RenderPipeline::Draw(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP, const std::weak_ptr<ViewPoint> pWaterRefVP)
+{
+	if (pCamera.expired())return;
+	if (pLight.expired())return;
+	if (pDOSVP.expired())return;
+	if (pWaterRefVP.expired())return;
+
+	pLight.lock()->Bind3D(m_pShaderBuffer);
+	pCamera.lock()->BindRenderTarget();
+	pWaterRefVP.lock()->Bind3D(m_pShaderBuffer, 1);
+	pCamera.lock()->Bind3D(m_pShaderBuffer);
+	m_pShaderBuffer.lock()->SetTexturePS(pDOSVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::DEPTH_OF_SAHDOW);
+	m_pShaderBuffer.lock()->SetTexturePS(pWaterRefVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::WATER);
+
+	CallDraw(DrawStep::WORLD, pCamera);
+	CallDraw(DrawStep::WATER, pCamera);
 }
 
 void RenderPipeline::PlayGaussianBlurX(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVP, const float fDeviation, const int number)
@@ -169,26 +184,6 @@ void RenderPipeline::PlayKawaseBloom(const std::weak_ptr<Camera> pCamera, KAWASE
 	DirectX11::GetInstance().SetBlendMode(BlendMode::BLEND_ALPHA);
 }
 
-void RenderPipeline::PlayMixTexture(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVPMix1, const std::weak_ptr<ViewPoint> pVPMix2)
-{
-	if (pCamera.expired())return;
-	if (pVPMix1.expired())return;
-	if (pVPMix2.expired())return;
-
-	Vector2 vp = pCamera.lock()->vpSize.get();
-	pCamera.lock()->BindRenderTarget();
-	pCamera.lock()->Bind2D(m_pShaderBuffer);
-	DirectX11::GetInstance().SetBlendMode(BlendMode::BLEND_ADD);
-	m_pShaderBuffer.lock()->SetTexturePS(pVPMix1.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::BLURX);
-	m_pShaderBuffer.lock()->SetTexturePS(pVPMix2.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::BLURY);
-	m_pShaderBuffer.lock()->BindVS(VS_TYPE::GAUSSIANBLUR);
-	m_pShaderBuffer.lock()->BindPS(PS_TYPE::MIX);
-	DirectX::XMMATRIX mtx = MyMath::ConvertMatrix(Vector3(vp.x, vp.y, 10), Vector3(0, 0, 0), Vector3(vp.x * 0.5f, vp.y * 0.5f, 0));
-	m_pShaderBuffer.lock()->SetWorld(mtx);
-	Geometory::GetInstance().DrawPolygon();
-	DirectX11::GetInstance().SetBlendMode(BlendMode::BLEND_ALPHA);
-}
-
 void RenderPipeline::DrawDOFTexture(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<ViewPoint> pVPDMain, const std::weak_ptr<ViewPoint> pVPDepth, const std::weak_ptr<ViewPoint> pVPBlur)
 {
 	if (pCamera.expired())return;
@@ -209,46 +204,9 @@ void RenderPipeline::DrawDOFTexture(const std::weak_ptr<Camera> pCamera, const s
 	Geometory::GetInstance().DrawPolygon();
 }
 
-void RenderPipeline::DrawWaterReflection(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP)
-{
-	if (pCamera.expired())return;
-	if (pLight.expired())return;
-	if (pDOSVP.expired())return;
-
-	pLight.lock()->Bind3D(m_pShaderBuffer);
-	pCamera.lock()->BindRenderTarget();
-	pCamera.lock()->Bind3D(m_pShaderBuffer);
-	m_pShaderBuffer.lock()->SetTexturePS(pDOSVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::DEPTH_OF_SAHDOW);
-
-	CallDraw(DrawType::WORLD_OF_CHARACTER, pCamera);
-	CallDraw(DrawType::WORLD_OF_GRASS, pCamera);
-	CallDraw(DrawType::WORLD_OF_TRIPLANAR, pCamera);
-}
-
-void RenderPipeline::Draw(const std::weak_ptr<Camera> pCamera, const std::weak_ptr<Light> pLight, const std::weak_ptr<ViewPoint> pDOSVP, const std::weak_ptr<ViewPoint> pWaterRefVP)
-{
-	if (pCamera.expired())return;
-	if (pLight.expired())return;
-	if (pDOSVP.expired())return;
-	if (pWaterRefVP.expired())return;
-
-	pLight.lock()->Bind3D(m_pShaderBuffer);
-	pCamera.lock()->BindRenderTarget();
-	pWaterRefVP.lock()->Bind3D(m_pShaderBuffer, 1);
-	pCamera.lock()->Bind3D(m_pShaderBuffer);
-	m_pShaderBuffer.lock()->SetTexturePS(pDOSVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::DEPTH_OF_SAHDOW);
-	m_pShaderBuffer.lock()->SetTexturePS(pWaterRefVP.lock()->GetRenderingTexture(0), ShaderResource::TEX_TYPE::WATER);
-
-	CallDraw(DrawType::WORLD_OF_CHARACTER, pCamera);
-	CallDraw(DrawType::WORLD_OF_EFFECT, pCamera);
-	CallDraw(DrawType::WORLD_OF_TRIPLANAR, pCamera);
-	CallDraw(DrawType::WORLD_OF_GRASS, pCamera);
-	CallDraw(DrawType::WORLD_OF_WATER, pCamera);
-}
-
 void RenderPipeline::DrawUI(const std::weak_ptr<Camera> pCamera)
 {
-	CallDraw(DrawType::UI_MAGIC, pCamera);
+	CallDraw(DrawStep::UI, pCamera);
 }
 
 void RenderPipeline::AddRenderer(const std::weak_ptr<Component>& pComponent)
@@ -275,7 +233,7 @@ void RenderPipeline::ReleaseRenderer(const std::weak_ptr<Component>& pComponent)
 	}
 }
 
-void RenderPipeline::CallWrite(const WriteType::kind type, const std::weak_ptr<ViewPoint>& pVP)
+void RenderPipeline::CallWrite(const WriteStep::kind type, const std::weak_ptr<ViewPoint>& pVP)
 {
 	for (const auto& itr : m_pDrawList)
 	{
@@ -286,13 +244,16 @@ void RenderPipeline::CallWrite(const WriteType::kind type, const std::weak_ptr<V
 	}
 }
 
-void RenderPipeline::CallDraw(const DrawType::kind type, const std::weak_ptr<ViewPoint>& pVP)
+void RenderPipeline::CallDraw(const DrawStep::kind type, const std::weak_ptr<ViewPoint>& pVP)
 {
 	for (const auto& itr : m_pDrawList)
 	{
 		if (itr.lock()->m_pOwner.lock()->IsActive())
-		{
-			itr.lock()->Draw(m_pShaderBuffer, type);
+		{                      
+			if (itr.lock()->CalcFrustumState(pVP))
+			{
+				itr.lock()->Draw(m_pShaderBuffer, type);
+			}
 		}
 	}
 }

@@ -1,70 +1,22 @@
-﻿  Collision.cpp
-  Character.cpp
+﻿  Character.cpp
   MasterWitch.cpp
   Player.cpp
-  Collider.cpp
-  Instancing.cpp
   MagicBall.cpp
-  MagicBullet.cpp
   MagicRazer.cpp
-  Mesh.cpp
-  Object.cpp
   BillBoardRenderer.cpp
-c:\users\taker\desktop\mygame\recruit\directxproject\app\component\instancing.cpp(59): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\taker\desktop\mygame\recruit\directxproject\app\component\instancing.cpp(71): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\taker\desktop\mygame\recruit\directxproject\app\component\instancing.cpp(72): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\taker\desktop\mygame\recruit\directxproject\app\component\instancing.cpp(73): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   Renderer2D.cpp
   Renderer3D.cpp
-  RootMotion.cpp
-  Transform.cpp
   FactoryMethod.cpp
-  Character_Fade.cpp
-  MagicUI_Fade.cpp
   Scene_Level_Fade.cpp
   LV_Cow.cpp
   LV_MasterWitch.cpp
   LV_StageBranch.cpp
-  MeshData.cpp
-  OBJModel.cpp
   RenderPipeline.cpp
   GameScene.cpp
   SceneBase.cpp
   SceneMgr.cpp
   TitleScene.cpp
-  Camera.cpp
-  LateCamera.cpp
-c:\users\taker\desktop\mygame\recruit\directxproject\app\objmodel.cpp(39): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-c:\users\taker\desktop\mygame\recruit\directxproject\app\objmodel.cpp(99): warning C4267: '=': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  Light.cpp
-  RotationCamera.cpp
-  ViewPoint.cpp
-  MyMath.cpp
-  ShaderBuffer.cpp
-c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(113): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  Startup.cpp
-  Geometory.cpp
-c:\users\taker\desktop\mygame\recruit\directxproject\app\scene\scenemgr.cpp(126): warning C4244: '引数': 'double' から 'const float' への変換です。データが失われる可能性があります。
   MessageWindow.cpp
-  Mouse.cpp
-  OBJParser.cpp
-  RenderTarget.cpp
-  Shader.cpp
-c:\users\taker\desktop\mygame\recruit\directxproject\startup.cpp(100): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\shader.cpp(20): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(252): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(261): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: 'fscanf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(267): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: 'fscanf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(273): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: 'fscanf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(280): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: 'fscanf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(287): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: 'fscanf' の宣言を確認してください
-c:\users\taker\desktop\mygame\recruit\directxproject\system\objparser.cpp(239): warning C4715: 'NewOBJParser::LoadMaterial': 値を返さないコントロール パスがあります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\renderpipeline.cpp(128): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\taker\desktop\mygame\recruit\directxproject\app\scene\scenemgr.cpp(126): warning C4244: '引数': 'double' から 'const float' への変換です。データが失われる可能性があります。
   DirectXProject.vcxproj -> C:\Users\taker\Desktop\MyGame\Recruit\x64\Debug\DirectXProject.exe

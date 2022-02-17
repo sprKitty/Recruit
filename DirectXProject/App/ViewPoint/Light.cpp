@@ -40,11 +40,15 @@ void Light::Uninit()
 
 void Light::Update()
 {
+	Vector3 dir = look.get() - position.get();
+	dir.Normalize();
+	front.set(dir);
+
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	//CreateViewFrustum();
-	//UpdateViewFrustum();
+	CreateViewFrustum();
+	UpdateViewFrustum();
 }
 
 void Light::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)

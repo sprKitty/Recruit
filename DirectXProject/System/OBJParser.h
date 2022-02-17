@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "Texture.h"
 #include <vector>
@@ -10,7 +10,7 @@
 
 class NewOBJParser
 {
-private:
+public:
 	struct Material
 	{
 		float Ns;
@@ -29,15 +29,23 @@ public:
 
 	const bool Load(const std::string& path, const std::string& name);
 
-private:
-	const bool LoadMaterial(const std::string& str);
+	inline const std::vector<Vector3>& GetVtxList() { return m_vtxList; }
+	inline const std::vector<Vector2>& GetUVList() { return m_uvList; }
+	inline const std::vector<Vector3>& GetNormalList() { return m_normalList; }
+	inline const std::map<std::string, Material>& GetMaterialMap() { return m_materialMap; }
+	inline const std::map<std::string, std::vector<VectorInt3>>& GetIndexMap() { return m_indexMap; }
 
 private:
-	std::vector<int> m_vtxIndexList;
-	std::vector<int> m_uvIndexList;
-	std::vector<int> m_normalIndexList;
-	
-	std::map<std::string, Material> m_materialList;
+	const bool LoadMaterial(const std::string& str);
+	const bool LoadIndex(const std::string& str, const std::string& data);
+
+private:
+	std::vector<Vector3> m_vtxList;
+	std::vector<Vector2> m_uvList;
+	std::vector<Vector3> m_normalList;
+
+	std::map<std::string, Material> m_materialMap;
+	std::map<std::string, std::vector<VectorInt3>> m_indexMap;
 };
 
 class OBJParser

@@ -7,68 +7,74 @@
 
 OBJModel::OBJModel()
 	:m_pBuffer(nullptr)
-	, m_pVtxList(nullptr)
-	, m_nVtxNum(0)
 {
 }
 
 OBJModel::~OBJModel()
 {
 	if (m_pBuffer) delete m_pBuffer;
-	if (m_pVtxList) delete[] m_pVtxList;
 }
 
-const MeshData::Info OBJModel::Load(const char * pPath)
+const MeshData::Info OBJModel::Load(const std::string& path, const std::string& name)
 {
 	HRESULT hr;
-	OBJParser obj;
+	NewOBJParser obj;
 	MeshData::Info info;
-	if (!obj.Load(pPath))
+
+	if (!obj.Load(path, name))
 	{
 		return info;
 	}
 	info.pDrawBuffer.reset(new DrawBuffer());
 
-	std::vector<Vector3> posList = obj.GetVertexList();
+	std::vector<Vector3> vtxList = obj.GetVtxList();
 	std::vector<Vector2> uvList = obj.GetUVList();
 	std::vector<Vector3> normalList = obj.GetNormalList();
-	std::vector<int> posIdxList = obj.GetVertexIndexList();
-	std::vector<int> uvIdxList = obj.GetUVIndexList();
-	std::vector<int> normalIdxList = obj.GetNormalIndexList();
+	std::map<std::string, NewOBJParser::Material> materialMap = obj.GetMaterialMap();
+	std::map<std::string, std::vector<VectorInt3>> indexMap = obj.GetIndexMap();
 
-	int nVtxNum = posIdxList.size();
-	MyMath::Vertex* pVtxList = new MyMath::Vertex[nVtxNum];
+	size_t vtxNum = 0;
 
-	for (int i = 0; i < nVtxNum; ++i)
+	for (const auto& itr : indexMap)
 	{
-		pVtxList[i].pos = posList[posIdxList[i] - 1];
-		pVtxList[i].uv = uvList[uvIdxList[i] - 1];
-		pVtxList[i].normal = normalList[normalIdxList[i] - 1];
-		pVtxList[i].tangent = 0;
-		pVtxList[i].binormal = 0;
+		vtxNum += itr.second.size();
+	}
+	VertexBuffer* pVtxBuffer = new VertexBuffer[vtxNum];
+	UINT16 i(0);
+
+	for (const auto& itrIndex : indexMap)
+	{
+		auto itrMat = materialMap[itrIndex.first];
+		for (const auto& itr : itrIndex.second)
+		{
+			pVtxBuffer[i].vtx.pos = vtxList[itr.x - 1];
+			pVtxBuffer[i].vtx.uv = uvList[itr.y - 1];
+			pVtxBuffer[i].vtx.normal = normalList[itr.z - 1];
+			pVtxBuffer[i].vtx.tangent = 0;
+			pVtxBuffer[i].ambient = itrMat.Ka;
+			pVtxBuffer[i].diffuse = itrMat.Kd;
+			pVtxBuffer[i].specular = itrMat.Ks;
+			pVtxBuffer[i].specularIndex = itrMat.Ns;
+			++i;
+		}
 	}
 
-	for (int i = 0; i < nVtxNum; i += 3)
+	for (int i = 0; i < vtxNum; i += 3)
 	{
-		Vector3 vTangent, vBinormal;
 		Mesh::Surface surface;
-		if (MyMath::TangentandBinormal(pVtxList[i], pVtxList[i + 1], pVtxList[i + 2], &vTangent, &vBinormal))
-		{
-			pVtxList[i].tangent = vTangent;
-			pVtxList[i + 1].tangent = vTangent;
-			pVtxList[i + 2].tangent = vTangent;
-			pVtxList[i].binormal = vBinormal;
-			pVtxList[i + 1].binormal = vBinormal;
-			pVtxList[i + 2].binormal = vBinormal;
-		}
-		surface.vPos0 = pVtxList[i].pos;
-		surface.vPos1 = pVtxList[i + 1].pos;
-		surface.vPos2 = pVtxList[i + 2].pos;
-		surface.vNormal = pVtxList[i].normal;
+		Vector3 vTangent = MyMath::CalcTangent(pVtxBuffer[i].vtx.pos, pVtxBuffer[i].vtx.uv, pVtxBuffer[i + 1].vtx.pos, pVtxBuffer[i + 1].vtx.uv, pVtxBuffer[i + 2].vtx.pos, pVtxBuffer[i + 2].vtx.uv);
+
+		pVtxBuffer[i].vtx.tangent = vTangent;
+		pVtxBuffer[i + 1].vtx.tangent = vTangent;
+		pVtxBuffer[i + 2].vtx.tangent = vTangent;
+		surface.vPos0 = pVtxBuffer[i].vtx.pos;
+		surface.vPos1 = pVtxBuffer[i + 1].vtx.pos;
+		surface.vPos2 = pVtxBuffer[i + 2].vtx.pos;
+		surface.vNormal = pVtxBuffer[i].vtx.normal;
 		info.surfaceList.emplace_back(surface);
 	}
 
-	hr = info.pDrawBuffer->CreateVertexBuffer(pVtxList, sizeof(MyMath::Vertex), nVtxNum);
+	hr = info.pDrawBuffer->CreateVertexBuffer(pVtxBuffer, sizeof(VertexBuffer), vtxNum);
 	
 	if (FAILED(hr))
 	{
@@ -76,55 +82,8 @@ const MeshData::Info OBJModel::Load(const char * pPath)
 		info.pDrawBuffer.reset();
 		info.surfaceList.clear();
 	}
-	delete[] pVtxList;
+	delete[] pVtxBuffer;
 	return info;
-}
-
-bool OBJModel::Create(const char * fileName)
-{
-	bool result = true;
-
-	OBJParser obj;
-	result = obj.Load(fileName);
-	if (!result) { return result; }
-
-	m_pBuffer = new DrawBuffer();
-
-	std::vector<Vector3> posList = obj.GetVertexList();
-	std::vector<Vector2> uvList = obj.GetUVList();
-	std::vector<Vector3> normalList = obj.GetNormalList();
-	std::vector<int> posIdxList = obj.GetVertexIndexList();
-	std::vector<int> uvIdxList = obj.GetUVIndexList();
-	std::vector<int> normalIdxList = obj.GetNormalIndexList();
-	m_nVtxNum = posIdxList.size();
-	m_pVtxList = new MyMath::Vertex[m_nVtxNum];
-
-	for (int i = 0; i < m_nVtxNum; ++i)
-	{
-		m_pVtxList[i].pos  = posList[posIdxList[i] - 1];
-		m_pVtxList[i].uv = uvList[uvIdxList[i] - 1];
-		m_pVtxList[i].normal = normalList[normalIdxList[i] - 1];
-		m_pVtxList[i].tangent = 0;
-		m_pVtxList[i].binormal = 0;
-	}
-
-	for (int i = 0; i < m_nVtxNum; i += 3)
-	{
-		Vector3 vTangent,vBinormal;
-		if (MyMath::TangentandBinormal(m_pVtxList[i], m_pVtxList[i + 1], m_pVtxList[i + 2], &vTangent, &vBinormal))
-		{
-			m_pVtxList[i].tangent = vTangent;
-			m_pVtxList[i + 1].tangent = vTangent;
-			m_pVtxList[i + 2].tangent = vTangent;
-			m_pVtxList[i].binormal = vBinormal;
-			m_pVtxList[i + 1].binormal = vBinormal;
-			m_pVtxList[i + 2].binormal = vBinormal;
-		}
-	}
-
-	m_pBuffer->CreateVertexBuffer(m_pVtxList, sizeof(MyMath::Vertex), m_nVtxNum);
-
-	return false;
 }
 
 void OBJModel::Draw()

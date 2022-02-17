@@ -98,7 +98,7 @@ void GameScene::Init()
 	m_pLight->Init();
 	m_pLight->SetRenderTarget(pRT);
 	m_pLight->parallelScale.set(16);
-	m_pLight->position.set(Vector3(-40, 50, -40));
+	m_pLight->position.set(Vector3(40, 40, -40));
 	m_pLight->nearclip.set(1.f);
 	m_pLight->farclip.set(300.f);
 	m_pLight->fov.set(60.0f);
@@ -274,11 +274,11 @@ void GameScene::Draw()
 	m_pMessageWindow->Draw(m_pShaderBuffer);
 	RenderPipeline::GetInstance().DrawUI(m_pMainScreen);
 
-//#ifdef _DEBUG
-//	m_pShaderBuffer.lock()->BindPS(PS_TYPE::NORMAL);
-//	m_pShaderBuffer.lock()->SetTexturePS(m_pLight->GetRenderingTexture(0));
-//	m_pShaderBuffer.lock()->SetWorld(MyMath::ConvertMatrix(Vector3(SCREEN_WIDTH * 0.2f, SCREEN_HEIGHT * 0.2f, 0), Vector3(0, 0, 0), Vector3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f, 0)));
-//	Geometory::GetInstance().DrawPolygon();
-//#endif // _DEBUG
+#ifdef _DEBUG
+	m_pShaderBuffer.lock()->BindPS(PS_TYPE::NORMAL);
+	m_pShaderBuffer.lock()->SetTexturePS(m_pCamera->GetRenderingTexture(1));
+	m_pShaderBuffer.lock()->SetWorld(MyMath::ConvertMatrix(Vector3(SCREEN_WIDTH * 0.2f, SCREEN_HEIGHT * 0.2f, 0), Vector3(0, 0, 0), Vector3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f, 0)));
+	Geometory::GetInstance().DrawPolygon();
+#endif // _DEBUG
 
 }

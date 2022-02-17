@@ -18,10 +18,10 @@ public:
 	void Uninit()override;
 	void Update()override;
 
-	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)override;
-	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)override;
+	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteStep::kind type)override;
+	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawStep::kind type)override;
 
-	void CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)override;
+	const bool CalcFrustumState(const std::weak_ptr<ViewPoint>& pVP)override;
 
 	inline void XaxisLock() 
 	{ 
@@ -62,12 +62,6 @@ public:
 	inline void SetMainTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pMainTexAnim = std::move(pImage); }
 	inline void SetBumpTexAnimation(const std::weak_ptr<TexAnimation> pImage) { m_pBumpTexAnim = std::move(pImage); }
 	inline void SetFadeAnimation(const std::weak_ptr<FadeBase> pFade) { m_pFadeAnimation = std::move(pFade); }
-
-	inline void EnableWrite(const WriteType::kind type) { m_isWriteType[type] = true; }
-	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
-
-	inline void DisableWrite(const WriteType::kind type) { m_isWriteType[type] = false; }
-	inline void DisableDraw(const DrawType::kind type) { m_isDrawType[type] = false; }
 
 private:
 	void CalcBillBoard();

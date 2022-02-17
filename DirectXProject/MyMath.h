@@ -13,7 +13,6 @@ namespace MyMath
 		Vector2 uv;
 		Vector3 normal;
 		Vector3 tangent;
-		Vector3 binormal;
 	};
 	/*************************************************
 	* @brief ローカル座標をワールド座標に変換
@@ -25,13 +24,16 @@ namespace MyMath
 
 	/*************************************************
 	* @brief 接空間、従法線計算
-	* @param const Vertex& v0 頂点0に関する情報
-	* @param const Vertex& v1 頂点1に関する情報
-	* @param const Vertex& v2 頂点2に関する情報
+	* @param const Vector3& pos0 頂点0
+	* @param const Vector2& uv0 uv0
+	* @param const Vector3& pos1 頂点1
+	* @param const Vector2& uv1 uv1
+	* @param const Vector3& pos2 頂点2
+	* @param const Vector2& uv2 uv2
 	* @param Vector3* pBinormal 接空間計算結果
 	* @param Vector3* pTangent 従法線計算結果
 	*************************************************/
-	bool TangentandBinormal(const Vertex& v0, const Vertex& v1, const Vertex& v2, Vector3* pTangent, Vector3* pBinormal);
+	const Vector3 CalcTangent(const Vector3& pos0, const Vector2& uv0, const Vector3& pos1, const Vector2& uv1, const Vector3& pos2, const Vector2& uv2);
 	
 	/*************************************************
 	* @brief ラジアン角計算

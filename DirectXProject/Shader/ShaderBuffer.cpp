@@ -8,7 +8,7 @@
 const char* pVSPath[] =
 {
 	"Assets/VSNormal.cso",
-	"Assets/VSTriPlanar.cso",
+	"Assets/VSObjModel.cso",
 	"Assets/VSLightDepth.cso",
 	"Assets/VSCameraDepth.cso",
 	"Assets/VSGaussianBlur.cso",
@@ -22,14 +22,12 @@ const char* pPSPath[] =
 {
 	"Assets/PSNormal.cso",
 	"Assets/PSEffect.cso",
-	"Assets/PSTriPlanar.cso",
+	"Assets/PSObjModel.cso",
 	"Assets/PSCharacter.cso",
-	"Assets/PSPixelColor.cso",
 	"Assets/PSLightDepth.cso",
 	"Assets/PSCameraDepth.cso",
 	"Assets/PSGaussianBlur.cso",
 	"Assets/PSKawaseBloom.cso",
-	"Assets/PSMixTexture.cso",
 	"Assets/PSDOF.cso",
 	"Assets/PSWaterReflection.cso",
 	"Assets/PSMainScreen.cso",

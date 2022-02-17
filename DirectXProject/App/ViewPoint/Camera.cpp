@@ -88,18 +88,18 @@ void Camera::Update()
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	//CreateViewFrustum();
-	//UpdateViewFrustum();
+	CreateViewFrustum();
+	UpdateViewFrustum();
 }
 
 void Camera::Bind3D(const std::weak_ptr<ShaderBuffer> pBuf, const int nBufferNum)
 {
 	Vector3 vPos = position.get();
-	Vector4 vColor = color.get();
 	Vector3 vFront = front.get();
 
 	ShaderResource::CameraInfo cam;
 	cam.pos = { vPos.x, vPos.y, vPos.z, 0.0f };
+	cam.dir = { vFront.x, vFront.y, vFront.z, 0.0f };
 	pBuf.lock()->SetCameraVP(view.get(), projection.get(), nBufferNum);
 	pBuf.lock()->SetCameraInfo(cam);
 	DirectX11::GetInstance().SetCulling(CullingMode::CULL_BACK);

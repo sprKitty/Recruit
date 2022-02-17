@@ -4,7 +4,10 @@ struct VS_IN
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
-    float3 binormal : BINORMAL0;
+    float3 ambient : AMBIENT0;
+    float3 diffuse : DIFFUSE0;
+    float3 specular : SPECULAR0;
+    uint specularIndex : BLENDINDICES0;
     uint inst : SV_InstanceID;
 };
 struct VS_OUT

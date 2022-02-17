@@ -4,7 +4,10 @@ struct VS_IN
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
-    float3 binormal : BINORMAL0;
+    float3 ambient : AMBIENT0;
+    float3 diffuse : DIFFUSE0;
+    float3 specular : SPECULAR0;
+    uint specularIndex : BLENDINDICES0;
     uint inst : SV_InstanceID;
 };
 
@@ -13,10 +16,13 @@ struct VS_OUT
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float4 wPos : TEXCOORD2;
+    float4 worldPos : TEXCOORD2;
     float4 lightPos : TEXCOORD3;
     float4 camPos : TEXCOORD4;
     float3 texSpaceLight : TEXCOORD5;
+    float4 ambient : COLOR0;
+    float4 diffuse : COLOR1;
+    float4 specular : COLOR2;
 };
 
 struct VP
@@ -59,23 +65,22 @@ VS_OUT main(VS_IN vin)
 
     vout.pos = float4(vin.pos, 1);
     vout.pos = mul(vout.pos, g_Worlds[vin.inst]);
-    vout.wPos = vout.pos;
+    vout.worldPos = vout.pos;
     
-    vout.pos = mul(vout.wPos, g_lightVP[0].view);
+    vout.pos = mul(vout.worldPos, g_lightVP[0].view);
     vout.pos = mul(vout.pos, g_lightVP[0].proj);
     vout.lightPos = vout.pos;
     
-    vout.pos = mul(vout.wPos, g_cameraVP[0].view);
+    vout.pos = mul(vout.worldPos, g_cameraVP[0].view);
     vout.pos = mul(vout.pos, g_cameraVP[0].proj);
     vout.camPos = vout.pos;
     
 	vout.uv = vin.uv;
-    
-    float3 N = normalize(mul(vin.normal, (float3x3) g_Worlds[vin.inst]));
-    vout.normal = N;
+    vout.normal = normalize(mul(vin.normal, (float3x3) g_Worlds[vin.inst]));
+    float3 N = vout.normal;
     float3 T = normalize(mul(vin.tangent, (float3x3) g_Worlds[vin.inst]));
-    float3 B = normalize(mul(vin.binormal, (float3x3) g_Worlds[vin.inst]));
- 
+    float3 B = normalize(cross(N, T));
+    
     float3x3 invTexToWorld = float3x3(
     T.x, B.x, N.x,
     T.y, B.y, N.y,
@@ -84,6 +89,9 @@ VS_OUT main(VS_IN vin)
     
     float3 L = normalize(g_lightInfo.dir.xyz);
     vout.texSpaceLight = normalize(mul(-L, invTexToWorld));
-	
+    vout.ambient = float4(vin.ambient, 1.f);
+    vout.diffuse = float4(vin.diffuse, 1.f);
+    vout.specular = float4(vin.specular, vin.specularIndex);
+    
     return vout;
 }
