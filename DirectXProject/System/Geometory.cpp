@@ -14,10 +14,10 @@ MeshData::Info Geometory::CreateBoardPolygon()
 	const float d = 0.5f;
 	MyMath::Vertex vtxPolygon[] =
 	{
-		{ Vector3(-d, d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(d, d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0),  },
-		{ Vector3(-d,-d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(d,-d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0),  },
+		{ Vector3(-d, d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,-d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d,-d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
 	};
 
 	hr = info.pDrawBuffer->CreateVertexBuffer(vtxPolygon, sizeof(MyMath::Vertex), _countof(vtxPolygon));
@@ -40,22 +40,27 @@ MeshData::Info Geometory::CreateCharacterPolygon()
 	const float d = 0.5f;
 	MyMath::Vertex vtxCharacterPolygon[] =
 	{
-		{ Vector3(-d, d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0),  },
-		{ Vector3(-d,-d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0),  },
-		{ Vector3(d, -d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(-d, -d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0),},
+		{ Vector3(-d, d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,-d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(d, -d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d, -d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
 	};
 
 	for (int i = 0; i < _countof(vtxCharacterPolygon); i += 3)
 	{
+		Vector3 vBio, vTan;
 		Mesh::Surface surface;
-		Vector3 vTangent = MyMath::CalcTangent(vtxCharacterPolygon[i].pos, vtxCharacterPolygon[i].uv, vtxCharacterPolygon[i + 1].pos, vtxCharacterPolygon[i + 1].uv, vtxCharacterPolygon[i + 2].pos, vtxCharacterPolygon[i + 2].uv);
-		vtxCharacterPolygon[i].tangent = vTangent;
-		vtxCharacterPolygon[i + 1].tangent = vTangent;
-		vtxCharacterPolygon[i + 2].tangent = vTangent;
-
+		if (MyMath::TangentandBinormal(vtxCharacterPolygon[i], vtxCharacterPolygon[i + 1], vtxCharacterPolygon[i + 2], &vBio, &vTan))
+		{
+			vtxCharacterPolygon[i].binormal = vBio;
+			vtxCharacterPolygon[i + 1].binormal = vBio;
+			vtxCharacterPolygon[i + 2].binormal = vBio;
+			vtxCharacterPolygon[i].tangent = vTan;
+			vtxCharacterPolygon[i + 1].tangent = vTan;
+			vtxCharacterPolygon[i + 2].tangent = vTan;
+		}
 		surface.vPos0 = vtxCharacterPolygon[i].pos;
 		surface.vPos1 = vtxCharacterPolygon[i + 1].pos;
 		surface.vPos2 = vtxCharacterPolygon[i + 2].pos;
@@ -84,56 +89,62 @@ MeshData::Info Geometory::CreateCube()
 
 	MyMath::Vertex vtxCube[] =
 	{
-		{ {-d, d,-d}, {0,0}, {0,0,-1}, {0,0,0}, },
-		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0}, },
-		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0}, },
-		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0}, },
-		{ { d,-d,-d}, {1,1}, {0,0,-1}, {0,0,0}, },
-		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0}, },
+		{ {-d, d,-d}, {0,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,1}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0},{0,0,0} },
 
-		{ { d, d,-d}, {0,0}, {1,0,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0}, },
-		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0}, },
-		{ { d,-d, d}, {1,1}, {1,0,0} , {0,0,0}, },
-		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0}, },
+		{ { d, d,-d}, {0,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {1,1}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0},{0,0,0} },
 
-		{ { d, d, d}, {0,0}, {0,0,1} , {0,0,0}, },
-		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0}, },
-		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0}, },
-		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0}, },
-		{ {-d,-d, d}, {1,1}, {0,0,1} , {0,0,0}, },
-		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0}, },
+		{ { d, d, d}, {0,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {1,1}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0},{0,0,0} },
 
-		{ {-d, d, d}, {0,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0}, },
-		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d,-d}, {1,1}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0}, },
+		{ {-d, d, d}, {0,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {1,1}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0},{0,0,0} },
 
-		{ {-d, d, d}, {0,0}, {0,1,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0}, },
-		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0}, },
-		{ { d, d,-d}, {1,1}, {0,1,0} , {0,0,0}, },
-		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0}, },
+		{ {-d, d, d}, {0,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,1}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0},{0,0,0} },
 
-		{ {-d,-d,-d}, {0,0}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d, d}, {1,1}, {0,-1,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0}, },
+		{ {-d,-d,-d}, {0,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {1,1}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0},{0,0,0} },
 	};
 
 	for (int i = 0; i < _countof(vtxCube); i += 3)
 	{
+		Vector3 vBio, vTan;
 		Mesh::Surface surface;
-		Vector3 vTangent = MyMath::CalcTangent(vtxCube[i].pos, vtxCube[i].uv, vtxCube[i + 1].pos, vtxCube[i + 1].uv, vtxCube[i + 2].pos, vtxCube[i + 2].uv);
-		vtxCube[i].tangent = vTangent;
-		vtxCube[i + 1].tangent = vTangent;
-		vtxCube[i + 2].tangent = vTangent;
+		if (MyMath::TangentandBinormal(vtxCube[i], vtxCube[i + 1], vtxCube[i + 2], &vBio, &vTan))
+		{
+			vtxCube[i].binormal = vBio;
+			vtxCube[i + 1].binormal = vBio;
+			vtxCube[i + 2].binormal = vBio;
+			vtxCube[i].tangent = vTan;
+			vtxCube[i + 1].tangent = vTan;
+			vtxCube[i + 2].tangent = vTan;
+		}
 		surface.vPos0 = vtxCube[i].pos;
 		surface.vPos1 = vtxCube[i + 1].pos;
 		surface.vPos2 = vtxCube[i + 2].pos;
@@ -158,10 +169,10 @@ HRESULT Geometory::Create()
 	const float d = 0.5f;
 	MyMath::Vertex vtxPolygon[] =
 	{
-		{ Vector3(-d, d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3( d, d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(-d,-d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3( d,-d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), },
+		{ Vector3(-d, d, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3( d, d, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,-d, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3( d,-d, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
 	};
 	m_pPolygon.reset(new DrawBuffer());
 	hr = m_pPolygon->CreateVertexBuffer(vtxPolygon, sizeof(MyMath::Vertex), _countof(vtxPolygon));
@@ -169,86 +180,86 @@ HRESULT Geometory::Create()
 	
 	MyMath::Vertex vtxCharacterPolygon[] =
 	{
-		{ Vector3(-d, d * 2.0f, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3( d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3( d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3( d,        0, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), },
-		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), },
+		{ Vector3(-d, d * 2.0f, 0), Vector2(0,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3( d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3( d, d * 2.0f, 0), Vector2(1,0), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3( d,        0, 0), Vector2(1,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
+		{ Vector3(-d,        0, 0), Vector2(0,1), Vector3(0,0,-1), Vector3(0), Vector3(0)},
 	};
-	//for (int i = 0; i < _countof(vtxCharacterPolygon); i += 3)
-	//{
-	//	Vector3 vBio, vTan;
-	//	if (MyMath::TangentandBinormal(vtxCharacterPolygon[i], vtxCharacterPolygon[i + 1], vtxCharacterPolygon[i + 2], &vTan, &vBio))
-	//	{
-	//		//vtxCharacterPolygon[i].binormal = vBio;
-	//		//vtxCharacterPolygon[i + 1].binormal = vBio;
-	//		//vtxCharacterPolygon[i + 2].binormal = vBio;
-	//		vtxCharacterPolygon[i].tangent = vTan;
-	//		vtxCharacterPolygon[i + 1].tangent = vTan;
-	//		vtxCharacterPolygon[i + 2].tangent = vTan;
-	//	}
-	//}
+	for (int i = 0; i < _countof(vtxCharacterPolygon); i += 3)
+	{
+		Vector3 vBio, vTan;
+		if (MyMath::TangentandBinormal(vtxCharacterPolygon[i], vtxCharacterPolygon[i + 1], vtxCharacterPolygon[i + 2], &vBio, &vTan))
+		{
+			vtxCharacterPolygon[i].binormal = vBio;
+			vtxCharacterPolygon[i + 1].binormal = vBio;
+			vtxCharacterPolygon[i + 2].binormal = vBio;
+			vtxCharacterPolygon[i].tangent = vTan;
+			vtxCharacterPolygon[i + 1].tangent = vTan;
+			vtxCharacterPolygon[i + 2].tangent = vTan;
+		}
+	}
 	m_pCharacterPolygon.reset(new DrawBuffer());
 	hr = m_pCharacterPolygon->CreateVertexBuffer(vtxCharacterPolygon, sizeof(MyMath::Vertex), _countof(vtxCharacterPolygon));
 	if (FAILED(hr)) return hr;
 
 	MyMath::Vertex vtxCube[] =
 	{
-		{ {-d, d,-d}, {0,0}, {0,0,-1}, {0,0,0}, },
-		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0}, },
-		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0}, },
-		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0}, },
-		{ { d,-d,-d}, {1,1}, {0,0,-1}, {0,0,0}, },
-		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0}, },
+		{ {-d, d,-d}, {0,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,0}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,1}, {0,0,-1}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {0,1}, {0,0,-1}, {0,0,0},{0,0,0} },
 		
-		{ { d, d,-d}, {0,0}, {1,0,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0}, },
-		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0}, },
-		{ { d,-d, d}, {1,1}, {1,0,0} , {0,0,0}, },
-		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0}, },
+		{ { d, d,-d}, {0,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {1,1}, {1,0,0} , {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {0,1}, {1,0,0} , {0,0,0},{0,0,0} },
 		
-		{ { d, d, d}, {0,0}, {0,0,1} , {0,0,0}, },
-		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0}, },
-		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0}, },
-		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0}, },
-		{ {-d,-d, d}, {1,1}, {0,0,1} , {0,0,0}, },
-		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0}, },
+		{ { d, d, d}, {0,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d, d, d}, {1,0}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {1,1}, {0,0,1} , {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {0,1}, {0,0,1} , {0,0,0},{0,0,0} },
 		
-		{ {-d, d, d}, {0,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0}, },
-		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d,-d}, {1,1}, {-1,0,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0}, },
+		{ {-d, d, d}, {0,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {1,0}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d,-d}, {1,1}, {-1,0,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {-1,0,0}, {0,0,0},{0,0,0} },
 		
-		{ {-d, d, d}, {0,0}, {0,1,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0}, },
-		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0}, },
-		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0}, },
-		{ { d, d,-d}, {1,1}, {0,1,0} , {0,0,0}, },
-		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0}, },
+		{ {-d, d, d}, {0,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d, d}, {1,0}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ { d, d,-d}, {1,1}, {0,1,0} , {0,0,0},{0,0,0} },
+		{ {-d, d,-d}, {0,1}, {0,1,0} , {0,0,0},{0,0,0} },
 		
-		{ {-d,-d,-d}, {0,0}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0}, },
-		{ { d,-d, d}, {1,1}, {0,-1,0}, {0,0,0}, },
-		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0}, },
+		{ {-d,-d,-d}, {0,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d,-d}, {1,0}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ { d,-d, d}, {1,1}, {0,-1,0}, {0,0,0},{0,0,0} },
+		{ {-d,-d, d}, {0,1}, {0,-1,0}, {0,0,0},{0,0,0} },
 	};
 	for (int i = 0; i < _countof(vtxCube); i += 3)
 	{
 		Vector3 vBio, vTan;
-		//if (MyMath::TangentandBinormal(vtxCube[i], vtxCube[i + 1], vtxCube[i + 2], &vTan, &vBio))
-		//{
-		//	//vtxCube[i].binormal = vBio;
-		//	//vtxCube[i + 1].binormal = vBio;
-		//	//vtxCube[i + 2].binormal = vBio;
-		//	vtxCube[i].tangent = vTan;
-		//	vtxCube[i + 1].tangent = vTan;
-		//	vtxCube[i + 2].tangent = vTan;
-		//}
+		if (MyMath::TangentandBinormal(vtxCube[i], vtxCube[i + 1], vtxCube[i + 2], &vBio, &vTan))
+		{
+			vtxCube[i].binormal = vBio;
+			vtxCube[i + 1].binormal = vBio;
+			vtxCube[i + 2].binormal = vBio;
+			vtxCube[i].tangent = vTan;
+			vtxCube[i + 1].tangent = vTan;
+			vtxCube[i + 2].tangent = vTan;
+		}
 	}
 	m_pCube.reset(new DrawBuffer());
 	hr = m_pCube->CreateVertexBuffer(vtxCube, sizeof(MyMath::Vertex), _countof(vtxCube));

@@ -102,7 +102,7 @@ PS_OUT main(PS_IN pin)
     
     float3 N[2];
     float height = TEX_WATERHEIGHT.Sample(WRAP, pin.uv).r;
-    float3 L = pin.texSpaceLight * float3(1, 1, 1);
+    float3 L = pin.texSpaceLight * float3(-1, 1, -1);
     float3 V = normalize(pin.worldPos.xyz - g_cameraInfo.pos.xyz);
     float2 texUV = pin.uv + .05f * height * V.xy;
     N[0] = normalize(TEX_WATERBUMP.Sample(WRAP, texUV + float2(-g_texSetting.fGameStartCnt * 0.0f, g_texSetting.fGameStartCnt * 0.5f)).rgb * 2.0f - 1.0f);

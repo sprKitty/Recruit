@@ -8,9 +8,7 @@ void Scene_Level_Fade::Init()
 	m_pRenderer2D = m_pObject->AddComponent<Renderer2D>();
 	if (!m_pRenderer2D.expired())
 	{
-		m_pRenderer2D.lock()->EnableDrawStep(DrawStep::UI);
-		m_pRenderer2D.lock()->SetVS(VS_TYPE::NORMAL);
-		m_pRenderer2D.lock()->SetPS(PS_TYPE::FADE);
+		m_pRenderer2D.lock()->EnableDraw(DrawType::UI_FADE);
 	}
 	LoadFiles loadFiles;
 	STRINGMAP strMap;
@@ -49,5 +47,5 @@ void Scene_Level_Fade::Bind(const std::weak_ptr<ShaderBuffer> pSB)
 	if (m_pRenderer2D.expired())return;
 
 	pSB.lock()->SetTime(MyMath::EaseInOutCubic(m_fInOut));
-	m_pRenderer2D.lock()->Draw(pSB, DrawStep::UI);
+	m_pRenderer2D.lock()->Draw(pSB, DrawType::UI_FADE);
 }

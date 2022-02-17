@@ -18,11 +18,8 @@ Object::WORKER_OBJ FactoryMethod::CreateObject()
 		if (!m_pCamera.expired())
 		{
 			pR3D.lock()->SetMainImage("titleCharacter");
-			pR3D.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-			pR3D.lock()->EnableDrawStep(DrawStep::WORLD);
-			pR3D.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-			pR3D.lock()->SetVS(VS_TYPE::NORMAL);
-			pR3D.lock()->SetPS(PS_TYPE::CHARACTER);
+			pR3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+			pR3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 		}
 	}
 	return pObj;
@@ -49,10 +46,7 @@ Object::WORKER_OBJ FactoryMethod::CreateWater()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WATER);
-		pRenderer3D.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pRenderer3D.lock()->SetVS(VS_TYPE::WATERREFLECTION);
-		pRenderer3D.lock()->SetPS(PS_TYPE::WATERREFLECTION);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_WATER);
 	}
 
 	return pObj;
@@ -81,10 +75,7 @@ Object::WORKER_OBJ FactoryMethod::CreateTerrain()
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->SetBumpImage("terrainBump");
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		//pRenderer3D.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pRenderer3D.lock()->SetVS(VS_TYPE::TRIPLANAR);
-		pRenderer3D.lock()->SetPS(PS_TYPE::TRIPLANAR);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
 
 	return pObj;
@@ -115,11 +106,8 @@ Object::WORKER_OBJ FactoryMethod::CreateOutsideArea()
 	{
 		pRenderer3D.lock()->SetMainImage("terrain");
 		pRenderer3D.lock()->SetBumpImage("terrainBump");
-		pRenderer3D.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pRenderer3D.lock()->SetVS(VS_TYPE::TRIPLANAR);
-		pRenderer3D.lock()->SetPS(PS_TYPE::TRIPLANAR);
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
 	if (!pInst.expired())
 	{
@@ -144,11 +132,8 @@ Object::WORKER_OBJ FactoryMethod::CreateFence()
 	{
 		pRenderer3D.lock()->SetMainImage("fence");
 		pRenderer3D.lock()->SetBumpImage("fenceBump");
-		pRenderer3D.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pRenderer3D.lock()->SetVS(VS_TYPE::TRIPLANAR);
-		pRenderer3D.lock()->SetPS(PS_TYPE::TRIPLANAR);
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_TRIPLANAR);
 	}
 	return pObj;
 }
@@ -174,11 +159,8 @@ Object::WORKER_OBJ FactoryMethod::CreateTransitionLevel()
 	if (!pRenderer3D.expired())
 	{
 		pRenderer3D.lock()->SetMainImage("grass");
-		pRenderer3D.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pRenderer3D.lock()->SetVS(VS_TYPE::NORMAL);
-		pRenderer3D.lock()->SetPS(PS_TYPE::CHARACTER);
+		pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 	}
 	if (!pInst.expired())
 	{
@@ -218,11 +200,8 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerObject(std::weak_ptr<GameKeyBind> 
 	{
 		pBBR.lock()->ZaxisUnlock();
 		pBBR.lock()->XaxisLock();
-		pBBR.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pBBR.lock()->EnableDrawStep(DrawStep::WORLD);
-		pBBR.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pBBR.lock()->SetVS(VS_TYPE::NORMAL);
-		pBBR.lock()->SetPS(PS_TYPE::CHARACTER);
+		pBBR.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 		pBBR.lock()->SetCamera(m_pCamera);
 	}
 	if (!m_pMouse.expired())
@@ -260,9 +239,7 @@ Object::WORKER_OBJ FactoryMethod::CreatePlayerMagic()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->SetVS(VS_TYPE::NORMAL);
-		pRenderer3D.lock()->SetPS(PS_TYPE::EFFECT);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 		pRenderer3D.lock()->SetEmissiveColor(Vector4(35.f / 255.f, 105.f / 255.f, 180.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
@@ -305,11 +282,8 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchObject()
 	{
 		pBBR.lock()->ZaxisUnlock();
 		pBBR.lock()->XaxisLock();	
-		pBBR.lock()->EnableWriteStep(WriteStep::LIGHT_DEPTH);
-		pBBR.lock()->EnableDrawStep(DrawStep::WORLD);
-		pBBR.lock()->EnableDrawStep(DrawStep::WATERRELECTION);
-		pBBR.lock()->SetVS(VS_TYPE::NORMAL);
-		pBBR.lock()->SetPS(PS_TYPE::CHARACTER);
+		pBBR.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
+		pBBR.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 		pBBR.lock()->SetCamera(m_pCamera);
 	}
 	return pObj;
@@ -337,10 +311,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBullet()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->SetVS(VS_TYPE::NORMAL);
-		pRenderer3D.lock()->SetPS(PS_TYPE::EFFECT);
-
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 		pRenderer3D.lock()->SetEmissiveColor(Vector4(210.f / 255.f, 165.f / 255.f, 100.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
@@ -373,9 +344,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchMagicBall()
 	}
 	if (!pRenderer3D.expired())
 	{
-		pRenderer3D.lock()->EnableDrawStep(DrawStep::WORLD);
-		pRenderer3D.lock()->SetVS(VS_TYPE::NORMAL);
-		pRenderer3D.lock()->SetPS(PS_TYPE::EFFECT);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_EFFECT);
 		pRenderer3D.lock()->SetEmissiveColor(Vector4(210.f / 255.f, 165.f / 255.f, 100.f / 255.f, 1.f));
 	}
 	if (!pCollider.expired())
@@ -409,7 +378,7 @@ Object::WORKER_OBJ FactoryMethod::CreateBossWitchRazer()
 	if (!pRenderer3D.expired())
 	{
 		//pRenderer3D.lock()->EnableWrite(WriteType::DEPTH_OF_SHADOW);
-		//pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
+		pRenderer3D.lock()->EnableDraw(DrawType::WORLD_OF_CHARACTER);
 	}
 	return pObj;
 }
@@ -434,9 +403,7 @@ Object::WORKER_OBJ FactoryMethod::CreateMagicUI()
 	Object::OWNER_OBJ pObj(new Object());
 	m_pObjectList.emplace_back(pObj);
 	RenderPipeline::GetInstance().AddRenderer(pObj->AddComponent<Renderer2D>());
-	pObj->GetComponent<Renderer2D>().lock()->EnableDrawStep(DrawStep::UI);
-	pObj->GetComponent<Renderer2D>().lock()->SetVS(VS_TYPE::NORMAL);
-	pObj->GetComponent<Renderer2D>().lock()->SetPS(PS_TYPE::CHARACTER);
+	pObj->GetComponent<Renderer2D>().lock()->EnableDraw(DrawType::UI_MAGIC);
 	return pObj;
 }
 

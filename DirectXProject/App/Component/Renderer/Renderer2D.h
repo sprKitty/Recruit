@@ -25,8 +25,8 @@ public:
 	void Uninit()override;
 	void Update()override;
 	
-	//void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteStep::kind type)override {}
-	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawStep::kind type)override;
+	void Write(const std::weak_ptr<ShaderBuffer>& pBuf, const WriteType::kind type)override {}
+	void Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)override;
 
 	bool MouseCollision();
 	
@@ -34,11 +34,14 @@ public:
 
 	inline const RectTransform& GetRectTransform() { return m_RectTransform; }
 	inline void SetRectTransform(const RectTransform& rect) { m_RectTransform = rect; }
+	inline void EnableDraw(const DrawType::kind type) { m_isDrawType[type] = true; }
+	inline void DisableDraw(const DrawType::kind type) { m_isDrawType[type] = false; }
 
 
 	Image m_Image;
 
 private:
+	std::vector<bool> m_isDrawType;
 	std::weak_ptr<FadeBase> m_pFadeAnimation;
 	RectTransform m_RectTransform;
 	bool m_isActive;

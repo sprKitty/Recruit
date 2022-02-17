@@ -85,7 +85,41 @@ void Collision::MouseColUpdate()
 void Collision::Draw(const std::weak_ptr<ShaderBuffer> pBuf)
 {
 #ifdef _DEBUG
+	for (const auto& itr : m_pColliderList)
+	{
+		if (itr.expired())continue;
+		if (!itr.lock()->m_pOwner.lock()->IsActive())continue;
+		std::weak_ptr<Transform> pTrans = itr.lock()->GetTransform();
+		if (pTrans.expired())continue;
 
+		DirectX::XMMATRIX mtx = pTrans.lock()->GetWorldMatrix(itr.lock()->GetScaleDeviation(), itr.lock()->GetAngleDeviation(), itr.lock()->GetPosDeviation());
+		//DirectX::XMVECTOR s, q, p;
+		//DirectX::XMMatrixDecompose(&s, &q, &p, mtx);
+		//DirectX::XMFLOAT3 vScale, vPos;
+		//DirectX::XMStoreFloat3(&vScale, s);
+		//DirectX::XMStoreFloat3(&vPos, p);
+		//mtx = MyMath::ConvertMatrix(Vector3().Convert(vScale), 0, Vector3().Convert(vPos));
+		pBuf.lock()->SetWorld(mtx);
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::COLOR);
+		for (int i = 0; i < ObjectType::MAX; ++i)
+		{
+			switch (itr.lock()->GetCollisionType(static_cast<ObjectType::Kind>(i)))
+			{
+			case CollisionType::AABB:
+			case CollisionType::OBB:
+				m_pCube->Bind();
+				break;
+			case CollisionType::BC:
+				m_pSpheare->Bind();
+				break;
+
+			default:
+				break;
+			}
+		}
+
+	}
 #endif // _DEBUG
 }
 

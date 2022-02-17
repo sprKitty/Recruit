@@ -13,7 +13,7 @@ void RotationCamera::Init()
 	position.set(CameraInitPos);
 	look.set(CameraInitLook);
 	up.set({ 0.0f,1.0f,0.0f });
-	Vector3 vFront = look.get() - position.get();
+	Vector3 vFront = CameraInitLook - CameraInitPos;
 	vFront.Normalize();
 	front.set(vFront);
 	side.set({ 1.0f,0.0f,0.0f });
@@ -69,13 +69,13 @@ void RotationCamera::Update()
 	CalcView();
 	CalcProjection();
 	CalcWorldMatrix();
-	CreateViewFrustum();
-	UpdateViewFrustum();
+	//CreateViewFrustum();
+	//UpdateViewFrustum();
 }
 
 void RotationCamera::UpdateRotation()
 {
-	m_fDegeree = -120.f;
+	m_fDegeree -= 0.1f;
 	if (m_fDegeree > 180.0f)
 	{
 		m_fDegeree = -180.0f;

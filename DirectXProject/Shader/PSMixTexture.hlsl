@@ -8,13 +8,6 @@ struct PS_IN
     float4 camPos : TEXCOORD4;
 };
 
-struct PS_OUT
-{
-    float4 main : SV_Target0;
-    float4 emissive : SV_Target1;
-    float4 depth : SV_Target2;
-};
-
 struct LightInfo
 {
     float4 pos;
@@ -26,6 +19,7 @@ struct LightInfo
 struct CameraInfo
 {
     float4 pos;
+    float4 vpSize;
 };
 
 struct TexSetting
@@ -41,10 +35,8 @@ struct TexSetting
 
 struct PostEffect
 {
-    float4 blur[8];
-    float4 emissive;
+    int4 blur;
 };
-
 cbuffer ConstantBuffer0 : register(b0)
 {
     CameraInfo g_cameraInfo;
@@ -64,7 +56,6 @@ cbuffer ConstantBuffer3 : register(b3)
 {
     PostEffect g_postEffect;
 }
-
 
 Texture2D TEX_MAIN : register(t0);
 Texture2D TEX_WATER : register(t1);
@@ -89,34 +80,12 @@ SamplerComparisonState samp3 : register(s3);
 SamplerState MIRROR : register(s4);
 
 
-
-PS_OUT main(PS_IN pin)
+float4 main(PS_IN pin) : SV_Target
 {
-    PS_OUT pout;
- 
-    int nCramp = 1 - g_texSetting.nWrap;
-    float4 color = TEX_MAIN.Sample(WRAP, pin.uv * g_texSetting.tile + g_texSetting.offset) * g_texSetting.nWrap;
-    color += TEX_MAIN.Sample(CRAMP, pin.uv * g_texSetting.tile + g_texSetting.offset) * nCramp;
-    clip(color.a - 0.1f);
-    color *= g_texSetting.multipray;
-    pout.main = color;
-    pout.emissive = g_postEffect.emissive;
-    pout.depth = pin.camPos.z / pin.camPos.w;
-    
-    float4 grayScale = TEX_GRAYSCALE.Sample(CRAMP, pin.uv);
-    if(grayScale.r - 0.001f < 0.f)
-    {
-        return pout;
-    }
-    
-    float clipVal = 1.f - grayScale.r - g_texSetting.fTime;
-    clip(clipVal - 0.1f);
-
-    // テレポート時アウトラインを発光させる
-    if (clipVal < 0.18f)
-    {
-        pout.emissive = 1.f;
-    }
-    
-    return pout;
+    float4 color = 0;
+    float2 offset = 1.0f / g_cameraInfo.vpSize.xy;
+    color += TEX_BLURX.Sample(CRAMP, pin.uv);
+    color += TEX_BLURY.Sample(CRAMP, pin.uv);
+    color /= 2;
+    return color;
 }

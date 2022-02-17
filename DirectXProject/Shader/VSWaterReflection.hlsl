@@ -4,10 +4,7 @@ struct VS_IN
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
-    float3 ambient : AMBIENT0;
-    float3 diffuse : DIFFUSE0;
-    float3 specular : SPECULAR0;
-    uint specularIndex : BLENDINDICES0;
+    float3 binormal : BINORMAL0;
     uint inst : SV_InstanceID;
 };
 struct VS_OUT
@@ -74,10 +71,11 @@ VS_OUT main(VS_IN vin)
     
     vout.uv = vin.uv;
     
-    float3 N = normalize(vin.normal);
-    float3 T = normalize(vin.tangent);
-    float3 B = normalize(cross(N, T));
-    
+    float3 N = normalize(mul(vin.normal, (float3x3) g_Worlds[vin.inst]));
+    vout.normal = N;
+    float3 T = normalize(mul(vin.tangent, (float3x3) g_Worlds[vin.inst]));
+    float3 B = normalize(mul(vin.binormal, (float3x3) g_Worlds[vin.inst]));
+ 
     float3x3 invTexToWorld = float3x3(
     T.x, B.x, N.x,
     T.y, B.y, N.y,

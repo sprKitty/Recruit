@@ -3,9 +3,10 @@ struct PS_IN
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float4 wPos : TEXCOORD2;
+    float4 worldPos : TEXCOORD2;
     float4 lightPos : TEXCOORD3;
     float4 camPos : TEXCOORD4;
+    float3 texSpaceLight : TEXCOORD5;
 };
 
 struct PS_OUT
@@ -93,30 +94,51 @@ SamplerState MIRROR : register(s4);
 PS_OUT main(PS_IN pin)
 {
     PS_OUT pout;
- 
-    int nCramp = 1 - g_texSetting.nWrap;
-    float4 color = TEX_MAIN.Sample(WRAP, pin.uv * g_texSetting.tile + g_texSetting.offset) * g_texSetting.nWrap;
-    color += TEX_MAIN.Sample(CRAMP, pin.uv * g_texSetting.tile + g_texSetting.offset) * nCramp;
-    clip(color.a - 0.1f);
-    color *= g_texSetting.multipray;
+    
+    float4 color = 1.0f;
+    float3 blending = abs(pin.normal);
+    blending = normalize(max(blending, 0.001f));
+    float b = blending.x + blending.y + blending.z;
+    blending /= b;
+    
+    float3 xaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.zy * 0.2f).rgb;
+    float3 yaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.xz * 0.2f).rgb;
+    float3 zaxis = TEX_MAIN.Sample(WRAP, pin.worldPos.xy * 0.2f).rgb;
+    
+    color.rgb = xaxis * blending.x + yaxis * blending.y + zaxis * blending.z;
+
+    float3 xN = TEX_BUMP.Sample(WRAP, pin.worldPos.zy * 0.2f).rgb * 2.0f - 1.0f;
+    float3 yN = TEX_BUMP.Sample(WRAP, pin.worldPos.xz * 0.2f).rgb * 2.0f - 1.0f;
+    float3 zN = TEX_BUMP.Sample(WRAP, pin.worldPos.xy * 0.2f).rgb * 2.0f - 1.0f;
+    
+    xN = (dot(xN, pin.texSpaceLight) + 1.0f) * 0.5f;
+    yN = (dot(yN, pin.texSpaceLight) + 1.0f) * 0.5f;
+    zN = (dot(zN, pin.texSpaceLight) + 1.0f) * 0.5f;
+    
+    color.rgb *= xN * blending.x + yN * blending.y + zN * blending.z;
+    
+    float3 L = -normalize(g_lightInfo.dir.xyz);
+    float3 N = normalize(pin.normal.xyz);
+    float I = dot(L, N);
+    I += 1.0f;
+    I *= 0.5f;
+    color.rgb *= (I * g_lightInfo.color.rgb);
+    
+    float2 mapUV;
+    float inLVP;
+    float depth = 0;
+    inLVP = pin.lightPos.z / pin.lightPos.w;
+    mapUV.x = (1.0f + pin.lightPos.x / pin.lightPos.w) * 0.5f;
+    mapUV.y = (1.0f - pin.lightPos.y / pin.lightPos.w) * 0.5f;
+    float3 mapColor = TEX_DOS.Sample(BORDER, mapUV).rgb;
+    depth = mapColor.r;
+    depth += mapColor.g / 256.0f;
+    depth += mapColor.b / 256.0f / 256.0f;
+    
+    color.rgb = (inLVP > depth + g_lightInfo.pos.w) ? color.rgb * 0.5f : color.rgb;
     pout.main = color;
     pout.emissive = g_postEffect.emissive;
     pout.depth = pin.camPos.z / pin.camPos.w;
-    
-    float4 grayScale = TEX_GRAYSCALE.Sample(CRAMP, pin.uv);
-    if(grayScale.r - 0.001f < 0.f)
-    {
-        return pout;
-    }
-    
-    float clipVal = 1.f - grayScale.r - g_texSetting.fTime;
-    clip(clipVal - 0.1f);
-
-    // テレポート時アウトラインを発光させる
-    if (clipVal < 0.18f)
-    {
-        pout.emissive = 1.f;
-    }
     
     return pout;
 }

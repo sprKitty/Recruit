@@ -13,7 +13,12 @@ void Renderer2D::Init()
 {
 	m_Image.Init();
 	m_isActive = true;
-	m_isDrawStepList[DrawStep::UI] = true;
+
+	m_isDrawType.resize(DrawType::MAX);
+	for (bool itr : m_isDrawType)
+	{
+		itr = false;
+	}
 }
 
 void Renderer2D::Uninit()
@@ -26,13 +31,38 @@ void Renderer2D::Update()
 {
 }
 
-void Renderer2D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawStep::kind type)
+void Renderer2D::Draw(const std::weak_ptr<ShaderBuffer>& pBuf, const DrawType::kind type)
 {
-	if (!m_isDrawStepList[type])return;
-	if (!m_pOwner.lock()->IsActive())return;
-
-	pBuf.lock()->BindVS(m_vsType);
-	pBuf.lock()->BindPS(m_psType);
+	if (type != DrawType::MAX)
+	{
+		if (!m_isDrawType[type])return;
+	}
+	
+	switch (type)
+	{
+	case DrawType::UI_NORMAL:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
+		break;
+	
+	case DrawType::UI_MAGIC:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::CHARACTER);
+		break;
+	
+	case DrawType::UI_FADE:
+		pBuf.lock()->BindVS(VS_TYPE::NORMAL);
+		pBuf.lock()->BindPS(PS_TYPE::FADE);
+		break;
+	case DrawType::WORLD_OF_NORMAL:
+	case DrawType::WORLD_OF_CHARACTER:
+	case DrawType::WORLD_OF_EFFECT:
+	case DrawType::WORLD_OF_WATER:
+	case DrawType::WORLD_OF_TRIPLANAR:
+	case DrawType::MAX:
+	default:
+		return;
+	}
 
 	if (pBuf.expired())return;
 

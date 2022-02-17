@@ -34,10 +34,12 @@ namespace PS_TYPE
 		EFFECT,
 		TRIPLANAR,
 		CHARACTER,
+		COLOR,
 		LIGHTDEPTH,
 		CAMERADEPTH,
 		GAUSSIANBLUR,
 		KAWASEBLOOM,
+		MIX,
 		DOF,
 		WATERREFLECTION,
 		MAINSCREEN,
@@ -64,8 +66,8 @@ namespace CB_TYPE
 
 namespace ShaderResource
 {
-	static constexpr UINT8 VPBUFFER_SIZE = 6;
-	static constexpr UINT8 KAWASEBLOOM = 8;
+	static constexpr int VPBUFFER_SIZE = 2;
+	static constexpr int KAWASEBLOOM = 8;
 
 	// テクスチャのサンプラー設定
 	enum class SAMLER_TYPE
@@ -115,7 +117,6 @@ namespace ShaderResource
 	{
 		DirectX::XMFLOAT4 pos;
 		DirectX::XMFLOAT4 vp;
-		DirectX::XMFLOAT4 dir;
 	};
 
 	struct LightInfo
